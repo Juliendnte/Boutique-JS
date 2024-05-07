@@ -3,7 +3,7 @@ require('dotenv').config();
 
 exports.getArticles = async (req, res) =>{
     try {
-        const articles = await user.getAllArticle();
+        const articles = await article.getAllArticle();
         console.log(articles)
         if (!articles){
             return res.status(404).json({

@@ -5,11 +5,11 @@ const controllerArticle = require("../controller/article");
 const validateToken = require("../middlewares/auth");
 
 //Configuration des routes CRUD
-routeur.get("/user", validateToken, controllerArticle.getUsers);
-routeur.get("/user/:id",validateToken , controllerArticle.getUser);
-routeur.post("/user",validateToken ,controllerArticle.postUser);
-routeur.put("/user/:id",validateToken ,controllerArticle.putUser);
-routeur.delete("/user/:id",validateToken ,controllerArticle.deleteUser);
+routeur.get("/article", validateToken, controllerArticle.getArticles);
+routeur.get("/article/:id",validateToken , controllerArticle.getArticle);
+routeur.post("/article",validateToken ,controllerArticle.postArticle);
+routeur.put("/article/:id",validateToken ,controllerArticle.putArticle);
+routeur.delete("/article/:id",validateToken ,controllerArticle.deleteArticle);
 
 //Exportation des routes
 module.exports = routeur;
