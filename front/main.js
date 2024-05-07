@@ -4,7 +4,7 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const forumRoutes = require("./routeur/route");
+const forumRoutes = require("./routeur/routes");
 
 //Reglage du serveur
 app.set("view engine", "ejs");
