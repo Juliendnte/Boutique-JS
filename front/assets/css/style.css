@@ -1,1 +1,23 @@
 /*CSS global*/
+
+@font-face {
+  font-family: "Inter Thin";
+  src: url("../font/Inter-Light.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Inter Bold";
+  src: url("../font/Inter-Bold.ttf") format("truetype");
+}
+
+:root {
+  --horo-blue: #1d1c69;
+  --light: "Inter Thin";
+  --bold: "Inter Bold";
+}
+
+* {
+  color: var(--horo-blue);
+  padding: 0;
+  margin: 0;
+}
