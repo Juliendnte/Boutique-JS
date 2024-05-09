@@ -8,12 +8,14 @@ header {
   width: 100vw;
   height: 13vh;
   min-height: 80px;
-  background: none;
+  background-color: var(--cream);
 }
 
 .burger,
 .panier,
-.login {
+.login,
+.favoris,
+.search {
   font-size: 15px;
   height: 60px;
   width: 60px;
@@ -54,12 +56,20 @@ header {
   height: 80%;
   width: auto;
 }
+
+.favoris img,
+.search img {
+  width: 40px;
+  height: 40px;
+}
 @media screen and (min-width: 1100px) {
   .burger {
     display: none;
   }
 
-  .login {
+  .login,
+  .search,
+  .favoris {
     height: 60px;
     width: 60px;
     display: flex;
@@ -81,11 +91,17 @@ header {
     justify-content: center;
     text-decoration: none;
   }
+
+  .burger-list-ctn {
+    visibility: hidden;
+  }
 }
 
 @media screen and (max-width: 1100px) {
   .login,
-  .categories {
+  .categories,
+  .favoris,
+  .search {
     display: none;
   }
   .burger {
@@ -93,4 +109,46 @@ header {
     align-items: center;
     justify-content: center;
   }
+  .burger-list-ctn {
+    visibility: visible;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .burger-list-ctn {
+    font-size: 20px;
+  }
+}
+
+@media screen and (min-width: 700px) {
+  .burger-list-ctn {
+    font-size: 27px;
+  }
+}
+
+.burger-list-ctn {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  font-family: var(--bold);
+  width: 100%;
+  height: 0;
+  background-color: var(--cream);
+}
+
+.burger-list-ctn a,
+.burger-list-ctn span {
+  text-decoration: none;
+  margin-top: 5vh;
+  margin-left: 10vw;
+}
+
+.burger-list-ctn a p {
+  opacity: 0;
+}
+
+.burger-list-ctn span {
+  width: 80%;
+  height: 5px;
+  background-color: var(--horo-blue);
 }
