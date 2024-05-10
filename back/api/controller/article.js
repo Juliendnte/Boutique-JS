@@ -1,18 +1,32 @@
 const article = require("../models/articleModel");
+require('dotenv').config();
+const baseUrl = process.env.BASE_URL;
 
 exports.getArticles = async (req, res) =>{
     try {
         const articles = await article.getAllArticle(req.query);
+
         if (!articles){
             return res.status(404).json({
                 message: `Articles not found`,
                 status:404
             });
         }else{
+            const offset = parseInt(req.query.offset) || 0;
+            const limit = parseInt(req.query.limit) || 6;
+            const href = baseUrl+"/article"
             return res.status(200).json({
                 message: `Articles successfully found`,
                 status: 200,
-                articles
+                articles: {
+                    href,
+                    offset,
+                    limit,
+                    next:`${href}?limit=${limit}&offset=${offset + limit}` ,
+                    previous: `${href}?limit=${limit}&offset=${Math.max(0, offset - limit)}`,
+                    total: Object.entries(articles).length,
+                    items: articles
+                }
             })
         }
     }catch (err){

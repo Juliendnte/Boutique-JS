@@ -12,15 +12,21 @@ class ArticleModel{
 
     static getAllArticle(query){
         return new Promise((resolve, reject) => {
-            let sql = `SELECT * FROM article`
+            let sql = `SELECT * FROM article `
             if (!(Object.entries(query).length === 0)){
                 const values = [];
-                sql += " WHERE "
                 Object.entries(query).forEach(([key, value], index, entries) => {
-                    sql += `${key}=?`;
-                    values.push(value);
-                    if (index < entries.length - 1) {
-                        sql += `, `;
+                    if (key.toLowerCase() === "limit" || key.toLowerCase() === "offset"){
+                        sql += `${key} ? `;
+                        values.push(parseInt(value));
+                    }else{
+                        if (index === 0){
+                            sql += "WHERE "
+                        }else {
+                            sql += `AND `;
+                        }
+                        sql += `${key}=? `;
+                        values.push(value);
                     }
                 });
                 console.log(sql);
