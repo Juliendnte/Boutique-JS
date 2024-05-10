@@ -7,8 +7,8 @@ function rateLimitHandler(req, res) {
 }
 
 const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 1000,
+    windowMs: 10 * 60 * 1000, // 10 minutes
+    max: 500,
     handler: rateLimitHandler
 });
 
