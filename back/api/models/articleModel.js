@@ -28,9 +28,34 @@ class ArticleModel{
         });
     }
 
-    static updateUser(id, updateArticle){
+    static updatePutArticle(id, updateArticle){
         return new Promise((resolve, reject) => {
+            const sql = `UPDATE article SET Name=?, Description=?, Price=?, Reduction=?, Stock=? WHERE id=?`;
+            const values = [updateArticle.Name, updateArticle.Description, updateArticle.Price, updateArticle.Reduction, updateArticle.Stock, id];
 
+            connection.query(sql, values, (err, results) => {
+                err ? reject(err) : resolve(results[0]);
+            });
+        });
+    }
+
+    static updatePatchArticle(id, updateArticle){
+        return new Promise((resolve, reject) => {
+            let sql = `UPDATE article SET `;
+            const values = [];
+            Object.entries(updateArticle).forEach(([key, value], index, entries) => {
+                sql += `${key}=?`;
+                values.push(value);
+                if (index < entries.length - 1) {
+                    sql += `, `;
+                }
+            });
+            sql += ` WHERE id=?`;
+            values.push(id);
+
+            connection.query(sql, values, (err, results) => {
+                err ? reject(err) : resolve(results[0]);
+            });
         })
     }
 

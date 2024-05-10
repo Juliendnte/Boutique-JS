@@ -8,8 +8,6 @@ const fs = require("fs");
 
 // Crée une application Express
 const app = express();
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
 //Applique une limite de requête pour toutes les routes
 const rateLimit = require("./middlewares/rate-limit");
