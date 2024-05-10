@@ -21,7 +21,7 @@ class ArticleModel{
 
     static createArticle(newArticle){
         return new Promise((resolve, reject) => {
-            const sql = `INSERT INTO article (Name, Description, Price, Reduction, Stock) VALUES ?`;
+            const sql = `INSERT INTO article (Name, Description, Price, Reduction, Stock) VALUES (?, ?, ?, ?, ?)`;
             connection.query(sql, [newArticle.Name, newArticle.Description, newArticle.Price, newArticle.Reduction, newArticle.Stock], (err, results)=> {
                 err ? reject(err) : resolve(results[0]);
             });
@@ -37,8 +37,8 @@ class ArticleModel{
     static deleteArticle(id){
         return new Promise((resolve, reject) => {
             const sql = `DELETE FROM article WHERE Id=?`
-            connection.query(sql,[id], (err)=> {
-                if (err) reject(err)
+            connection.query(sql,[id], (err,results)=> {
+                
             })
         })
     }
