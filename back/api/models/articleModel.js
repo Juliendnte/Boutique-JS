@@ -38,7 +38,7 @@ class ArticleModel{
         return new Promise((resolve, reject) => {
             const sql = `DELETE FROM article WHERE Id=?`
             connection.query(sql,[id], (err,results)=> {
-                
+                err ? reject(err) : resolve(results[0]);
             })
         })
     }
