@@ -2,7 +2,7 @@ const article = require("../models/articleModel");
 
 exports.getArticles = async (req, res) =>{
     try {
-        const articles = await article.getAllArticle();
+        const articles = await article.getAllArticle(req.query);
         if (!articles){
             return res.status(404).json({
                 message: `Articles not found`,
@@ -17,7 +17,7 @@ exports.getArticles = async (req, res) =>{
         }
     }catch (err){
         res.status(500).json({
-            message:err,
+            message:err.sqlMessage,
             status:500
         });
     }
@@ -60,7 +60,7 @@ exports.postArticle = async (req,res)=>{
         });
     }catch (err){
         res.status(500).json({
-            message:err,
+            message:err.sqlMessage,
             status:500
         });
     }
@@ -93,7 +93,7 @@ exports.putArticle = async (req,res)=>{
 
     }catch (err){
         res.status(500).json({
-            message:err,
+            message:err.sqlMessage,
             status:500
         })
     }
@@ -115,7 +115,7 @@ exports.patchArticle = async (req,res) =>{
         });
     }catch (err){
         res.status(500).json({
-            message:err,
+            message:err.sqlMessage,
             status:500
         })
     }
@@ -132,7 +132,7 @@ exports.deleteArticle = async (req,res)=>{
 
     }catch (err){
         res.status(500).json({
-            message:err,
+            message:err.sqlMessage,
             status:500
         });
     }

@@ -10,12 +10,30 @@ class ArticleModel{
         });
     }
 
-    static getAllArticle(){
+    static getAllArticle(query){
         return new Promise((resolve, reject) => {
-            const sql = `SELECT * FROM article;`
-            connection.query(sql, (err, results)=> {
-                err ? reject(err) : resolve(results);
-            });
+            let sql = `SELECT * FROM article`
+            if (!(Object.entries(query).length === 0)){
+                const values = [];
+                sql += " WHERE "
+                Object.entries(query).forEach(([key, value], index, entries) => {
+                    sql += `${key}=?`;
+                    values.push(value);
+                    if (index < entries.length - 1) {
+                        sql += `, `;
+                    }
+                });
+                console.log(sql);
+                console.log(values)
+                connection.query(sql,values, (err, results)=> {
+                    err ? reject(err) : resolve(results);
+                });
+            }else{
+                connection.query(sql, (err, results)=> {
+                    err ? reject(err) : resolve(results);
+                });
+            }
+
         });
     }
 
