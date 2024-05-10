@@ -8,7 +8,6 @@ const middleware = {
     bodyParser : require("../middlewares/bodyParser"),
 }
 
-
 //Configuration des routes CRUD
 routeur.get("/article", controllerArticle.getArticles);
 routeur.get("/article/:id",middleware.articleExists , controllerArticle.getArticle);
