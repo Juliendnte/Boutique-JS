@@ -6,16 +6,20 @@ exports.getArticles = async (req, res) =>{
     try {
         const articles = await article.getAllArticle(req.query);
 
-        if (!articles){
+        const offset = parseInt(req.query.offset) || 0;
+        const limit = parseInt(req.query.limit) || 6;
+        const href = baseUrl+"/articles";
+        const total = Object.entries(articles).length;
+
+        const next = `${href}?limit=${limit}&offset=${offset + limit}`;
+        const previous = `${href}?limit=${limit}&offset=${Math.max(0, offset - limit)}`;
+
+        if (!articles || total === 0){
             return res.status(404).json({
                 message: `Articles not found`,
-                status:404
+                status: 404
             });
         }else {
-            const offset = parseInt(req.query.offset) || 0;
-            const limit = parseInt(req.query.limit) || 6;
-            const href = baseUrl+"/article"
-
             return res.status(200).json({
                 message: `Articles successfully found`,
                 status: 200,
@@ -23,50 +27,69 @@ exports.getArticles = async (req, res) =>{
                     href,
                     offset,
                     limit,
-                    next:`${href}?limit=${limit}&offset=${offset + limit}` ,
-                    previous: `${href}?limit=${limit}&offset=${Math.max(0, offset - limit)}`,
-                    total: Object.entries(articles).length,
+                    next,
+                    previous,
+                    total,
                     items: articles
                 }
             });
         }
     }catch (err){
         res.status(500).json({
-            message:err.sqlMessage,
+            message:err,
             status:500
         });
     }
 }
 
 exports.getArticle = async (req , res) =>{
-    //const link = process.env.BASE_URL;
     const articleById = req.article;
-    //articleById.Photo = `${link}/asset/${articleById.Photo}`;
+    try {
+        const img = await article.getImages(articleById.Id);
+        articleById.img = img.map(image => `${baseUrl}/asset/${image.URL}`);
 
-    return res.status(200).json({
-        message: `Article with id ${req.params.id} successfully found`,
-        status: 200,
-        article: articleById
-    })
+        return res.status(200).json({
+            message: `Article with id ${req.params.id} successfully found`,
+            status: 200,
+            article: articleById
+        })
+    }catch (err){
+        res.status(500).json({
+            message:err,
+            status:500
+        })
+    }
 };
 
 exports.postArticle = async (req,res)=>{
-    const { Name, Description, Price, Reduction, Stock } = req.body;
+    const { Marque, Model, Ref, Price,Fab, Dimension, Matiere, Color, Waterproof, Movement,Complications,Bracelet, Color_Bracelet, Availability, Reduction, Stock, Description} = req.body;
 
-    if (!Name || !Description || !Price || !Reduction || !Stock) {
+    if (!Marque || !Model  || !Ref || !Price || !Fab || !Dimension || !Matiere || !Color || !Waterproof || !Movement || !Complications || !Bracelet || !Color_Bracelet || !Availability || !Description) {
         return res.status(400).json({
-            message: "Tous les champs (Name, Description, Price, Reduction, Stock) sont requis.",
+            message: "Tous les champs (Marque, Model, Ref, Price,Fab, Dimension, Matiere, Color, Waterproof, Movement,Complications,Bracelet, Color_Bracelet, Availability, Description) sont requis.",
             status:400
         });
     }
 
     try{
         const NewArticle = await article.createArticle({
-            Name,
-            Description,
+            Marque,
+            Model,
+            Ref,
             Price,
+            Fab,
+            Dimension,
+            Matiere,
+            Color,
+            Waterproof,
+            Movement,
+            Complications,
+            Bracelet,
+            Color_Bracelet,
+            Availability,
             Reduction,
-            Stock
+            Stock,
+            Description
         });
 
         return res.status(201).json({
@@ -76,7 +99,7 @@ exports.postArticle = async (req,res)=>{
         });
     }catch (err){
         res.status(500).json({
-            message:err.sqlMessage,
+            message:err,
             status:500
         });
     }
@@ -84,22 +107,34 @@ exports.postArticle = async (req,res)=>{
 
 exports.putArticle = async (req,res)=>{
     const id  = req.params.id;
-    const { Name, Description, Price, Reduction, Stock } = req.body;
+    const { Marque, Model, Ref, Price,Fab, Dimension, Matiere, Color, Waterproof, Movement,Complications,Bracelet, Color_Bracelet, Availability, Reduction, Stock, Description} = req.body;
 
-    if (!Name || !Description || !Price || !Reduction || !Stock) {
+    if (!Marque || !Model  || !Ref || !Price || !Fab || !Dimension || !Matiere || !Color || !Waterproof || !Movement || !Complications || !Bracelet || !Color_Bracelet || !Availability || !Description) {
         return res.status(400).json({
-            message: "Tous les champs (Name, Description, Price, Reduction, Stock) sont requis.",
+            message: "Tous les champs (Marque, Model, Ref, Price,Fab, Dimension, Matiere, Color, Waterproof, Movement,Complications,Bracelet, Color_Bracelet, Availability, Description) sont requis.",
             status:400
         });
     }
 
     try {
         await article.updatePutArticle(id,{
-            Name,
-            Description,
+            Marque,
+            Model,
+            Ref,
             Price,
+            Fab,
+            Dimension,
+            Matiere,
+            Color,
+            Waterproof,
+            Movement,
+            Complications,
+            Bracelet,
+            Color_Bracelet,
+            Availability,
             Reduction,
-            Stock
+            Stock,
+            Description
         });
 
         return res.status(200).json({
@@ -108,7 +143,7 @@ exports.putArticle = async (req,res)=>{
         });
     }catch (err){
         res.status(500).json({
-            message:err.sqlMessage,
+            message:err,
             status:500
         });
     }
@@ -119,10 +154,10 @@ exports.patchArticle = async (req,res) =>{
     const body = req.body;
 
     //Check si une clé du body appartient a cette liste
-    if (!body || !Object.keys(body).some(key => ['Name', 'Description', 'Price', 'Reduction', 'Stock'].includes(key))) {
+    if (!body || !Object.keys(body).some(key => ['Marque', 'Model', 'Ref', 'Price','Fab', 'Dimension', 'Matiere', 'Color', 'Waterproof', 'Movement','Complications','Bracelet', 'Color_Bracelet', 'Availability', 'Reduction', 'Stock', 'Description'].includes(key))) {
         return res.status(400).json({
-            message: "Au moins un des champs (Name, Description, Price, Reduction, Stock) doit être modifié",
-            status: 400
+            message: "Tous les champs (Marque, Model, Ref, Price,Fab, Dimension, Matiere, Color, Waterproof, Movement,Complications,Bracelet, Color_Bracelet, Availability, Description) sont requis.",
+            status:400
         });
     }
 
@@ -135,7 +170,7 @@ exports.patchArticle = async (req,res) =>{
         });
     }catch (err){
         res.status(500).json({
-            message:err.sqlMessage,
+            message:err,
             status:500
         });
     }
@@ -153,7 +188,7 @@ exports.deleteArticle = async (req,res)=>{
         });
     }catch (err){
         res.status(500).json({
-            message:err.sqlMessage,
+            message:err,
             status:500
         });
     }

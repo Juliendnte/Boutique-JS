@@ -9,7 +9,7 @@ const middleware = {
 }
 
 //Configuration des routes CRUD
-routeur.get("/article", controllerArticle.getArticles);
+routeur.get("/articles", controllerArticle.getArticles);
 routeur.get("/article/:id",middleware.articleExists , controllerArticle.getArticle);
 routeur.post("/article",[middleware.validateToken, middleware.bodyParser] ,controllerArticle.postArticle);
 routeur.put("/article/:id",[middleware.validateToken, middleware.articleExists, middleware.bodyParser] ,controllerArticle.putArticle);
