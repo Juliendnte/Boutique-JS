@@ -39,9 +39,7 @@ exports.getArticles = async (req, res) =>{
 }
 
 exports.getArticle = async (req , res) =>{
-    //const link = process.env.BASE_URL;
     const articleById = req.article;
-    //articleById.Photo = `${link}/asset/${articleById.Photo}`;
 
     return res.status(200).json({
         message: `Article with id ${req.params.id} successfully found`,
