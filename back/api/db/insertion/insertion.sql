@@ -12,4 +12,3 @@ INSERT INTO `photo` (`URL`, `Id_Article`) VALUES
     ('montres/a._lange_&_söhne/1815/or_blanc/img_4.avif', 1),
     ('montres/a._lange_&_söhne/1815/or_blanc/img_5.avif', 1);
                                               
-

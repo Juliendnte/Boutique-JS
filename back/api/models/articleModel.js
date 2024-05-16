@@ -35,7 +35,6 @@ class ArticleModel{
                         values.push(value);
                     }
                 });
-
                 connection.query(sql,values, (err, results)=> err ? reject(err) : resolve(results));
             }else{
                 connection.query(sql, (err, results)=> err ? reject(err) : resolve(results));
@@ -46,15 +45,15 @@ class ArticleModel{
 
     static createArticle(newArticle){
         return new Promise((resolve, reject) => {
-            const sql = `INSERT INTO article (Name, Description, Price, Reduction, Stock) VALUES (?, ?, ?, ?, ?)`;
-            connection.query(sql, [newArticle.Name, newArticle.Description, newArticle.Price, newArticle.Reduction, newArticle.Stock], (err, results)=> err ? reject(err) : resolve(results[0]));
+            const sql = `INSERT INTO article (Marque, Model, Ref, Price,Fab, Dimension, Matiere, Color, Waterproof, Movement,Complications,Bracelet, Color_Bracelet, Availability, Reduction, Stock, Description) VALUES (?,?,?,?,?,?,?,?, ?, ?, ?, ?,?,?,?,?)`;
+            connection.query(sql, [newArticle.Marque, newArticle.Model, newArticle.Ref, newArticle.Price, newArticle.Fab, newArticle.Dimension, newArticle.Matiere, newArticle.Color, newArticle.Waterproof, newArticle.Movement,newArticle.Complications,newArticle.Bracelet, newArticle.Color_Bracelet, newArticle.Availability, newArticle.Reduction, newArticle.Stock, newArticle.Description], (err, results)=> err ? reject(err) : resolve(results[0]));
         });
     }
 
     static updatePutArticle(id, updateArticle){
         return new Promise((resolve, reject) => {
-            const sql = `UPDATE article SET Name=?, Description=?, Price=?, Reduction=?, Stock=? WHERE id=?`;
-            const values = [updateArticle.Name, updateArticle.Description, updateArticle.Price, updateArticle.Reduction, updateArticle.Stock, id];
+            const sql = `UPDATE article SET Marque=?, Model=?, Ref=?, Price=? ,Fab=? , Dimension=? , Matiere=? , Color=?, Waterproof=?, Movement=?,Complications=?,Bracelet=?, Color_Bracelet=?, Availability=?, Reduction=?, Stock=?, Description=? WHERE id=?`;
+            const values =  [newArticle.Marque, newArticle.Model, newArticle.Ref, newArticle.Price, newArticle.Fab, newArticle.Dimension, newArticle.Matiere, newArticle.Color, newArticle.Waterproof, newArticle.Movement,newArticle.Complications,newArticle.Bracelet, newArticle.Color_Bracelet, newArticle.Availability, newArticle.Reduction, newArticle.Stock, newArticle.Description, id];
 
             connection.query(sql, values, (err, results) => err ? reject(err) : resolve(results[0]));
         });
@@ -91,6 +90,14 @@ class ArticleModel{
             const sql = `DELETE FROM article WHERE Id=?`
 
             connection.query(sql,[id], (err,results)=> err ? reject(err) : resolve(results[0]))
+        });
+    }
+
+    static getImages(id){
+        return new Promise((resolve, reject) => {
+           const sql = `SELECT photo.URL FROM article LEFT JOIN photo ON article.Id = photo.Id_Article WHERE article.Id = ?;`;
+
+           connection.query(sql, [id], (err, results)=> err ? reject(err) : resolve(results));
         });
     }
 }

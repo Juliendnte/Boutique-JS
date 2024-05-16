@@ -14,6 +14,7 @@ app.use(express.json());
 //Lire un formulaire
 app.use(express.urlencoded({ extended: true }));
 
+app.use(express.static('api'));
 //Applique une limite de requête pour toutes les routes
 const rateLimit = require("./middlewares/rate-limit");
 app.use(rateLimit);
