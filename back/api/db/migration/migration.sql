@@ -29,28 +29,27 @@ SET time_zone = "+00:00";
 
 DROP TABLE IF EXISTS `article`;
 CREATE TABLE IF NOT EXISTS `article` (
-  `Id` int NOT NULL AUTO_INCREMENT,
-  `Name` varchar(50) NOT NULL,
-  `Description` varchar(500) DEFAULT NULL,
-  `Price` int NOT NULL,
-  `Reduction` int DEFAULT NULL,
-  `Stock` int NOT NULL,
-  PRIMARY KEY (`Id`)
+    `Id` int NOT NULL AUTO_INCREMENT,
+    `Description` varchar(500) DEFAULT NULL,
+    `Marque` varchar(50) NOT NULL ,
+    `Model` varchar(50) NOT NULL,
+    `Ref` varchar(50) NOT NULL,
+    `Fab` varchar(30) NOT NULL,
+    `Dimension` varchar(15) NOT NULL,
+    `Matiere` varchar(20) NOT NULL ,
+    `Color` varchar(20) NOT NULL ,
+    `Movement` varchar(30) NOT NULL ,
+    `Complications` varchar(200) NOT NULL ,
+    `Waterproof` varchar(10) DEFAULT NULL ,
+    `Bracelet` varchar(20) NOT NULL ,
+    `Color_Bracelet` varchar(20) NOT NULL ,
+    `Availability` varchar(20) NOT NULL ,
+    `Price` int NOT NULL,
+    `Reduction` int DEFAULT NULL,
+    `Stock` int NOT NULL,
+    PRIMARY KEY (`Id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- --------------------------------------------------------
-
---
--- Structure de la table `have`
---
-
-DROP TABLE IF EXISTS `have`;
-CREATE TABLE IF NOT EXISTS `have` (
-  `Id_Article` int DEFAULT NULL,
-  `Id_Tag` int DEFAULT NULL,
-  FOREIGN KEY (Id_Article) REFERENCES article(Id),
-  FOREIGN KEY (Id_Tag) REFERENCES tags(Id)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -69,18 +68,6 @@ CREATE TABLE IF NOT EXISTS `photo` (
 
 -- --------------------------------------------------------
 
---
--- Structure de la table `tags`
---
-
-DROP TABLE IF EXISTS `tags`;
-CREATE TABLE IF NOT EXISTS `tags` (
-  `Id` int NOT NULL AUTO_INCREMENT,
-  `Label` varchar(10) NOT NULL,
-  PRIMARY KEY (`Id`),
-  UNIQUE KEY `Label` (`Label`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

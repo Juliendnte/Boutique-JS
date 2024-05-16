@@ -9,8 +9,7 @@ const fs = require("fs");
 // Crée une application Express
 const app = express();
 app.use(cors());
-app.use("/asset", express.static(path.join(__dirname,"./")));
-
+app.use(express.static('api'));
 //Applique une limite de requête pour toutes les routes
 const rateLimit = require("./middlewares/rate-limit");
 app.use(rateLimit);
