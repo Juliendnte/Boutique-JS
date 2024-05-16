@@ -1,12 +1,12 @@
 require("dotenv").config()
-const api_key = process.env.API_KEY;
+const api_key = process.env.API_KEY;//Est voué a changer
 
 function validateToken(req, res, next) {
-    const token = req.get('Authorization');
+    const token = req.get('Authorization');//Récupere le token
 
-    if (!token) return res.status(401).send("Unauthorized")
-    else if (token !== api_key) return res.status(403).send("Forbidden")
-    else return next();
+    if (!token) return res.status(401).send("Unauthorized")//S'il y en a pas
+    else if (token !== api_key) return res.status(403).send("Forbidden")//S'il n'est pas bon
+    else return next();//S'il est bon (next = passe au middleware suivant)
 }
 
 module.exports = validateToken;

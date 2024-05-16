@@ -1,6 +1,7 @@
-const mysql = require("mysql2");
+const mysql = require("mysql2");//Faire attention de bien install mysql2 est pas mysql simple
 require('dotenv').config();
 
+//Prend les données du .env et se connecte a l'utilisateur et va a la base de données choisie
 const connection = mysql.createConnection({
     host: process.env.DB_HOST || 'localhost',
     user: process.env.DB_USER || "root",
@@ -10,8 +11,8 @@ const connection = mysql.createConnection({
 });
 
 connection.connect((err)=>{
-    if (err) console.error(err);
-    else console.log("Connection etablished");
+    if (err) console.error(err);//S'il y a une erreur
+    else console.log("Connection etablished");//Sinon
 });
 
 module.exports = connection;
