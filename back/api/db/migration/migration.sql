@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS `article` (
 DROP TABLE IF EXISTS `photo`;
 CREATE TABLE IF NOT EXISTS `photo` (
   `Id` int NOT NULL AUTO_INCREMENT,
-  `URL` varchar(10) DEFAULT NULL,
+  `URL` varchar(100) DEFAULT NULL,
   `Id_Article` int DEFAULT NULL,
   PRIMARY KEY (`Id`),
   FOREIGN KEY (Id_Article) REFERENCES article(Id)
