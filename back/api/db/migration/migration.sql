@@ -68,6 +68,50 @@ CREATE TABLE IF NOT EXISTS `photo` (
 
 -- --------------------------------------------------------
 
+--
+-- Structure de la table `user`
+--
+
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE IF NOT EXISTS `user` (
+    `Id` int NOT NULL AUTO_INCREMENT,
+    `Name` varchar(30) NOT NULL,
+    `Email` varchar(70) NOT NULL,
+    `Pwd` varchar(70) NOT NULL,
+    `Adresse` varchar(100) DEFAULT NULL,
+    PRIMARY KEY (`Id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+
+--
+-- Structure de la table `favoris`
+--
+DROP TABLE IF EXISTS `favoris`;
+CREATE TABLE IF NOT EXISTS `favoris` (
+    `Id_user` int NOT NULL,
+    `Id_article` int NOT NULL,
+    PRIMARY KEY (`Id_user`,`Id_article`),
+    FOREIGN KEY (`Id_user`) REFERENCES `user`(`Id`),
+    FOREIGN KEY (`Id_article`) REFERENCES `article`(`Id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+
+--
+-- Structure de la table `commande`
+--
+DROP TABLE IF EXISTS `commande`;
+CREATE TABLE IF NOT EXISTS `commande` (
+    `Id_user` int NOT NULL,
+    `Id_article` int NOT NULL,
+    `Current_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`Id_user`,`Id_article`),
+    FOREIGN KEY (`Id_user`) REFERENCES `user`(`Id`),
+    FOREIGN KEY (`Id_article`) REFERENCES `article`(`Id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
