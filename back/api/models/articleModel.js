@@ -1,5 +1,4 @@
 const connection = require("../config/authBDD")
-const {resolve} = require("path");
 //Pour se connecter a la base de données
 
 class ArticleModel{
