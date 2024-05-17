@@ -1,6 +1,11 @@
-const connection = require("../config/authBDD")//Pour se connecter a la base de données
+const connection = require("../config/authBDD")
+const {resolve} = require("path");
+//Pour se connecter a la base de données
 
 class ArticleModel{
+
+    total = 0;
+
     static getArticleById(id){
         /*
          Les promesses permettent un chaînage fluide, une gestion centralisée des erreurs, et sont compatibles avec la syntaxe async/await.
@@ -14,11 +19,11 @@ class ArticleModel{
     }
 
     static getAllArticle(query){
-        return new Promise((resolve, reject) => {
-            let sql = `SELECT * FROM article `
+        return new Promise(async (resolve, reject) => {
+            let sql = `SELECT a.*, p.URL AS Image_URL FROM article a LEFT JOIN (SELECT Id_Article, MIN(Id) AS Min_Id FROM photo GROUP BY Id_Article) mp ON a.Id = mp.Id_Article LEFT JOIN photo p ON mp.Min_Id = p.Id; `
 
             //S'il y a quelque chose dans la query
-            if (!(Object.entries(query).length === 0)){
+            if (!(Object.entries(query).length === 0)) {
                 const values = [];
 
                 /*
@@ -30,19 +35,26 @@ class ArticleModel{
                 Ma fonction ne marche que si le limit et offset sont a la fin comme en sql
                 Voir le cours de Cyril sur moodle si pas compris
                  */
-                Object.entries(query).forEach(([key, value], index) => {
-                    if (key.toLowerCase() === "limit" || key.toLowerCase() === "offset"){
+                Object.entries(query).forEach(async ([key, value], index) => {
+                    if (key.toLowerCase() === "limit" || key.toLowerCase() === "offset") {
+                        this.total = (await this.getTotal(sql, values)).length;
                         sql += `${key} ? `;
                         values.push(parseInt(value));
-                    }else{
-                        sql += index ===0 ? "WHERE ": "AND "
+                    } else {
+                        sql += index === 0 ? "WHERE " : "AND "
                         sql += `${key}=? `;
                         values.push(value);
                     }
                 });
-                connection.query(sql,values, (err, results)=> err ? reject(err) : resolve(results));
-            }else{
-                connection.query(sql, (err, results)=> err ? reject(err) : resolve(results));
+                if (!this.total) {
+                    this.total = (await this.getTotal(sql, values)).length;
+                }
+                connection.query(sql, values, (err, results) => err ? reject(err) : resolve(results));
+            } else {
+                if (!this.total) {
+                    this.total = (await this.getTotal(sql)).length;
+                }
+                connection.query(sql, (err, results) => err ? reject(err) : resolve(results));
             }
 
         });
@@ -101,13 +113,26 @@ class ArticleModel{
         });
     }
 
-    static getImages(id){
+    static getImages(id, test= false){
         return new Promise((resolve, reject) => {
             //Je selectionne l'url de la photo , je suis positionné dans la article, je fait une jointure entre l'Id de mon article et l'id article de ma photo,
             //Quand l'id de l'article est égale a la valeur envoyé
-            const sql = `SELECT photo.URL FROM article LEFT JOIN photo ON article.Id = photo.Id_Article WHERE article.Id = ?;`;
+            let sql = `SELECT photo.URL FROM article LEFT JOIN photo ON article.Id = photo.Id_Article WHERE article.Id = ?`;
+            if (test){
+                sql += " LIMIT 1 OFFSET 0;"
+            }
 
             connection.query(sql, id, (err, results)=> err ? reject(err) : resolve(results));
+        });
+    }
+
+    static getTotal(sql,values = []){
+        return new Promise((resolve,reject)=>{
+            if (values.length) {
+                connection.query(sql, values, (err, results) => err ? reject(err) : resolve(results));
+            }else{
+                connection.query(sql, (err, results) => err ? reject(err) : resolve(results));
+            }
         });
     }
 }

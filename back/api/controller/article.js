@@ -5,14 +5,16 @@ const baseUrl = process.env.BASE_URL;
 exports.getArticles = async (req, res) =>{
     try {
         const articles = await article.getAllArticle(req.query);
-
+        articles.forEach((article) => {
+           article.Image_URL = `${baseUrl}/asset/${article.Image_URL}`;
+        });
         const offset = parseInt(req.query.offset) || 0;
         const limit = parseInt(req.query.limit) || 6;
         const href = baseUrl+"/articles";
         const total = Object.entries(articles).length;
 
-        const next = `${href}?limit=${limit}&offset=${offset + limit}`;
-        const previous = `${href}?limit=${limit}&offset=${Math.max(0, offset - limit)}`;
+        const next = article.total === total ? null :  `${href}?limit=${limit}&offset=${offset + limit}`;
+        const previous = offset ? `${href}?limit=${limit}&offset=${offset}` : null;
 
         if (!articles || total === 0){
             return res.status(404).json({
