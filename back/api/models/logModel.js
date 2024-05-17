@@ -4,7 +4,7 @@ class logModel{
 
     static login(email){
         return new Promise((resolve,reject)=>{
-            const sql =`SELECT * FROM users WHERE Email = ?`;
+            const sql =`SELECT * FROM users WHERE Email = ?`;//Car email unique
             connection.query(sql,email, (err, results)=> err ? reject(err) : resolve(results[0]));
         });
     }

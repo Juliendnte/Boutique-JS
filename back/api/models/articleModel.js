@@ -19,6 +19,7 @@ class ArticleModel{
 
     static getAllArticle(query){
         return new Promise(async (resolve, reject) => {
+            //Prend tous de article et la première image des articles
             let sql = `SELECT a.*, p.URL AS Image_URL FROM article a LEFT JOIN (SELECT Id_Article, MIN(Id) AS Min_Id FROM photo GROUP BY Id_Article) mp ON a.Id = mp.Id_Article LEFT JOIN photo p ON mp.Min_Id = p.Id; `
 
             //S'il y a quelque chose dans la query
@@ -63,7 +64,7 @@ class ArticleModel{
         //newArticle est le json de l'article que l'on veut ajoutée
         return new Promise((resolve, reject) => {
             //dans les parenthèse ce sont les valeurs qu'un article doit avoir
-            const sql = `INSERT INTO article (Marque, Model, Ref, Price,Fab, Dimension, Matiere, Color, Waterproof, Movement,Complications,Bracelet, Color_Bracelet, Availability, Reduction, Stock, Description) VALUES (?,?,?,?,?,?,?,?, ?, ?, ?, ?,?,?,?,?)`;
+            const sql = `INSERT INTO article (Marque, Model, Ref, Price,Fab, Dimension, Matiere, Color, Waterproof, Movement,Complications,Bracelet, Color_Bracelet, Availability, Reduction, Stock, Description) VALUES (?,?,?,?,?,?,?,?, ?, ?,?,?, ?, ?,?,?,?)`;
             connection.query(sql, [newArticle.Marque, newArticle.Model, newArticle.Ref, newArticle.Price, newArticle.Fab, newArticle.Dimension, newArticle.Matiere, newArticle.Color, newArticle.Waterproof, newArticle.Movement,newArticle.Complications,newArticle.Bracelet, newArticle.Color_Bracelet, newArticle.Availability, newArticle.Reduction, newArticle.Stock, newArticle.Description], (err, results)=> err ? reject(err) : resolve(results[0]));
         });
     }

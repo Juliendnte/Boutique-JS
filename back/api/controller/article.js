@@ -1,20 +1,24 @@
 const article = require("../models/articleModel");
 require('dotenv').config();
+
 const baseUrl = process.env.BASE_URL;
 
 exports.getArticles = async (req, res) =>{
     try {
         const articles = await article.getAllArticle(req.query);
-        articles.forEach((article) => {
-           article.Image_URL = `${baseUrl}/asset/${article.Image_URL}`;
-        });
-        const offset = parseInt(req.query.offset) || 0;
-        const limit = parseInt(req.query.limit) || 6;
-        const href = baseUrl+"/articles";
-        const total = Object.entries(articles).length;
 
-        const next = article.total === total ? null :  `${href}?limit=${limit}&offset=${offset + limit}`;
-        const previous = offset ? `${href}?limit=${limit}&offset=${offset}` : null;
+        const offset = parseInt(req.query.offset) || 0;//S'il a déjà set l'offset sinon c'est 0
+        const limit = parseInt(req.query.limit) || 6;//S'il a déjà set la limit sinon c'est 6
+        const href = baseUrl+"/articles";//http://localhost:4000/articles
+        const total = Object.entries(articles).length;//Pour savoir j'ai combien d'article
+
+        const next = article.total === total ? null :  `${href}?limit=${limit}&offset=${offset + limit}`;//Si article.total et total sont égaux alors pas de suivant
+        /*
+        La différence entre article.total et total est que
+        article.total est le total des articles avec la query mais sans le limit et offset ex le total de /articles?name=julien
+        total est le total des article avec la query y compris les limit et offset ex le total de /articles?name=julien&offset=0&limit=6
+         */
+        const previous = offset ? `${href}?limit=${limit}&offset=${offset}` : null;//Si l'offset est différent de 0 pagination sinon y en a pas
 
         if (!articles || total === 0){
             return res.status(404).json({
@@ -45,10 +49,10 @@ exports.getArticles = async (req, res) =>{
 }
 
 exports.getArticle = async (req , res) =>{
-    const articleById = req.article;
+    const articleById = req.article;//Grâce au middleware articleExists
     try {
-        const img = await article.getImages(articleById.Id);
-        articleById.img = img.map(image => `${baseUrl}/asset/${image.URL}`);
+        const img = await article.getImages(articleById.Id);//Prends toutes les images de l'article indiqué
+        articleById.img = img.map(image => `${baseUrl}/asset/${image.URL}`);//Met le chemin dans le json
 
         return res.status(200).json({
             message: `Article with id ${req.params.id} successfully found`,
@@ -64,7 +68,7 @@ exports.getArticle = async (req , res) =>{
 };
 
 exports.postArticle = async (req,res)=>{
-    const { Marque, Model, Ref, Price,Fab, Dimension, Matiere, Color, Waterproof, Movement,Complications,Bracelet, Color_Bracelet, Availability, Reduction, Stock, Description} = req.body;
+    const { Marque, Model, Ref, Price, Fab, Dimension, Matiere, Color, Waterproof, Movement,Complications,Bracelet, Color_Bracelet, Availability, Reduction, Stock, Description} = req.body;
 
     if (!Marque || !Model  || !Ref || !Price || !Fab || !Dimension || !Matiere || !Color || !Waterproof || !Movement || !Complications || !Bracelet || !Color_Bracelet || !Availability || !Description) {
         return res.status(400).json({
@@ -158,7 +162,7 @@ exports.patchArticle = async (req,res) =>{
     //Check si une clé du body appartient a cette liste
     if (!body || !Object.keys(body).some(key => ['Marque', 'Model', 'Ref', 'Price','Fab', 'Dimension', 'Matiere', 'Color', 'Waterproof', 'Movement','Complications','Bracelet', 'Color_Bracelet', 'Availability', 'Reduction', 'Stock', 'Description'].includes(key))) {
         return res.status(400).json({
-            message: "Tous les champs (Marque, Model, Ref, Price,Fab, Dimension, Matiere, Color, Waterproof, Movement,Complications,Bracelet, Color_Bracelet, Availability, Description) sont requis.",
+            message: "Au moins un des champs (Marque, Model, Ref, Price,Fab, Dimension, Matiere, Color, Waterproof, Movement,Complications,Bracelet, Color_Bracelet, Availability, Description) sont requis.",
             status:400
         });
     }
