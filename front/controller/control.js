@@ -1,11 +1,17 @@
 const url = "http://localhost:4000";
 
 exports.Index = (req, res) => {
-  const watches = getWatches();
-  res.render("../views/pages/index", watches);
+  getWatche(1).then(watches =>{
+    console.log(watches)
+    res.render("../views/pages/index", {
+      lst : watches.article.img
+    });
+  }).catch(err =>{
+    console.log(err);
+  })
 };
 
-async function getWatches() {
-  const data = await fetch(`${url}/articles`);
+async function getWatche(i) {
+  const data = await fetch(`${url}/article/${i}`);
   return data.json();
 }

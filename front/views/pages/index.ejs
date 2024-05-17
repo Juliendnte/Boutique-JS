@@ -7,7 +7,9 @@
   <body>
     <%- include('../components/header'); %>
     <%-include('../components/burger-list'); %>
-    <p><%= watches %></p>
+    <% lst.forEach(function (img) { %>
+      <img src="<%= img %>" alt="img">
+    <%}); %>
   </body>
   <script src="/public/js/script.js"></script>
 </html>
