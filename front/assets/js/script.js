@@ -1,3 +1,4 @@
+
 const burger = document.querySelector("#burger");
 burger.addEventListener("click", displayBurger);
 const span1 = document.querySelector("#first-span");
@@ -33,3 +34,8 @@ function hideBurger() {
   burger.removeEventListener("click", hideBurger);
   burger.addEventListener("click", displayBurger);
 }
+
+
+
+
+

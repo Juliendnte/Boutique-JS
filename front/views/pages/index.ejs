@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="fr">
   <head>
-    <%- include('../partials/head'); %>
+    <%- include('../components/head'); %>
     <title>Accueil</title>
   </head>
   <body>
-    <%- include('../partials/header'); %> 
-    <%-include('../partials/burger-list');%>
+    <%- include('../components/header'); %>
+    <%-include('../components/burger-list'); %>
+    <p><%= watches %></p>
   </body>
   <script src="/public/js/script.js"></script>
 </html>
