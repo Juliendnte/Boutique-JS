@@ -76,7 +76,7 @@ DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
     `Id` int NOT NULL AUTO_INCREMENT,
     `Name` varchar(30) NOT NULL,
-    `Email` varchar(70) NOT NULL,
+    `Email` varchar(70) NOT NULL UNIQUE ,
     `Pwd` varchar(100) NOT NULL,
     `Salt` varchar(100) NOT NULL,
     `Adresse` varchar(100) DEFAULT NULL,

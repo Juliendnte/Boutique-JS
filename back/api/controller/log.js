@@ -1,11 +1,13 @@
 const crypto = require('crypto');
 const log = require("../models/logModel");
 const jwt = require('jsonwebtoken');
-const secretKey = process.env.SECRET_KEY
+require("dotenv").config();
 
+const jwtkey = process.env.JWT_KEY
+const pepper = process.env.PEPPER
 const hashPassword = (password, salt) => {
     const hash = crypto.createHmac('sha512', salt);
-    hash.update(password);
+    hash.update(password + pepper);
     const value = hash.digest('hex');
     return {
         salt: salt,
@@ -14,10 +16,11 @@ const hashPassword = (password, salt) => {
 };
 
 exports.Register = async (req, res) =>{
-    const { username,email, password } = req.body;
-    const { hashedPassword } = hashPassword(password, crypto.randomBytes(16).toString('hex'));
+    const { username, email, password } = req.body;
+    const salt = crypto.randomBytes(16).toString('hex')
+    const hashedPassword  = hashPassword(password, salt);
     try{
-        await log.register({username,email,password,hashedPassword});
+        await log.register({username, email, hashedPassword, salt});
         res.status(201).json({
             message : `User registered successfully`,
             status: 201
@@ -41,9 +44,9 @@ exports.Login = async (req, res) =>{
                 status: 401
             });
         }
-        const hashedPassword = hashPassword(password, user.salt);
-        if (hashedPassword === user.password) {
-            const accessToken = jwt.sign({ username: user.username }, secretKey, { expiresIn: '24h' });
+        const hashedPassword = hashPassword(password, user.Salt);
+        if (hashedPassword === user.Pwd) {
+            const accessToken = jwt.sign({ email: user.Email }, jwtkey, { expiresIn: '24h' });
             res.status(200).json({ accessToken });
         } else {
             return res.status(401).json({
