@@ -61,3 +61,83 @@ exports.Login = async (req, res) =>{
         });
     }
 }
+
+exports.getAllFav = async (req,res)=>{
+    const user = req.user;//Pris du middleware auth
+    try{
+        const Favoris = await log.getAllFav(user.Id);//Récupère tous les favoris a l'id de l'user
+        if (!Favoris){
+            return res.status(404).json({
+                message:`None favori were found to the user at id ${user.Id}`,
+                status: 404
+            })
+        }
+        return res.status(200).json({
+            message : "Favorite articles by user",
+            status: 200,
+            Favoris
+        })
+    }catch (err){
+        res.status(500).json({
+            message:err,
+            status:500
+        })
+    }
+}
+
+exports.getAllCommande = async (req,res)=>{
+    const userID = req.user.Id;
+    try{
+        const Commande = await log.getAllCommande(userID);
+        if (!Commande){
+            return res.status(404).json({
+                message:`None command were found to the user at id ${userID}`,
+                status: 404
+            })
+        }
+        return res.status(200).json({
+            message : "Command articles by user",
+            status: 200,
+            Commande
+        })
+    }catch (err){
+        res.status(500).json({
+            message:err,
+            status:500
+        })
+    }
+}
+
+exports.postFavoris = async (req,res) =>{
+    const userID = req.user.Id;
+    const articleID = req.params.id;
+    try{
+        await log.postFav(userID, articleID);//L'user met en favoris l'article
+        res.status(200).json({
+            message : "Article successfully been in favoris",
+            status: 200
+        })
+    }catch (err){
+        res.status(500).json({
+            message:err,
+            status:500
+        })
+    }
+}
+
+exports.postComande = async (req,res) =>{
+    const userID = req.user.Id;
+    const articleID = req.params.id;
+    try{
+        await log.postCommande(userID, articleID);//L'user a mit dans l'historique de commande
+        res.status(200).json({
+            message : "Command successfully registered",
+            status: 200
+        })
+    }catch (err){
+        res.status(500).json({
+            message:err,
+            status:500
+        })
+    }
+}
