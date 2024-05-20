@@ -8,9 +8,5 @@ const middleware = {
 
 routeur.post("/login", controllerLog.Login);
 routeur.post("/register", controllerLog.Register);
-routeur.get("/fav",middleware.validateToken,controllerLog.getAllFav)
-routeur.post("/fav/:id",[middleware.validateToken,middleware.articleExists], controllerLog.postFavoris)
-routeur.get("/commande", middleware.validateToken, controllerLog.getAllCommande)
-routeur.post("/commande/:id",[middleware.validateToken,middleware.articleExists],controllerLog.postComande);
 
 module.exports = routeur;

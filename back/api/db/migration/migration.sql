@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `article` (
                                          `Availability` varchar(20) NOT NULL,
                                          `Price` int NOT NULL,
                                          `Reduction` int DEFAULT NULL,
-                                         `Stock` int NOT NULL,
+                                         `Stock` int NOT NULL CHECK (`Stock` >= 0),
                                          PRIMARY KEY (`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 

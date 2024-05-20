@@ -1,7 +1,7 @@
 //Importation des modules
 const express = require("express");
 const routeur = express.Router();//Configure le module pour faire des routes
-const controllerArticle = require("../controller/article");//Appels des controllers avec dedans les fonctions des calls d'api
+const controllerArticle = require("../controller/article");
 //Objet avec tous les middleware
 const middleware = {
     validateToken : require("../middlewares/auth"),//Middleware vérifiant si l'utilisateur au token spécifiée a le droit d'accéder
@@ -16,10 +16,16 @@ const middleware = {
 //Delete sert a supprimer la donné a l'id spécifiée
 routeur.get("/articles", controllerArticle.getArticles);
 routeur.get("/article/:id",middleware.articleExists , controllerArticle.getArticle);
-routeur.post("/article",middleware.validateToken ,controllerArticle.postArticle);
-routeur.put("/article/:id",[middleware.validateToken, middleware.articleExists] ,controllerArticle.putArticle);
+routeur.post("/article",middleware.validateToken ,controllerArticle.postArticle);//Pas obligé
+routeur.put("/article/:id",[middleware.validateToken, middleware.articleExists] ,controllerArticle.putArticle);//Pas obligé
 routeur.patch("/article/:id",[middleware.validateToken, middleware.articleExists] ,controllerArticle.patchArticle);
-routeur.delete("/article/:id",[middleware.validateToken, middleware.articleExists] ,controllerArticle.deleteArticle);
+routeur.delete("/article/:id",[middleware.validateToken, middleware.articleExists] ,controllerArticle.deleteArticle);//Pas obligé
+routeur.get("/fav",middleware.validateToken,controllerArticle.getAllFav)
+routeur.post("/fav/:id",[middleware.validateToken,middleware.articleExists], controllerArticle.postFavoris)
+routeur.delete("/fav/:id",[middleware.validateToken,middleware.articleExists])
+routeur.get("/commande", middleware.validateToken, controllerArticle.getAllCommande)
+routeur.post("/commande/:id",[middleware.validateToken,middleware.articleExists],controllerArticle.postComande);
+routeur
 
 //Exportation des routes
 module.exports = routeur;
