@@ -9,7 +9,7 @@ exports.getArticles = async (req, res) =>{
 
         const offset = parseInt(req.query.offset) || 0;//S'il a déjà set l'offset sinon c'est 0
         const limit = parseInt(req.query.limit) || 6;//S'il a déjà set la limit sinon c'est 6
-        const href = baseUrl+"/articles";//http://localhost:4000/articles
+        const href = baseUrl + "/articles" + buildQueryWithoutLimitOffset(req.query); // href avec query mais sans limit ou offset
         const total = Object.entries(articles).length;//Pour savoir j'ai combien d'article
 
         const next = article.total === total ? null :  `${href}?limit=${limit}&offset=${offset + limit}`;//Si article.total et total sont égaux alors pas de suivant
@@ -324,4 +324,8 @@ exports.deleteCommande = async (req,res) =>{
             status:500
         })
     }
+}
+
+function buildQueryWithoutLimitOffset(query) {
+    return query ? `?${Object.entries(query).filter(([key]) => key.toLowerCase() !== 'limit' && key.toLowerCase() !== 'offset').map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`).join('&')}` : '';
 }
