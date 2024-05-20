@@ -6,40 +6,40 @@ const baseUrl = process.env.BASE_URL;
 exports.getArticles = async (req, res) =>{
     try {
         const articles = await article.getAllArticle(req.query);
-
-        const offset = parseInt(req.query.offset) || 0;//S'il a déjà set l'offset sinon c'est 0
-        const limit = parseInt(req.query.limit) || 6;//S'il a déjà set la limit sinon c'est 6
-        const href = baseUrl + "/articles" + buildQueryWithoutLimitOffset(req.query); // href avec query mais sans limit ou offset
         const total = Object.entries(articles).length;//Pour savoir j'ai combien d'article
-
-        const next = article.total === total ? null :  `${href}?limit=${limit}&offset=${offset + limit}`;//Si article.total et total sont égaux alors pas de suivant
-        /*
-        La différence entre article.total et total est que
-        article.total est le total des articles avec la query mais sans le limit et offset ex le total de /articles?name=julien
-        total est le total des article avec la query y compris les limit et offset ex le total de /articles?name=julien&offset=0&limit=6
-         */
-        const previous = offset ? `${href}?limit=${limit}&offset=${offset}` : null;//Si l'offset est différent de 0 pagination sinon y en a pas
-
         if (!articles || total === 0){
             return res.status(404).json({
                 message: `Articles not found`,
                 status: 404
             });
-        }else {
-            return res.status(200).json({
-                message: `Articles successfully found`,
-                status: 200,
-                articles: {
-                    href,
-                    offset,
-                    limit,
-                    next,
-                    previous,
-                    total,
-                    items: articles
-                }
-            });
         }
+
+        const offset = parseInt(req.query.offset) || 0;//S'il a déjà set l'offset sinon c'est 0
+        const limit = parseInt(req.query.limit) || 6;//S'il a déjà set la limit sinon c'est 6
+        const href = baseUrl + "/articles?" + buildQueryWithoutLimitOffset(req.query); // href avec query mais sans limit ou offset
+
+        const next = article.total === total ? null :  `${href}&limit=${limit}&offset=${offset + limit}`;//Si article.total et total sont égaux alors pas de suivant
+        /*
+        La différence entre article.total et total est que
+        article.total est le total des articles avec la query mais sans le limit et offset ex le total de /articles?name=julien
+        total est le total des article avec la query y compris les limit et offset ex le total de /articles?name=julien&offset=0&limit=6
+         */
+        const previous = offset ? `${href}&limit=${limit}&offset=${offset}` : null;//Si l'offset est différent de 0 pagination sinon y en a pas
+
+        return res.status(200).json({
+            message: `Articles successfully found`,
+            status: 200,
+            articles: {
+                total2: article.total,
+                href: req.query.length ? href : href.slice(0, -1),
+                offset,
+                limit,
+                next,
+                previous,
+                total,
+                items: articles
+            }
+        });
     }catch (err){
         res.status(500).json({
             message:err,
@@ -327,5 +327,8 @@ exports.deleteCommande = async (req,res) =>{
 }
 
 function buildQueryWithoutLimitOffset(query) {
-    return query ? `?${Object.entries(query).filter(([key]) => key.toLowerCase() !== 'limit' && key.toLowerCase() !== 'offset').map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`).join('&')}` : '';
+    return query ? `${Object.entries(query)
+        .filter(([key]) => key.toLowerCase() !== 'limit' && key.toLowerCase() !== 'offset')
+        .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+        .join('&')}` : '';
 }

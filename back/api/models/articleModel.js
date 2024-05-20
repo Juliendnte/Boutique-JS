@@ -61,7 +61,7 @@ class ArticleModel{
             // Obtenir le total des articles sans limit et offset
             if (!this.total) {
                  // Utilise la même requête sans limit ni offset
-                this.total = await this.getTotal(sql, values.slice(0, values.length - (limitClause ? 1 : 0) - (offsetClause ? 1 : 0)));
+                this.total = (await this.getTotal(sql, values.slice(0, values.length - (limitClause ? 1 : 0) - (offsetClause ? 1 : 0)))).total;
             }
 
             // Ajouter limit et offset à la requête principale
