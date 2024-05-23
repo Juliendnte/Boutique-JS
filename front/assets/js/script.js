@@ -1,4 +1,3 @@
-
 const burger = document.querySelector("#burger");
 burger.addEventListener("click", displayBurger);
 const span1 = document.querySelector("#first-span");
@@ -6,6 +5,7 @@ const span2 = document.querySelector("#second-span");
 const span3 = document.querySelector("#third-span");
 const burgerListCtn = document.querySelector(".burger-list-ctn");
 const burgerList = document.querySelectorAll(".burger-list-ctn p");
+const listP = document.querySelectorAll(".filtre p");
 
 function displayBurger() {
   span1.style =
@@ -34,8 +34,3 @@ function hideBurger() {
   burger.removeEventListener("click", hideBurger);
   burger.addEventListener("click", displayBurger);
 }
-
-
-
-
-

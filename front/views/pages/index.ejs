@@ -2,14 +2,35 @@
 <html lang="fr">
   <head>
     <%- include('../components/head'); %>
+    <link rel="stylesheet" href="/public/css/accueil.css" />
     <title>Accueil</title>
   </head>
   <body>
     <%- include('../components/header'); %>
     <%-include('../components/burger-list'); %>
-    <% lst.forEach(function (img) { %>
-      <img src="<%= img %>" alt="img">
-    <%}); %>
+    <!-- <% lst.forEach(function (img) { %>
+    <img src="<%= img %>" alt="img" />
+    <%}); %> -->
+    <div class="vid-ctn">
+      <video
+        class="video"
+        src="/public/video/VIDEO.mp4"
+        loop
+        muted
+        autoplay
+      ></video>
+      <div class="filtre first">
+        <p>HORO HAVEN</p>
+        <p>L'essence du luxe.</p>
+        <a href="/">Voir toutes les montres</a>
+      </div>
+    </div>
+    <div class="horlogerie">
+      <img src="/public/video/horloger/img_1.jpg" alt="Image Horloger" />
+      <div class="filtre second">
+        <p>Vente, réparation et expertise de montres de luxe.</p>
+      </div>
+    </div>
   </body>
   <script src="/public/js/script.js"></script>
 </html>

@@ -1,7 +1,7 @@
 const url = "http://localhost:4000";
 
 exports.Index = (req, res) => {
-  getWatche(1).then(watches =>{
+  getWatch(1).then(watches =>{
     console.log(watches)
     res.render("../views/pages/index", {
       lst : watches.article.img
@@ -11,7 +11,7 @@ exports.Index = (req, res) => {
   })
 };
 
-async function getWatche(i) {
+async function getWatch(i) {
   const data = await fetch(`${url}/article/${i}`);
   return data.json();
 }

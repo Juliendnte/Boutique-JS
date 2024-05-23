@@ -8,7 +8,7 @@ const path = require("path");//Pour travailler avec les chemins des fichiers
 // Crée une application Express
 const app = express();
 app.use(cors());
-app.use("/asset", express.static(path.join(__dirname, "./")));
+app.use("/asset", express.static(path.join(__dirname, "/asset")));
 /*
 Configure votre application Express pour servir des fichiers statiques à partir du répertoire courant.
 Lorsque le serveur reçoit une requête commençant par /asset, il recherche le fichier correspondant dans le répertoire spécifié et le renvoie au client.
