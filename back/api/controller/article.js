@@ -73,183 +73,6 @@ exports.getArticle = async (req , res) =>{
     }
 };
 
-exports.getArticle = async (req, res) => {
-  const articleById = req.article; //Grâce au middleware articleExists
-  try {
-    const img = await article.getImages(articleById.Id); //Prends toutes les images de l'article indiqué
-    articleById.img = img.map((image) => `${baseUrl}/asset/${image.URL}`); //Met le chemin dans le json
-
-    return res.status(200).json({
-      message: `Article with id ${req.params.id} successfully found`,
-      status: 200,
-      article: articleById,
-    });
-  } catch (err) {
-    res.status(500).json({
-      message: err,
-      status: 500,
-    });
-  }
-};
-
-exports.postArticle = async (req, res) => {
-  const {
-    Marque,
-    Model,
-    Ref,
-    Price,
-    Fab,
-    Dimension,
-    Matiere,
-    Color,
-    Waterproof,
-    Movement,
-    Complications,
-    Bracelet,
-    Color_Bracelet,
-    Availability,
-    Reduction,
-    Stock,
-    Description,
-  } = req.body;
-
-  if (
-    !Marque ||
-    !Model ||
-    !Ref ||
-    !Price ||
-    !Fab ||
-    !Dimension ||
-    !Matiere ||
-    !Color ||
-    !Waterproof ||
-    !Movement ||
-    !Complications ||
-    !Bracelet ||
-    !Color_Bracelet ||
-    !Availability ||
-    !Description
-  ) {
-    return res.status(400).json({
-      message:
-        "Tous les champs (Marque, Model, Ref, Price,Fab, Dimension, Matiere, Color, Waterproof, Movement,Complications,Bracelet, Color_Bracelet, Availability, Description) sont requis.",
-      status: 400,
-    });
-  }
-
-  try {
-    const NewArticle = await article.createArticle({
-      Marque,
-      Model,
-      Ref,
-      Price,
-      Fab,
-      Dimension,
-      Matiere,
-      Color,
-      Waterproof,
-      Movement,
-      Complications,
-      Bracelet,
-      Color_Bracelet,
-      Availability,
-      Reduction,
-      Stock,
-      Description,
-    });
-
-    return res.status(201).json({
-      message: `Article successfully create`,
-      status: 201,
-      NewArticle,
-    });
-  } catch (err) {
-    res.status(500).json({
-      message: err,
-      status: 500,
-    });
-  }
-};
-
-exports.putArticle = async (req, res) => {
-  const id = req.params.id;
-  const {
-    Marque,
-    Model,
-    Ref,
-    Price,
-    Fab,
-    Dimension,
-    Matiere,
-    Color,
-    Waterproof,
-    Movement,
-    Complications,
-    Bracelet,
-    Color_Bracelet,
-    Availability,
-    Reduction,
-    Stock,
-    Description,
-  } = req.body;
-
-  if (
-    !Marque ||
-    !Model ||
-    !Ref ||
-    !Price ||
-    !Fab ||
-    !Dimension ||
-    !Matiere ||
-    !Color ||
-    !Waterproof ||
-    !Movement ||
-    !Complications ||
-    !Bracelet ||
-    !Color_Bracelet ||
-    !Availability ||
-    !Description
-  ) {
-    return res.status(400).json({
-      message:
-        "Tous les champs (Marque, Model, Ref, Price,Fab, Dimension, Matiere, Color, Waterproof, Movement,Complications,Bracelet, Color_Bracelet, Availability, Description) sont requis.",
-      status: 400,
-    });
-  }
-
-  try {
-    await article.updatePutArticle(id, {
-      Marque,
-      Model,
-      Ref,
-      Price,
-      Fab,
-      Dimension,
-      Matiere,
-      Color,
-      Waterproof,
-      Movement,
-      Complications,
-      Bracelet,
-      Color_Bracelet,
-      Availability,
-      Reduction,
-      Stock,
-      Description,
-    });
-
-    return res.status(200).json({
-      message: `Article with id ${id} successfully updated`,
-      status: 200,
-    });
-  } catch (err) {
-    res.status(500).json({
-      message: err,
-      status: 500,
-    });
-  }
-};
-
 exports.patchArticle = async (req, res) => {
   const id = req.params.id;
   const body = req.body;
@@ -301,23 +124,51 @@ exports.patchArticle = async (req, res) => {
   }
 };
 
-exports.deleteArticle = async (req, res) => {
-  const id = req.params.id;
+exports.search = async (req,res)=>{
+    const search = req.query;
 
-  try {
-    await article.deleteArticle(id);
+    try {
+        const offset = parseInt(req.query.offset) || 0;//S'il a déjà set l'offset sinon c'est 0
+        const limit = parseInt(req.query.limit) || 6;//S'il a déjà set la limit sinon c'est 6
+        const href = baseUrl + "/search" + buildQueryWithoutLimitOffset(req.query); // href avec query mais sans limit ou offset
 
-    return res.status(200).json({
-      message: `Article with id ${id} successfully delete`,
-      status: 200,
-    });
-  } catch (err) {
-    res.status(500).json({
-      message: err,
-      status: 500,
-    });
-  }
-};
+        req.query.limit = limit;
+        req.query.offset = offset;
+        const articles = await article.search(search);
+        articles.forEach((article) => {
+            article.Image_URL1 = `${baseUrl}/assets/${article.Image_URL1}`;
+            article.Image_URL2 = `${baseUrl}/assets/${article.Image_URL2}`;
+        })
+        const total = Object.entries(articles).length;
+        if (!articles || total === 0) {
+            return res.status(404).json({
+                message: `Articles not found`,
+                status: 404
+            });
+        }
+        const next = article.total - limit <= offset ? null :  `${href}&limit=${limit}&offset=${offset + limit}`;//Si article.total et total sont égaux alors pas de suivant
+        const previous = offset ? `${href}&limit=${limit}&offset=${offset}` : null;//Si l'offset est différent de 0 pagination sinon y en a pas
+
+        res.status(200).json({
+            message: 'Article found with search '+search.search,
+            status: 200,
+            articles: {
+                href,
+                offset,
+                limit,
+                next,
+                previous,
+                total,
+                items: articles
+            }
+        })
+    }catch (err){
+        res.status(500).json({
+            message:err,
+            status:500
+        });
+    }
+}
 
 exports.getAllFav = async (req, res) => {
   const userID = req.user.Id; //Pris du middleware auth
@@ -427,69 +278,6 @@ exports.deleteFavoris = async (req, res) => {
     });
   }
 };
-
-exports.deleteCommande = async (req, res) => {
-  const userID = req.user.Id;
-  const articleId = req.params.id;
-  try {
-    await article.deleteCommande(userID, articleId);
-    res.status(200).json({
-      message: `Article with id ${articleId} successfully been deleted from commande`,
-      status: 200,
-    });
-  } catch (err) {
-    res.status(500).json({
-      message: err,
-      status: 500,
-    });
-  }
-};
-
-exports.search = async (req,res)=>{
-    const search = req.query;
-
-    try {
-        const offset = parseInt(req.query.offset) || 0;//S'il a déjà set l'offset sinon c'est 0
-        const limit = parseInt(req.query.limit) || 6;//S'il a déjà set la limit sinon c'est 6
-        const href = baseUrl + "/search" + buildQueryWithoutLimitOffset(req.query); // href avec query mais sans limit ou offset
-
-        req.query.limit = limit;
-        req.query.offset = offset;
-        const articles = await article.search(search);
-        articles.forEach((article) => {
-            article.Image_URL1 = `${baseUrl}/assets/${article.Image_URL1}`;
-            article.Image_URL2 = `${baseUrl}/assets/${article.Image_URL2}`;
-        })
-        const total = Object.entries(articles).length;
-        if (!articles || total === 0) {
-            return res.status(404).json({
-                message: `Articles not found`,
-                status: 404
-            });
-        }
-        const next = article.total - limit <= offset ? null :  `${href}&limit=${limit}&offset=${offset + limit}`;//Si article.total et total sont égaux alors pas de suivant
-        const previous = offset ? `${href}&limit=${limit}&offset=${offset}` : null;//Si l'offset est différent de 0 pagination sinon y en a pas
-
-        res.status(200).json({
-            message: 'Article found with search '+search.search,
-            status: 200,
-            articles: {
-                href,
-                offset,
-                limit,
-                next,
-                previous,
-                total,
-                items: articles
-            }
-        })
-    }catch (err){
-        res.status(500).json({
-            message:err,
-            status:500
-        });
-    }
-}
 
 function buildQueryWithoutLimitOffset(query) {
     return Object.keys(query).length !==0 ? `?${Object.entries(query)

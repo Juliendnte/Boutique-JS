@@ -196,14 +196,6 @@ class ArticleModel{
         })
     }
 
-    static deleteCommande(userID, articleId){
-        return new Promise((resolve, reject) => {
-            const sql = `DELETE FROM commande WHERE Id_user=? AND Id_article=?`;
-
-            connection.query(sql, [userID,articleId], (err, results)=> err ? reject(err) : resolve(results[0]));
-        })
-    }
-
     static getImages(id, test= false){
         return new Promise((resolve, reject) => {
             //Je selectionne l'url de la photo , je suis positionné dans la article, je fait une jointure entre l'Id de mon article et l'id article de ma photo,

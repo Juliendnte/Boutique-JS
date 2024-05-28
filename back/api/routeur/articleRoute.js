@@ -16,10 +16,7 @@ const middleware = {
 //Delete sert a supprimer la donné a l'id spécifiée
 routeur.get("/articles", controllerArticle.getArticles);
 routeur.get("/article/:id",middleware.articleExists , controllerArticle.getArticle);
-routeur.post("/article",middleware.validateToken ,controllerArticle.postArticle);//Pas obligé
-routeur.put("/article/:id",[middleware.validateToken, middleware.articleExists] ,controllerArticle.putArticle);//Pas obligé
 routeur.patch("/article/:id",[middleware.validateToken, middleware.articleExists] ,controllerArticle.patchArticle);
-routeur.delete("/article/:id",[middleware.validateToken, middleware.articleExists] ,controllerArticle.deleteArticle);//Pas obligé
 routeur.get("/fav",middleware.validateToken,controllerArticle.getAllFav)
 routeur.post("/fav/:id",[middleware.validateToken,middleware.articleExists], controllerArticle.postFavoris)
 routeur.delete("/fav/:id",[middleware.validateToken,middleware.articleExists])
