@@ -8,7 +8,7 @@ header {
   width: 100vw;
   height: 13vh;
   min-height: 80px;
-  background-color: var(--cream);
+  background-color: var(--horo-blue);
 }
 
 .burger,
@@ -29,7 +29,7 @@ header {
 .burger span {
   height: 3px;
   width: 38px;
-  background-color: var(--horo-blue);
+  background-color: var(--cream);
 }
 
 .logo {
@@ -62,7 +62,30 @@ header {
   width: 40px;
   height: 40px;
 }
-@media screen and (min-width: 1100px) {
+
+.search-bar {
+  top: 0;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 70px;
+  background-color: var(--horo-blue);
+}
+
+.search-bar input {
+  color: var(--horo-blue);
+  width: 45%;
+  height: 65%;
+  border-radius: 10px;
+  background-color: var(--cream);
+  border: none;
+  padding: 0 1em;
+  font-size: 20px;
+}
+
+@media screen and (min-width: 1024px) {
   .burger {
     display: none;
   }
@@ -97,7 +120,7 @@ header {
   }
 }
 
-@media screen and (max-width: 1100px) {
+@media screen and (max-width: 1024px) {
   .login,
   .categories,
   .favoris,
@@ -118,11 +141,27 @@ header {
   .burger-list-ctn {
     font-size: 20px;
   }
+
+  .search-bar {
+    height: 70px;
+  }
+
+  .search-bar input {
+    width: 80%;
+  }
 }
 
 @media screen and (min-width: 700px) {
+  .search-bar {
+    height: 0;
+  }
+
   .burger-list-ctn {
     font-size: 27px;
+  }
+
+  .search-bar input:focus {
+    outline: none;
   }
 }
 
@@ -134,22 +173,29 @@ header {
   font-family: var(--bold);
   width: 100%;
   height: 0;
+  background-color: var(--horo-blue);
+}
+
+.burger-list-ctn span {
+  margin-left: 2em;
+}
+
+.burger-list-ctn a:first-of-type {
+  margin-top: 2em;
+}
+
+.burger-list-ctn span {
+  margin: 1em;
+  width: 80%;
+  height: 5px;
   background-color: var(--cream);
 }
 
-.burger-list-ctn a,
-.burger-list-ctn span {
+.burger-list-ctn a {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 7vh;
   text-decoration: none;
-  margin-top: 5vh;
-  margin-left: 10vw;
-}
-
-.burger-list-ctn a p {
-  opacity: 0;
-}
-
-.burger-list-ctn span {
-  width: 80%;
-  height: 5px;
-  background-color: var(--horo-blue);
+  padding-left: 2em;
 }
