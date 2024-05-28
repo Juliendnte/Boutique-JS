@@ -987,7 +987,7 @@ INSERT INTO `photo` (`URL`, `Id_Article`) VALUES
     ('montres/vacheron_constantin/traditionnelle/or_rose/img_2.avif', 111),
     ('montres/vacheron_constantin/traditionnelle/or_rose/img_3.avif', 111),
     ('montres/vacheron_constantin/traditionnelle/or_rose/img_4.avif', 111),
-    ('montres/vacheron_constantin/traditionnelle/or_rose/img_5.avif', 111),
+    ('montres/vacheron_constantin/traditionnelle/or_rose/img_5.avif', 111);
 
 
 
