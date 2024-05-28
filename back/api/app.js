@@ -27,5 +27,7 @@ app.use(rateLimit);
 //Appel du routeur
 const route = require("./routeur/articleRoute");
 app.use(route);
+const routelog = require("./routeur/logRoute");
+app.use(routelog);
 
 module.exports = app;

@@ -27,35 +27,26 @@ class ArticleModel{
             let limitClause = "";
             let offsetClause = "";
 
-            // S'il y a quelque chose dans la query
-            if (Object.entries(query).length > 0) {
-                Object.entries(query).forEach(([key, value]) => {
-                    if (key.toLowerCase() === "limit") {
-                        // Gérer limit
-                        limitClause = ` LIMIT ?`;
-                        values.push(parseInt(value));
-                    } else if (key.toLowerCase() === "offset") {
-                        // Gérer offset
-                        offsetClause = ` OFFSET ?`;
-                        values.push(parseInt(value));
-                    } else {
-                        // Gérer les autres clés
-                        const valuesArray = value.split(',');
-                        const placeholders = valuesArray.map(() => '?').join(',');
-
-                        if (valuesArray.length > 1) {
-                            whereClauses.push(`${key} IN (${placeholders})`);
-                        } else {
-                            whereClauses.push(`${key} = ?`);
-                        }
-
-                        values.push(...valuesArray);
-                    }
-                });
-
-                if (whereClauses.length > 0) {
-                    sql += ' WHERE ' + whereClauses.join(' AND ');
+            Object.entries(query).forEach(([key, value]) => {
+                if (key.toLowerCase() === "limit") {
+                    // Gérer limit
+                    limitClause = ` LIMIT ?`;
+                    values.push(parseInt(value));
+                } else if (key.toLowerCase() === "offset") {
+                    // Gérer offset
+                    offsetClause = ` OFFSET ?`;
+                    values.push(parseInt(value));
+                } else {
+                    // Gérer les autres clés
+                    const valuesArray = value.split(',');
+                    const placeholders = valuesArray.map(() => '?').join(',');
+                    whereClauses.push(valuesArray.length > 1?`${key} IN (${placeholders})`:`${key} = ?`);
+                    values.push(...valuesArray);
                 }
+            });
+
+            if (whereClauses.length > 0) {
+                sql += ' WHERE ' + whereClauses.join(' AND ');
             }
 
             // Obtenir le total des articles sans limit et offset
