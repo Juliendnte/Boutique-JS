@@ -20,40 +20,55 @@ class ArticleModel{
     static getAllArticle(query) {
         return new Promise(async (resolve, reject) => {
             // Requête SQL de base pour récupérer tous les articles avec la première image
-            let sql = `SELECT a.*, p.URL AS Image_URL FROM article a LEFT JOIN (SELECT Id_Article, MIN(Id) AS Min_Id FROM photo GROUP BY Id_Article) mp ON a.Id = mp.Id_Article LEFT JOIN photo p ON mp.Min_Id = p.Id`;
+            let sql = `
+                WITH FirstTwoPhotos AS (
+                    SELECT
+                        p.Id_Article,
+                        p.URL AS Image_URL,
+                        ROW_NUMBER() OVER (PARTITION BY p.Id_Article ORDER BY p.Id) AS RowNum
+                    FROM
+                        photo p
+                )
+                SELECT
+                    a.*,
+                    p1.Image_URL AS Image_URL1,
+                    p2.Image_URL AS Image_URL2
+                FROM
+                    article a
+                        LEFT JOIN
+                    FirstTwoPhotos p1 ON a.Id = p1.Id_Article AND p1.RowNum = 1
+                        LEFT JOIN
+                    FirstTwoPhotos p2 ON a.Id = p2.Id_Article AND p2.RowNum = 2`;
 
             const values = [];
             let whereClauses = [];
             let limitClause = "";
             let offsetClause = "";
 
+            // Construire les clauses WHERE, LIMIT et OFFSET
             Object.entries(query).forEach(([key, value]) => {
                 if (key.toLowerCase() === "limit") {
-                    // Gérer limit
                     limitClause = ` LIMIT ?`;
                     values.push(parseInt(value));
                 } else if (key.toLowerCase() === "offset") {
-                    // Gérer offset
                     offsetClause = ` OFFSET ?`;
                     values.push(parseInt(value));
                 } else {
-                    // Gérer les autres clés
                     const valuesArray = value.split(',');
                     const placeholders = valuesArray.map(() => '?').join(',');
-                    whereClauses.push(valuesArray.length > 1?`${key} IN (${placeholders})`:`${key} = ?`);
+                    whereClauses.push(valuesArray.length > 1 ? `${key} IN (${placeholders})` : `${key} = ?`);
                     values.push(...valuesArray);
                 }
             });
 
+            // Ajouter les clauses WHERE à la requête SQL
             if (whereClauses.length > 0) {
                 sql += ' WHERE ' + whereClauses.join(' AND ');
             }
 
-            // Obtenir le total des articles sans limit et offset
-            if (!this.total) {
-                 // Utilise la même requête sans limit ni offset
-                this.total = (await this.getTotal(sql, values.slice(0, values.length - (limitClause ? 1 : 0) - (offsetClause ? 1 : 0)))).total;
-            }
+            console.log(this.total)
+            // Utilise la même requête sans limit ni offset
+            this.total = (await this.getTotal(sql, values.slice(0, values.length - (limitClause ? 1 : 0) - (offsetClause ? 1 : 0)))).total;
 
             // Ajouter limit et offset à la requête principale
             sql += limitClause + offsetClause;
@@ -113,6 +128,35 @@ class ArticleModel{
             const sql = `DELETE FROM article WHERE Id=?`
 
             connection.query(sql,id, (err,results)=> err ? reject(err) : resolve(results[0]))
+        });
+    }
+
+    static search(query){
+        return new Promise(async (resolve,reject)=>{
+            const searchParam = `%${query.search}%`;
+            let values = [searchParam, searchParam, searchParam, query.limit, query.offset]
+            let sql = `WITH FirstTwoPhotos AS (
+                SELECT
+                    p.Id_Article,
+                    p.URL AS Image_URL,
+                    ROW_NUMBER() OVER (PARTITION BY p.Id_Article ORDER BY p.Id) AS RowNum
+                FROM
+                    photo p
+            )
+                       SELECT
+                           a.*,
+                           p1.Image_URL AS Image_URL1,
+                           p2.Image_URL AS Image_URL2
+                       FROM
+                           article a
+                               JOIN marque m ON a.Id_Marque = m.Id
+                               LEFT JOIN FirstTwoPhotos p1 ON a.Id = p1.Id_Article AND p1.RowNum = 1
+                               LEFT JOIN FirstTwoPhotos p2 ON a.Id = p2.Id_Article AND p2.RowNum = 2
+                       WHERE
+                           (m.Label LIKE ? OR a.Model LIKE ? OR a.Ref LIKE ?)
+                       LIMIT ? OFFSET ?`;
+            this.total = (await this.getTotal(sql, values)).total;
+            connection.query(sql,values,(err,results)=> err ? reject(err) : resolve(results));
         });
     }
 
