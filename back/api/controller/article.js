@@ -13,6 +13,11 @@ exports.getArticles = async (req, res) =>{
         req.query.limit = limit;
         req.query.offset = offset;
         const articles = await article.getAllArticle(req.query);
+        articles.forEach((article) => {
+            article.Image_URL1 = `${baseUrl}/assets/${article.Image_URL1}`;
+            article.Image_URL2 = `${baseUrl}/assets/${article.Image_URL2}`;
+        })
+
         const total = Object.entries(articles).length;//Pour savoir j'ai combien d'article
         if (!articles || total === 0) {
             return res.status(404).json({
@@ -53,7 +58,7 @@ exports.getArticle = async (req , res) =>{
     const articleById = req.article;//Grâce au middleware articleExists
     try {
         const img = await article.getImages(articleById.Id);//Prends toutes les images de l'article indiqué
-        articleById.img = img.map(image => `${baseUrl}/asset/${image.URL}`);//Met le chemin dans le json
+        articleById.img = img.map(image => `${baseUrl}/assets/${image.URL}`);//Met le chemin dans le json
 
         return res.status(200).json({
             message: `Article with id ${req.params.id} successfully found`,
@@ -324,6 +329,52 @@ exports.deleteCommande = async (req,res) =>{
             message:err,
             status:500
         })
+    }
+}
+
+exports.search = async (req,res)=>{
+    const search = req.query;
+
+    try {
+        const offset = parseInt(req.query.offset) || 0;//S'il a déjà set l'offset sinon c'est 0
+        const limit = parseInt(req.query.limit) || 6;//S'il a déjà set la limit sinon c'est 6
+        const href = baseUrl + "/search" + buildQueryWithoutLimitOffset(req.query); // href avec query mais sans limit ou offset
+
+        req.query.limit = limit;
+        req.query.offset = offset;
+        const articles = await article.search(search);
+        articles.forEach((article) => {
+            article.Image_URL1 = `${baseUrl}/assets/${article.Image_URL1}`;
+            article.Image_URL2 = `${baseUrl}/assets/${article.Image_URL2}`;
+        })
+        const total = Object.entries(articles).length;
+        if (!articles || total === 0) {
+            return res.status(404).json({
+                message: `Articles not found`,
+                status: 404
+            });
+        }
+        const next = article.total - limit <= offset ? null :  `${href}&limit=${limit}&offset=${offset + limit}`;//Si article.total et total sont égaux alors pas de suivant
+        const previous = offset ? `${href}&limit=${limit}&offset=${offset}` : null;//Si l'offset est différent de 0 pagination sinon y en a pas
+
+        res.status(200).json({
+            message: 'Article found with search '+search.search,
+            status: 200,
+            articles: {
+                href,
+                offset,
+                limit,
+                next,
+                previous,
+                total,
+                items: articles
+            }
+        })
+    }catch (err){
+        res.status(500).json({
+            message:err,
+            status:500
+        });
     }
 }
 
