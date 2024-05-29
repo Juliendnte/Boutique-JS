@@ -2,11 +2,12 @@ const article = require("../models/articleModel");
 require("dotenv").config();
 
 const baseUrl = process.env.BASE_URL;
+const pagination = 12;
 
 exports.getArticles = async (req, res) =>{
     try {
         const offset = parseInt(req.query.offset) || 0;//S'il a déjà set l'offset sinon c'est 0
-        const limit = parseInt(req.query.limit) || 6;//S'il a déjà set la limit sinon c'est 6
+        const limit = parseInt(req.query.limit) || pagination;
 
         const href = baseUrl + "/articles" + buildQueryWithoutLimitOffset(req.query); // href avec query mais sans limit ou offset
 
@@ -30,7 +31,7 @@ exports.getArticles = async (req, res) =>{
         /*
         La différence entre article.total et total est que
         article.total est le total des articles avec la query mais sans le limit et offset ex le total de /articles?name=julien
-        total est le total des article avec la query y compris les limit et offset ex le total de /articles?name=julien&offset=0&limit=6
+        total est le total des article avec la query y compris les limit et offset ex le total de /articles?name=julien&offset=0&limit=12
          */
         const previous = offset ? `${href}&limit=${limit}&offset=${offset}` : null;//Si l'offset est différent de 0 pagination sinon y en a pas
         return res.status(200).json({
@@ -129,7 +130,7 @@ exports.search = async (req,res)=>{
 
     try {
         const offset = parseInt(req.query.offset) || 0;//S'il a déjà set l'offset sinon c'est 0
-        const limit = parseInt(req.query.limit) || 6;//S'il a déjà set la limit sinon c'est 6
+        const limit = parseInt(req.query.limit) || pagination;
         const href = baseUrl + "/search" + buildQueryWithoutLimitOffset(req.query); // href avec query mais sans limit ou offset
 
         req.query.limit = limit;
