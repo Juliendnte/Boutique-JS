@@ -30,7 +30,23 @@ class ArticleModel{
                         photo p
                 )
                 SELECT
-                    a.*,
+                    a.Description,
+                    m.Label AS Marque_Label,
+                    a.Model,
+                    a.Ref,
+                    f.Label AS Fab_Label,
+                    a.Dimension,
+                    ma.Label AS Matiere_Label,
+                    c.Label AS Color_Label,
+                    mo.Label AS Movement_Label,
+                    a.Complications,
+                    a.Waterproof,
+                    b.Label AS Bracelet_Label,
+                    cb.Label AS Color_Bracelet_Label,
+                    a.Availability,
+                    a.Price,
+                    a.Reduction,
+                    a.Stock,
                     p1.Image_URL AS Image_URL1,
                     p2.Image_URL AS Image_URL2
                 FROM
@@ -38,7 +54,22 @@ class ArticleModel{
                         LEFT JOIN
                     FirstTwoPhotos p1 ON a.Id = p1.Id_Article AND p1.RowNum = 1
                         LEFT JOIN
-                    FirstTwoPhotos p2 ON a.Id = p2.Id_Article AND p2.RowNum = 2`;
+                    FirstTwoPhotos p2 ON a.Id = p2.Id_Article AND p2.RowNum = 2
+                        LEFT JOIN
+                    marque m ON a.Id_Marque = m.Id
+                        LEFT JOIN
+                    fabrication f ON a.Id_Fab = f.Id
+                        LEFT JOIN
+                    matiere ma ON a.Id_Matiere = ma.Id
+                        LEFT JOIN
+                    color c ON a.Id_Color = c.Id
+                        LEFT JOIN
+                    movement mo ON a.Id_Movement = mo.Id
+                        LEFT JOIN
+                    bracelet b ON a.Id_Bracelet = b.Id
+                        LEFT JOIN
+                    color_bracelet cb ON a.Id_Color_Bracelet = cb.Id
+            `;
 
             const values = [];
             let whereClauses = [];
