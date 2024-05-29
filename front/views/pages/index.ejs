@@ -6,11 +6,8 @@
     <title>Accueil</title>
   </head>
   <body>
-    <%- include('../components/header'); %>
-    <%-include('../components/burger-list'); %>
-    <!-- <% lst.forEach(function (img) { %>
-    <img src="<%= img %>" alt="img" />
-    <%}); %> -->
+    <%- include('../components/header'); %> <%-
+    include('../components/burger-list'); %>
 
     <div class="vid-ctn">
       <video
@@ -19,14 +16,13 @@
         loop
         muted
         autoplay
+        playsinline
       ></video>
       <div class="filtre first">
-        <div class="search-bar">
-          <input type="text" placeholder="Rechercher une montre" />
-        </div>
+        <%- include('../components/search-bar'); %>
         <p>HORO HAVEN</p>
         <p>L'essence du luxe.</p>
-        <a href="/">Voir toutes les montres</a>
+        <a href="/result">Voir toutes les montres</a>
         <div class="blank"></div>
       </div>
     </div>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <%- include('../components/head'); %>
+    <link rel="stylesheet" href="/public/css/result.css" />
+    <link rel="stylesheet" href="/public/css/accueil.css" />
+
+    <title>Montres</title>
+  </head>
+  <body>
+    <%- include('../components/header'); %>
+    <%-include('../components/burger-list'); %>
+    <div class="search-bar-ctn">
+      <%- include('../components/search-bar'); %>
+    </div>
+    <div class="item-ctn">
+      <% lst.forEach(function (item) { %>
+      <div class="watch">
+        <img src="<%= item.Image_URL1 %>" alt="<%= item.Image_URL1 %>" />
+        <p><%= item.Id_Marque %></p>
+      </div>
+      <%}); %>
+    </div>
+  </body>
+  <script src="/public/js/script2.js"></script>
+</html>

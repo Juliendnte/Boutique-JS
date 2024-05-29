@@ -17,7 +17,6 @@ INSERT INTO `color` (`Label`) VALUES
 INSERT INTO `marque` (`Label`) VALUES
                                    ('A. Lange & Sohne'),
                                    ('Audemars Piguet'),
-                                   ('Audemars Piguet'),
                                    ('Breitling'),
                                    ('F.P. Journe'),
                                    ('H. Moser & Cie.'),
