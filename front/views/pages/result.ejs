@@ -14,12 +14,18 @@
       <%- include('../components/search-bar'); %>
     </div>
     <div class="item-ctn">
-      <% lst.forEach(function (item) { %>
+      <% lst.items.forEach(function (article) { %>
       <div class="watch">
-        <img src="<%= item.Image_URL1 %>" alt="<%= item.Image_URL1 %>" />
-        <p><%= item.Id_Marque %></p>
+        <img src="<%= article.Image_URL1 %>" alt="Image <%= article.Model %>" />
+        <p class="model"><%= article.Model %></p>
+        <p class="marque"><%= article.Marque_Label %></p>
       </div>
       <%}); %>
+    </div>
+    <div class="prev-next">
+      <a href="/result?previous=<%= lst.previous %>">Previous</a>
+
+      <a href="/result?next=<%= lst.next %>">Next</a>
     </div>
   </body>
   <script src="/public/js/script2.js"></script>

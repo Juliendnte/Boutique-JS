@@ -12,16 +12,33 @@ html {
   .item-ctn {
     margin-top: 70px;
   }
+
+  .watch {
+    width: 150px;
+    height: 240px;
+  }
 }
 
 @media screen and (min-width: 700px) {
+  .watch {
+    width: 200px;
+    height: 280px;
+  }
 }
 
-.watch {
-  width: 100px;
-  height: 150px;
+@media screen and (min-width: 1100px) {
+  .watch {
+    width: 260px;
+    height: 330px;
+  }
 }
 
+@media screen and (min-width: 1800px) {
+  .watch {
+    width: 290px;
+    height: 400px;
+  }
+}
 .watch img {
   color: black;
   width: 100%;
@@ -34,4 +51,39 @@ html {
 
 .watch p {
   color: black;
+}
+
+.item-ctn {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  min-height: 87vh;
+  flex-wrap: wrap;
+}
+
+.item-ctn p {
+  font-family: var(--light);
+  width: 100%;
+  text-align: center;
+}
+
+.model {
+  font-size: 15px;
+}
+.marque {
+  font-size: 10px;
+}
+
+.prev-next {
+  width: 100vw;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.prev-next a {
+  text-decoration: none;
+  padding: 30px;
+  background-color: red;
 }

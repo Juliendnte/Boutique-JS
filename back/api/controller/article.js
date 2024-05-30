@@ -27,13 +27,13 @@ exports.getArticles = async (req, res) =>{
             });
         }
 
-        const next = article.total - limit <= offset ? null :  `${href}&limit=${limit}&offset=${offset + limit}`;//Si article.total et total sont égaux alors pas de suivant
+        const next = article.total - limit <= offset ? null :  `${href}limit=${limit}&offset=${offset + limit}`;//Si article.total et total sont égaux alors pas de suivant
         /*
         La différence entre article.total et total est que
         article.total est le total des articles avec la query mais sans le limit et offset ex le total de /articles?name=julien
         total est le total des article avec la query y compris les limit et offset ex le total de /articles?name=julien&offset=0&limit=12
          */
-        const previous = offset ? `${href}&limit=${limit}&offset=${offset}` : null;//Si l'offset est différent de 0 pagination sinon y en a pas
+        const previous = offset ? `${href}limit=${limit}&offset=${offset - limit}` : null;//Si l'offset est différent de 0 pagination sinon y en a pas
         return res.status(200).json({
             message: `Articles successfully found`,
             status: 200,
@@ -283,6 +283,6 @@ exports.deleteFavoris = async (req, res) => {
 function buildQueryWithoutLimitOffset(query) {
     return Object.keys(query).length !==0 ? `?${Object.entries(query)
         .filter(([key]) => key.toLowerCase() !== 'limit' && key.toLowerCase() !== 'offset')
-        .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
-        .join('&')}` : '';
+        .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}&`)
+        .join('&')}` : '?';
 }
