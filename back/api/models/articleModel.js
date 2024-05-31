@@ -97,7 +97,6 @@ class ArticleModel{
                 sql += ' WHERE ' + whereClauses.join(' AND ');
             }
 
-            console.log(this.total)
             // Utilise la même requête sans limit ni offset
             this.total = (await this.getTotal(sql, values.slice(0, values.length - (limitClause ? 1 : 0) - (offsetClause ? 1 : 0)))).total;
 
@@ -246,6 +245,34 @@ class ArticleModel{
             connection.query(countSql, values, (err, results) => err ? reject(err) : resolve(results[0]));
         });
     }
+
+    static async getArticleSimilaire(id,limit) {
+        return new Promise((resolve, reject) => {
+            const sql = `SELECT a.*,
+                            (
+                                (a.Dimension = b.Dimension) +
+                                (a.Id_Matiere = b.Id_Matiere) +
+                                (a.Id_Color = b.Id_Color) +
+                                (a.Id_Movement = b.Id_Movement) +
+                                (a.Complications = b.Complications) +
+                                (a.Waterproof = b.Waterproof) +
+                                (a.Id_Bracelet = b.Id_Bracelet) +
+                                (a.Id_Color_Bracelet = b.Id_Color_Bracelet) +
+                                (1 - ABS(a.Price - b.Price) / GREATEST(a.Price, b.Price))
+                            ) AS similarity_score
+                        FROM 
+                            article a
+                        JOIN 
+                            article b ON a.Id <> b.Id
+                        WHERE 
+                            b.Id = ?
+                        ORDER BY 
+                            similarity_score DESC
+                        LIMIT ?`;
+            connection.query(sql, [id, limit], (err, results) => err ? reject(err) : resolve(results));
+        });
+    }
+
 }
 
 module.exports = ArticleModel;
