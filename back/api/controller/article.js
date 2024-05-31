@@ -1,5 +1,6 @@
 const article = require("../models/articleModel");
 require("dotenv").config();
+const fs = require("fs");
 
 const baseUrl = process.env.BASE_URL;
 const pagination = 12;
@@ -8,11 +9,11 @@ exports.getArticles = async (req, res) =>{
     try {
         const offset = parseInt(req.query.offset) || 0;//S'il a déjà set l'offset sinon c'est 0
         const limit = parseInt(req.query.limit) || pagination;
-
         const href = baseUrl + "/articles" + buildQueryWithoutLimitOffset(req.query); // href avec query mais sans limit ou offset
 
         req.query.limit = limit;
         req.query.offset = offset;
+
         const articles = await article.getAllArticle(req.query);
         articles.forEach((article) => {
             article.Image_URL1 = `${baseUrl}/assets/${article.Image_URL1}`;
@@ -26,13 +27,8 @@ exports.getArticles = async (req, res) =>{
                 status: 404
             });
         }
-
-        const next = article.total - limit <= offset ? null :  `${href}limit=${limit}&offset=${offset + limit}`;//Si article.total et total sont égaux alors pas de suivant
-        /*
-        La différence entre article.total et total est que
-        article.total est le total des articles avec la query mais sans le limit et offset ex le total de /articles?name=julien
-        total est le total des article avec la query y compris les limit et offset ex le total de /articles?name=julien&offset=0&limit=12
-         */
+        const last_page = Math.ceil(article.total / limit)
+        const next = article.total - limit <= offset ? null : href.includes("?") ? `${href}&limit=${limit}&offset=${offset + limit}` : `${href}?limit=${limit}&offset=${offset + limit}`;//Si article.total et total sont égaux alors pas de suivant
         const previous = offset ? `${href}limit=${limit}&offset=${offset - limit}` : null;//Si l'offset est différent de 0 pagination sinon y en a pas
         return res.status(200).json({
             message: `Articles successfully found`,
@@ -44,6 +40,7 @@ exports.getArticles = async (req, res) =>{
                 next,
                 previous,
                 total,
+                last_page,
                 items: articles
             }
         });
@@ -280,9 +277,44 @@ exports.deleteFavoris = async (req, res) => {
   }
 };
 
+exports.getArticleSimilar = async (req, res) => {
+    const id = req.params.id;
+    const limit = parseInt(req.query.limit) || 5;
+    try{
+        const articles = await article.getArticleSimilaire(id,limit);
+        res.status(200).json({
+            message: `Similar articles for id ${id} `,
+            status: 200,
+            articles
+        })
+    }catch (err){
+        res.status(500).json({
+            message: err,
+            status: 500
+        })
+    }
+}
+
+exports.getImage = async (req, res) => {
+    const filename = req.params.filename;
+    const filePath = __dirname + "assets/montres" + filename;
+
+    fs.readFile(filePath, (err, data) => {
+        if (err) {
+            res.status(404).json({
+                message : "Image not found",
+                status: 404
+            })
+        }else{
+            res.sendfile(filePath)
+        }
+
+    })
+}
+
 function buildQueryWithoutLimitOffset(query) {
     return Object.keys(query).length !==0 ? `?${Object.entries(query)
         .filter(([key]) => key.toLowerCase() !== 'limit' && key.toLowerCase() !== 'offset')
-        .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}&`)
-        .join('&')}` : '?';
+        .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+        .join('&')}` : '';
 }
