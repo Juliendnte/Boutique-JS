@@ -282,6 +282,10 @@ exports.getArticleSimilar = async (req, res) => {
     const limit = parseInt(req.query.limit) || 5;
     try{
         const articles = await article.getArticleSimilaire(id,limit);
+        articles.forEach((article) => {
+            article.Image_URL1 = `${baseUrl}/assets/${article.Image_URL1}`;
+            article.Image_URL2 = `${baseUrl}/assets/${article.Image_URL2}`;
+        })
         res.status(200).json({
             message: `Similar articles for id ${id} `,
             status: 200,
@@ -298,7 +302,6 @@ exports.getArticleSimilar = async (req, res) => {
 exports.getImage = async (req, res) => {
     const filename = req.params.filename;
     const filePath = __dirname + "assets/montres" + filename;
-
     fs.readFile(filePath, (err, data) => {
         if (err) {
             res.status(404).json({

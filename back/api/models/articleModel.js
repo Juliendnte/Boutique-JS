@@ -248,7 +248,18 @@ class ArticleModel{
 
     static async getArticleSimilaire(id,limit) {
         return new Promise((resolve, reject) => {
-            const sql = `SELECT a.*,
+            const sql = `
+                WITH FirstTwoPhotos AS (
+                    SELECT
+                        p.Id_Article,
+                        p.URL AS Image_URL,
+                        ROW_NUMBER() OVER (PARTITION BY p.Id_Article ORDER BY p.Id) AS RowNum
+                    FROM
+                        photo p
+                )
+                            SELECT a.*,
+                                   p1.Image_URL AS Image_URL1,
+                                   p2.Image_URL AS Image_URL2,
                             (
                                 (a.Dimension = b.Dimension) +
                                 (a.Id_Matiere = b.Id_Matiere) +
@@ -262,6 +273,8 @@ class ArticleModel{
                             ) AS similarity_score
                         FROM 
                             article a
+                            LEFT JOIN FirstTwoPhotos p1 ON a.Id = p1.Id_Article AND p1.RowNum = 1
+                            LEFT JOIN FirstTwoPhotos p2 ON a.Id = p2.Id_Article AND p2.RowNum = 2
                         JOIN 
                             article b ON a.Id <> b.Id
                         WHERE 
