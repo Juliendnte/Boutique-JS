@@ -11,7 +11,36 @@ class ArticleModel{
          Cela conduit à un code plus propre, plus lisible et plus maintenable.
          */
         return new Promise((resolve, reject) => {
-            const sql = `SELECT * FROM article WHERE Id=?`//Le ? sert a contrer l'injection SQL
+            const sql = `SELECT
+                                     a.Id,
+                                     a.Description,
+                                     marque.Label AS marque,
+                                     a.Model,
+                                     a.Ref,
+                                     fabrication.Label AS fab,
+                                     a.Dimension,
+                                     matiere.Label AS matiere,
+                                     color.Label AS color,
+                                     movement.Label AS movement,
+                                     a.Complications,
+                                     a.Waterproof,
+                                     bracelet.Label AS bracelet,
+                                     color_bracelet.Label AS color_Bracelet,
+                                     a.Availability,
+                                     a.Price,
+                                     a.Reduction,
+                                     a.Stock
+                                FROM 
+                                    article a
+                                    LEFT JOIN marque ON a.Id_Marque = marque.Id
+                                    LEFT JOIN fabrication ON a.Id_Fab = fabrication.Id
+                                    LEFT JOIN matiere ON a.Id_Matiere = matiere.Id
+                                    LEFT JOIN color ON a.Id_Color = color.Id
+                                    LEFT JOIN movement ON a.Id_Movement = movement.Id
+                                    LEFT JOIN bracelet ON a.Id_Bracelet = bracelet.Id
+                                    LEFT JOIN color_bracelet ON a.Id_Color_Bracelet = color_bracelet.Id
+                                WHERE 
+                                    a.Id=?`//Le ? sert a contrer l'injection SQL
             //[id] va remplacert le ? s'il y a plus que un ? il va remplacer dans l'ordre des variables dans cette liste
             connection.query(sql,[id], (err, results)=> err ? reject(err) : resolve(results[0]));
         });
@@ -21,54 +50,23 @@ class ArticleModel{
         return new Promise(async (resolve, reject) => {
             // Requête SQL de base pour récupérer tous les articles avec la première image
             let sql = `
-                WITH FirstTwoPhotos AS (
-                    SELECT
-                        p.Id_Article,
-                        p.URL AS Image_URL,
-                        ROW_NUMBER() OVER (PARTITION BY p.Id_Article ORDER BY p.Id) AS RowNum
-                    FROM
-                        photo p
-                )
                 SELECT
-                    a.Description,
-                    m.Label AS Marque_Label,
+                    a.Id,
+                    marque.Label AS marqueLabel,
                     a.Model,
-                    a.Ref,
-                    f.Label AS Fab_Label,
-                    a.Dimension,
-                    ma.Label AS Matiere_Label,
-                    c.Label AS Color_Label,
-                    mo.Label AS Movement_Label,
-                    a.Complications,
-                    a.Waterproof,
-                    b.Label AS Bracelet_Label,
-                    cb.Label AS Color_Bracelet_Label,
                     a.Availability,
                     a.Price,
                     a.Reduction,
-                    a.Stock,
-                    p1.Image_URL AS Image_URL1,
-                    p2.Image_URL AS Image_URL2
+                    a.Stock
                 FROM
                     article a
-                        LEFT JOIN
-                    FirstTwoPhotos p1 ON a.Id = p1.Id_Article AND p1.RowNum = 1
-                        LEFT JOIN
-                    FirstTwoPhotos p2 ON a.Id = p2.Id_Article AND p2.RowNum = 2
-                        LEFT JOIN
-                    marque m ON a.Id_Marque = m.Id
-                        LEFT JOIN
-                    fabrication f ON a.Id_Fab = f.Id
-                        LEFT JOIN
-                    matiere ma ON a.Id_Matiere = ma.Id
-                        LEFT JOIN
-                    color c ON a.Id_Color = c.Id
-                        LEFT JOIN
-                    movement mo ON a.Id_Movement = mo.Id
-                        LEFT JOIN
-                    bracelet b ON a.Id_Bracelet = b.Id
-                        LEFT JOIN
-                    color_bracelet cb ON a.Id_Color_Bracelet = cb.Id
+                    LEFT JOIN marque ON a.Id_Marque = marque.Id
+                    LEFT JOIN fabrication ON a.Id_Fab = fabrication.Id
+                    LEFT JOIN matiere ON a.Id_Matiere = matiere.Id
+                    LEFT JOIN color ON a.Id_Color = color.Id
+                    LEFT JOIN movement ON a.Id_Movement = movement.Id
+                    LEFT JOIN bracelet ON a.Id_Bracelet = bracelet.Id
+                    LEFT JOIN color_bracelet ON a.Id_Color_Bracelet = color_bracelet.Id
             `;
 
             const values = [];
@@ -108,25 +106,6 @@ class ArticleModel{
         });
     }
 
-    static createArticle(newArticle){
-        //newArticle est le json de l'article que l'on veut ajoutée
-        return new Promise((resolve, reject) => {
-            //dans les parenthèse ce sont les valeurs qu'un article doit avoir
-            const sql = `INSERT INTO article (Marque, Model, Ref, Price,Fab, Dimension, Matiere, Color, Waterproof, Movement,Complications,Bracelet, Color_Bracelet, Availability, Reduction, Stock, Description) VALUES (?,?,?,?,?,?,?,?, ?, ?,?,?, ?, ?,?,?,?)`;
-            connection.query(sql, [newArticle.Marque, newArticle.Model, newArticle.Ref, newArticle.Price, newArticle.Fab, newArticle.Dimension, newArticle.Matiere, newArticle.Color, newArticle.Waterproof, newArticle.Movement,newArticle.Complications,newArticle.Bracelet, newArticle.Color_Bracelet, newArticle.Availability, newArticle.Reduction, newArticle.Stock, newArticle.Description], (err, results)=> err ? reject(err) : resolve(results[0]));
-        });
-    }
-
-    static updatePutArticle(id, updateArticle){
-        return new Promise((resolve, reject) => {
-            //Faire attention a l'ordre ici
-            const sql = `UPDATE article SET Marque=?, Model=?, Ref=?, Price=? ,Fab=? , Dimension=? , Matiere=? , Color=?, Waterproof=?, Movement=?,Complications=?,Bracelet=?, Color_Bracelet=?, Availability=?, Reduction=?, Stock=?, Description=? WHERE id=?`;
-            const values =  [updateArticle.Marque, updateArticle.Model, updateArticle.Ref, updateArticle.Price, updateArticle.Fab, updateArticle.Dimension, updateArticle.Matiere, updateArticle.Color, updateArticle.Waterproof, updateArticle.Movement,updateArticle.Complications,updateArticle.Bracelet, updateArticle.Color_Bracelet, updateArticle.Availability, updateArticle.Reduction, updateArticle.Stock, updateArticle.Description, id];
-
-            connection.query(sql, values, (err, results) => err ? reject(err) : resolve(results[0]));
-        });
-    }
-
     static updatePatchArticle(id, updateArticle){
         return new Promise((resolve, reject) => {
             let sql = `UPDATE article SET `;
@@ -153,37 +132,30 @@ class ArticleModel{
         });
     }
 
-    static deleteArticle(id){
-        return new Promise((resolve, reject) => {
-            const sql = `DELETE FROM article WHERE Id=?`
-
-            connection.query(sql,id, (err,results)=> err ? reject(err) : resolve(results[0]))
-        });
-    }
-
     static search(query){
         return new Promise(async (resolve,reject)=>{
             const searchParam = `%${query.search}%`;
             let values = [searchParam, searchParam, searchParam, query.limit, query.offset]
-            let sql = `WITH FirstTwoPhotos AS (
-                SELECT
-                    p.Id_Article,
-                    p.URL AS Image_URL,
-                    ROW_NUMBER() OVER (PARTITION BY p.Id_Article ORDER BY p.Id) AS RowNum
-                FROM
-                    photo p
-            )
-                       SELECT
-                           a.*,
-                           p1.Image_URL AS Image_URL1,
-                           p2.Image_URL AS Image_URL2
-                       FROM
+            let sql = `
+                        SELECT
+                            a.Id,
+                            marque.Label AS marqueLabel,
+                            a.Model,
+                            a.Availability,
+                            a.Price,
+                            a.Reduction,
+                            a.Stock
+                        FROM
                            article a
-                               JOIN marque m ON a.Id_Marque = m.Id
-                               LEFT JOIN FirstTwoPhotos p1 ON a.Id = p1.Id_Article AND p1.RowNum = 1
-                               LEFT JOIN FirstTwoPhotos p2 ON a.Id = p2.Id_Article AND p2.RowNum = 2
-                       WHERE
-                           (m.Label LIKE ? OR a.Model LIKE ? OR a.Ref LIKE ?)
+                           LEFT JOIN marque ON a.Id_Marque = marque.Id
+                           LEFT JOIN fabrication ON a.Id_Fab = fabrication.Id
+                           LEFT JOIN matiere ON a.Id_Matiere = matiere.Id
+                           LEFT JOIN color ON a.Id_Color = color.Id
+                           LEFT JOIN movement ON a.Id_Movement = movement.Id
+                           LEFT JOIN bracelet ON a.Id_Bracelet = bracelet.Id
+                           LEFT JOIN color_bracelet ON a.Id_Color_Bracelet = color_bracelet.Id  
+                        WHERE
+                           (marque.Label LIKE ? OR a.Model LIKE ? OR a.Ref LIKE ?)
                        LIMIT ? OFFSET ?`;
             this.total = (await this.getTotal(sql, values)).total;
             connection.query(sql,values,(err,results)=> err ? reject(err) : resolve(results));
@@ -232,56 +204,48 @@ class ArticleModel{
             //Quand l'id de l'article est égale a la valeur envoyé
             let sql = `SELECT photo.URL FROM article LEFT JOIN photo ON article.Id = photo.Id_Article WHERE article.Id = ?`;
             if (test){
-                sql += " LIMIT 1 OFFSET 0;"
+                sql += " LIMIT 2 OFFSET 0"
             }
-
             connection.query(sql, id, (err, results)=> err ? reject(err) : resolve(results));
         });
     }
 
-    static async getTotal(sql, values) {
+    static getTotal(sql, values) {
         return new Promise((resolve, reject) => {
             const countSql = `SELECT COUNT(*) AS total FROM (${sql}) AS subquery`;
             connection.query(countSql, values, (err, results) => err ? reject(err) : resolve(results[0]));
         });
     }
 
-    static async getArticleSimilaire(id,limit) {
+    static getArticleSimilaire(id,limit) {
         return new Promise((resolve, reject) => {
             const sql = `
-                WITH FirstTwoPhotos AS (
-                    SELECT
-                        p.Id_Article,
-                        p.URL AS Image_URL,
-                        ROW_NUMBER() OVER (PARTITION BY p.Id_Article ORDER BY p.Id) AS RowNum
-                    FROM
-                        photo p
-                )
-                            SELECT a.*,
-                                   p1.Image_URL AS Image_URL1,
-                                   p2.Image_URL AS Image_URL2,
-                            (
-                                (a.Dimension = b.Dimension) +
-                                (a.Id_Matiere = b.Id_Matiere) +
-                                (a.Id_Color = b.Id_Color) +
-                                (a.Id_Movement = b.Id_Movement) +
-                                (a.Complications = b.Complications) +
-                                (a.Waterproof = b.Waterproof) +
-                                (a.Id_Bracelet = b.Id_Bracelet) +
-                                (a.Id_Color_Bracelet = b.Id_Color_Bracelet) +
-                                (1 - ABS(a.Price - b.Price) / GREATEST(a.Price, b.Price))
-                            ) AS similarity_score
-                        FROM 
-                            article a
-                            LEFT JOIN FirstTwoPhotos p1 ON a.Id = p1.Id_Article AND p1.RowNum = 1
-                            LEFT JOIN FirstTwoPhotos p2 ON a.Id = p2.Id_Article AND p2.RowNum = 2
-                        JOIN 
-                            article b ON a.Id <> b.Id
-                        WHERE 
-                            b.Id = ?
-                        ORDER BY 
-                            similarity_score DESC
-                        LIMIT ?`;
+                            SELECT
+                                a.Id,
+                                marque.Label AS marqueLabel,
+                                a.Model,
+                                a.Availability,
+                                a.Price,
+                                a.Reduction,
+                                a.Stock,
+                                (
+                                    (a.Dimension = b.Dimension) +
+                                    (a.Id_Matiere = b.Id_Matiere) +
+                                    (a.Id_Color = b.Id_Color) +
+                                    (a.Id_Movement = b.Id_Movement) +
+                                    (a.Complications = b.Complications) +
+                                    (a.Waterproof = b.Waterproof) +
+                                    (a.Id_Bracelet = b.Id_Bracelet) +
+                                    (a.Id_Color_Bracelet = b.Id_Color_Bracelet) +
+                                    (1 - ABS(a.Price - b.Price) / GREATEST(a.Price, b.Price))
+                                ) AS similarity_score
+                            FROM 
+                                article a
+                                LEFT JOIN marque ON a.Id_Marque = marque.Id
+                                JOIN article b ON a.Id <> b.Id
+                            WHERE b.Id = ?
+                            ORDER BY similarity_score DESC
+                            LIMIT ?`;
             connection.query(sql, [id, limit], (err, results) => err ? reject(err) : resolve(results));
         });
     }

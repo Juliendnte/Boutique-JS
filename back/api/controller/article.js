@@ -15,10 +15,11 @@ exports.getArticles = async (req, res) =>{
         req.query.offset = offset;
 
         const articles = await article.getAllArticle(req.query);
-        articles.forEach((article) => {
-            article.Image_URL1 = `${baseUrl}/assets/${article.Image_URL1}`;
-            article.Image_URL2 = `${baseUrl}/assets/${article.Image_URL2}`;
-        })
+
+        for (const art of articles) {
+            const photos = await article.getImages(art.Id, true);
+            art.Images = photos.map(photo => `${baseUrl}/assets/${photo.URL}`);
+        }
 
         const total = Object.entries(articles).length;//Pour savoir j'ai combien d'article
         if (!articles || total === 0) {
@@ -77,32 +78,15 @@ exports.patchArticle = async (req, res) => {
 
   //Check si une clé du body appartient a cette liste
   if (
-    !body ||
-    !Object.keys(body).some((key) =>
+    !body || !Object.keys(body).some((key) =>
       [
-        "Marque",
-        "Model",
-        "Ref",
-        "Price",
-        "Fab",
-        "Dimension",
-        "Matiere",
-        "Color",
-        "Waterproof",
-        "Movement",
-        "Complications",
-        "Bracelet",
-        "Color_Bracelet",
-        "Availability",
-        "Reduction",
-        "Stock",
-        "Description",
-      ].includes(key)
-    )
-  ) {
+          "Model", "Ref", "Price", "Dimension",
+          "Waterproof", "Movement", "Complications",
+           "Availability", "Reduction", "Stock", "Description"
+      ].includes(key))) {
     return res.status(400).json({
       message:
-        "Au moins un des champs (Marque, Model, Ref, Price,Fab, Dimension, Matiere, Color, Waterproof, Movement,Complications,Bracelet, Color_Bracelet, Availability, Description) sont requis.",
+        "Au moins un des champs (Model, Ref, Price,Dimension, Waterproof, Movement,Complications, Availability, Description) sont requis.",
       status: 400,
     });
   }
@@ -133,11 +117,13 @@ exports.search = async (req,res)=>{
         req.query.limit = limit;
         req.query.offset = offset;
         const articles = await article.search(search);
-        articles.forEach((article) => {
-            article.Image_URL1 = `${baseUrl}/assets/${article.Image_URL1}`;
-            article.Image_URL2 = `${baseUrl}/assets/${article.Image_URL2}`;
-        })
+        for (const art of articles) {
+            const photos = await article.getImages(art.Id, true);
+            art.Images = photos.map(photo => `${baseUrl}/assets/${photo.URL}`);
+        }
         const total = Object.entries(articles).length;
+        const last_page = Math.ceil(article.total / limit)
+
         if (!articles || total === 0) {
             return res.status(404).json({
                 message: `Articles not found`,
@@ -157,6 +143,7 @@ exports.search = async (req,res)=>{
                 next,
                 previous,
                 total,
+                last_page,
                 items: articles
             }
         })
@@ -282,10 +269,10 @@ exports.getArticleSimilar = async (req, res) => {
     const limit = parseInt(req.query.limit) || 5;
     try{
         const articles = await article.getArticleSimilaire(id,limit);
-        articles.forEach((article) => {
-            article.Image_URL1 = `${baseUrl}/assets/${article.Image_URL1}`;
-            article.Image_URL2 = `${baseUrl}/assets/${article.Image_URL2}`;
-        })
+        for (const art of articles) {
+            const photos = await article.getImages(art.Id, true);
+            art.Images = photos.map(photo => `${baseUrl}/assets/${photo.URL}`);
+        }
         res.status(200).json({
             message: `Similar articles for id ${id} `,
             status: 200,
