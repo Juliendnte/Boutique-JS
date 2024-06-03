@@ -20,7 +20,7 @@ exports.Register = async (req, res) =>{
     const salt = crypto.randomBytes(16).toString('hex')//Prend un salt bien chiant
     const hashedPassword  = hashPassword(password, salt);//hash mon password
     try{
-        await log.register({username, email, hashedPassword, salt});
+        await log.register({username, email, hashedPassword});
         res.status(201).json({
             message : `User registered successfully`,
             status: 201
@@ -34,9 +34,17 @@ exports.Register = async (req, res) =>{
 }
 
 exports.Login = async (req, res) =>{
-    const { email, password } = req.body;
+    const { email, username , password ,remember} = req.body;
     try{
-        const user = await log.login(email);
+        let user
+        if (email && username)
+            user = await log.login(email, username);
+        else{
+            return res.status(401).json({
+                message:`Invalid username or password`,
+                status: 401
+            });
+        }
         if (!user){
             return res.status(401).json({
                 message:`Invalid username or password`,
@@ -44,9 +52,9 @@ exports.Login = async (req, res) =>{
             });
         }
         const hashedPassword = hashPassword(password, user.Salt);//Récupere le password hashé
-        if (hashedPassword === user.Pwd) {//Test s'il est egale au password de l'utilisateur a l'email donné par l'utilisateur
-            const Token = jwt.sign({ email: user.Email }, jwtkey, { expiresIn: '24h' });//Me passe un token pendant 24h et le régle avec le jwtkey
-            res.status(200).json({ Token });//Je renvoie un nouveau token a chaque login
+        if (hashedPassword.hashedPassword === user.Pwd) {//Test s'il est egale au password de l'utilisateur a l'email donné par l'utilisateur
+            const Token = jwt.sign({ Sub: user.Id }, jwtkey, { expiresIn: remember ? '365j':'24h' });//Me passe un token pendant 24h et le régle avec le jwtkey
+            res.status(201).json({ Token });//Je renvoie un nouveau token a chaque login
         } else {
             return res.status(401).json({
                 message:`Invalid username or password`,

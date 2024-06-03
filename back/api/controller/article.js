@@ -29,8 +29,10 @@ exports.getArticles = async (req, res) =>{
             });
         }
         const last_page = Math.ceil(article.total / limit)
+        const current_page = Math.ceil(offset / limit) + 1;
         const next = article.total - limit <= offset ? null : href.includes("?") ? `${href}&limit=${limit}&offset=${offset + limit}` : `${href}?limit=${limit}&offset=${offset + limit}`;//Si article.total et total sont égaux alors pas de suivant
-        const previous = offset ? `${href}limit=${limit}&offset=${offset - limit}` : null;//Si l'offset est différent de 0 pagination sinon y en a pas
+        const previous = offset ?  href.includes("?") ? `${href}&limit=${limit}&offset=${offset - limit}`:`${href}?limit=${limit}&offset=${offset - limit}` : null;//Si l'offset est différent de 0 pagination sinon y en a pas
+
         return res.status(200).json({
             message: `Articles successfully found`,
             status: 200,
@@ -42,6 +44,7 @@ exports.getArticles = async (req, res) =>{
                 previous,
                 total,
                 last_page,
+                current_page,
                 items: articles
             }
         });
@@ -130,8 +133,9 @@ exports.search = async (req,res)=>{
                 status: 404
             });
         }
-        const next = article.total - limit <= offset ? null :  `${href}&limit=${limit}&offset=${offset + limit}`;//Si article.total et total sont égaux alors pas de suivant
-        const previous = offset ? `${href}&limit=${limit}&offset=${offset}` : null;//Si l'offset est différent de 0 pagination sinon y en a pas
+
+        const next = article.total - limit <= offset ? null : href.includes("?") ? `${href}&limit=${limit}&offset=${offset + limit}` : `${href}?limit=${limit}&offset=${offset + limit}`;//Si article.total et total sont égaux alors pas de suivant
+        const previous = offset ?  href.includes("?") ? `${href}&limit=${limit}&offset=${offset - limit}`:`${href}?limit=${limit}&offset=${offset - limit}` : null;//Si l'offset est différent de 0 pagination sinon y en a pas
 
         res.status(200).json({
             message: 'Article found with search '+search.search,
@@ -286,25 +290,11 @@ exports.getArticleSimilar = async (req, res) => {
     }
 }
 
-exports.getImage = async (req, res) => {
-    const filename = req.params.filename;
-    const filePath = __dirname + "assets/montres" + filename;
-    fs.readFile(filePath, (err, data) => {
-        if (err) {
-            res.status(404).json({
-                message : "Image not found",
-                status: 404
-            })
-        }else{
-            res.sendfile(filePath)
-        }
-
-    })
-}
-
 function buildQueryWithoutLimitOffset(query) {
-    return Object.keys(query).length !==0 ? `?${Object.entries(query)
+    const filteredQuery = Object.entries(query)
         .filter(([key]) => key.toLowerCase() !== 'limit' && key.toLowerCase() !== 'offset')
         .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
-        .join('&')}` : '';
+        .join('&');
+
+    return filteredQuery ? `?${filteredQuery}` : '';
 }
