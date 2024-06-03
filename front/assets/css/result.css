@@ -74,16 +74,25 @@ html {
   font-size: 10px;
 }
 
-.prev-next {
+.pagination {
+  font-family: var(--bold);
   width: 100vw;
   height: 100px;
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 3px;
 }
 
 .prev-next a {
   text-decoration: none;
   padding: 30px;
   background-color: red;
+}
+
+.page {
+  text-decoration: none;
+  padding: 20px;
+  background-color: var(--horo-blue);
+  border-radius: 10px;
 }

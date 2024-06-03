@@ -16,16 +16,26 @@
     <div class="item-ctn">
       <% lst.items.forEach(function (article) { %>
       <div class="watch">
-        <img src="<%= article.Image_URL1 %>" alt="Image <%= article.Model %>" />
+        <img src="<%= article.Images[0] %>" alt="Image <%= article.Model %>" />
         <p class="model"><%= article.Model %></p>
         <p class="marque"><%= article.Marque_Label %></p>
       </div>
       <%}); %>
     </div>
-    <div class="prev-next">
-      <a href="/result?previous=<%= lst.previous %>">Previous</a>
-
-      <a href="/result?next=<%= lst.next %>">Next</a>
+    <div class="pagination">
+      <% for(var i=lst.current_page; i < lst.last_page; i++) { %> <%
+      if(i-3===lst.current_page){%>
+      <p class="page">...</p>
+      <a
+        href="/result?next=http://localhost:4000/articles?limit=12&offset=<%= +i*12 %>"
+        class="page"
+      ><%= lst.last_page %></a>
+      <% } %>
+      <a
+        href="/result?next=http://localhost:4000/articles?limit=12&offset=<%= +i*12 %>"
+        class="page"
+        ><%= i+1 %></a>
+      <% } %>
     </div>
   </body>
   <script src="/public/js/script2.js"></script>

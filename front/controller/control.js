@@ -1,4 +1,4 @@
-const url = "http://10.13.35.133:4000";
+const url = "http://localhost:4000";
 const axios = require("axios");
 
 exports.Index = (req, res) => {
@@ -8,9 +8,11 @@ exports.Index = (req, res) => {
 exports.Result = async (req, res) => {
   let watches;
   if (req.query.next) {
-    watches = await axios.get(req.query.next+"&offset="+req.query.offset);
+    watches = await axios.get(req.query.next + "&offset=" + req.query.offset);
   } else if (req.query.previous) {
-    watches = await axios.get(req.query.previous+"&offset="+req.query.offset);
+    watches = await axios.get(
+      req.query.previous + "&offset=" + req.query.offset
+    );
   } else {
     watches = await axios.get(url + "/articles");
   }
