@@ -23,6 +23,8 @@ routeur.delete("/fav/:id",[middleware.validateToken,middleware.articleExists])
 routeur.get("/commande", middleware.validateToken, controllerArticle.getAllCommande)
 routeur.post("/commande/:id",[middleware.validateToken,middleware.articleExists],controllerArticle.postComande);
 routeur.get("/search",controllerArticle.search)
+routeur.get("/similar/:id", middleware.articleExists, controllerArticle.getArticleSimilar)
+routeur.get("/assets/montres/:filename(*)", controllerArticle.getImage)
 
 //Exportation des routes
 module.exports = routeur;
