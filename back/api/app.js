@@ -2,13 +2,13 @@
 
 //Importation des modules
 const express = require("express");
-const cors = require("cors");//Middleware qui permet d'autoriser les requêtes HTTP d'origine différente du serveur
-const path = require("path");//Pour travailler avec les chemins des fichiers
+const cors = require("cors"); //Middleware qui permet d'autoriser les requêtes HTTP d'origine différente du serveur
+const path = require("path"); //Pour travailler avec les chemins des fichiers
 
 // Crée une application Express
 const app = express();
 app.use(cors());
-app.use("/assets", express.static(path.join(__dirname, "/assets"), { extensions: ['avif'] }));
+app.use("/assets", express.static(path.join(__dirname, "/assets")));
 /*
 Configure votre application Express pour servir des fichiers statiques à partir du répertoire courant.
 Lorsque le serveur reçoit une requête commençant par /asset, il recherche le fichier correspondant dans le répertoire spécifié et le renvoie au client.

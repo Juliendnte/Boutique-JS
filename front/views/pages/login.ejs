@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <%- include('../components/head'); %>
+    <link rel="stylesheet" href="/public/css/login.css" />
+    <link rel="stylesheet" href="/public/css/accueil.css" />
+
+    <title>Login</title>
+  </head>
+  <body>
+    <%- include('../components/header'); %>
+    <%-include('../components/burger-list'); %>
+
+    <section>
+      <div class="search-bar-ctn">
+        <%- include('../components/search-bar'); %>
+      </div>
+      <div class="log-ctn">
+        <img src="/public/img/logo.png" alt="Logo Login" />
+        <h1 class="login-text">Login</h1>
+        <input type="text" placeholder="Username" />
+        <input type="text" placeholder="Password" />
+        <div class="remember-forget-ctn">
+          <div class="remember">
+            <input type="checkbox" />
+            <p>Remember me</p>
+          </div>
+          <a href="">Forgot Password ?</a>
+        </div>
+
+        <button>LOGIN</button>
+        <a href="/create-account">Don't have an account ? Create one here</a>
+      </div>
+    </section>
+  </body>
+  <script src="/public/js/script2.js"></script>
+</html>

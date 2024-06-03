@@ -4,5 +4,7 @@ const controller = require("../controller/control");
 
 routeur.get("/index", controller.Index);
 routeur.get("/result", controller.Result);
+routeur.get("/login", controller.Login);
+routeur.get("/create-account", controller.CreateAccount);
 
 module.exports = routeur;

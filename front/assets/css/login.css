@@ -1,0 +1,113 @@
+html {
+  overflow-x: hidden;
+}
+
+section {
+  color: var(--horo-blue);
+  position: relative;
+  width: 100vw;
+  height: 87vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--horo-blue);
+}
+
+.log-ctn,
+.sign-up-ctn {
+  width: 40%;
+  height: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  background-color: var(--cream);
+  border-radius: 50px;
+}
+
+@media screen and (max-width: 700px) {
+  .log-ctn img,
+  .sign-up-ctn img {
+    width: 150px;
+    height: auto;
+  }
+
+  p,
+  .sign-up-ctn a,
+  .log-ctn a {
+    font-size: 12px;
+  }
+}
+
+.sign-up-ctn p,
+.sign-up-ctn a,
+.log-ctn p,
+.log-ctn a,
+h1 {
+  font-family: var(--light);
+  color: var(--horo-blue);
+}
+
+h1 {
+  font-family: var(--bold);
+}
+
+.sign-up-ctn input[type="text"],
+.sign-up-ctn input[type="mail"],
+.log-ctn input[type="text"] {
+  width: 60%;
+  background-color: var(--horo-blue);
+  border: none;
+  height: 30px;
+  border-radius: 50px;
+  padding-left: 1em;
+}
+
+.sign-up-ctn input::placeholder,
+.log-ctn input::placeholder {
+  color: var(--cream);
+}
+
+.sign-up-ctn button,
+.log-ctn button {
+  background-color: var(--horo-blue);
+  padding: 10px 30px;
+  border-radius: 50px;
+}
+
+.remember-forget-ctn {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  width: 80%;
+}
+
+.remember {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.remember p {
+  padding-left: 0.5em;
+}
+
+@media screen and (min-width: 700px) {
+}
+
+@media screen and (min-width: 1100px) {
+}
+
+@media screen and (max-width: 1100px) {
+  .log-ctn,
+  .sign-up-ctn {
+    width: 80%;
+    height: 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    background-color: var(--cream);
+    border-radius: 30px;
+  }
+}

@@ -24,6 +24,7 @@ header {
   align-items: center;
   justify-content: center;
   gap: 11px;
+  text-decoration: none;
 }
 
 .burger span {
@@ -65,6 +66,7 @@ header {
 
 .search-bar {
   top: 0;
+  right: 0;
   position: absolute;
   display: flex;
   align-items: center;

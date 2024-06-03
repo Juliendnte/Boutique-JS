@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <%- include('../components/head'); %>
+    <link rel="stylesheet" href="/public/css/login.css" />
+    <link rel="stylesheet" href="/public/css/accueil.css" />
+
+    <title>Login</title>
+  </head>
+  <body>
+    <%- include('../components/header'); %>
+    <%-include('../components/burger-list'); %>
+
+    <section>
+      <div class="search-bar-ctn">
+        <%- include('../components/search-bar'); %>
+      </div>
+      <div class="sign-up-ctn">
+        <img src="/public/img/logo.png" alt="Logo Horo Haven" />
+        <h1>Create account</h1>
+        <input type="text" placeholder="Username" required />
+        <input type="mail" placeholder="E-mail" required />
+        <input type="text" placeholder="Password" required />
+        <input type="text" placeholder="Confirm Password" required />
+        <button>CREATE ACCOUNT</button>
+        <a href="/login">Already have an account ? Click here</a>
+      </div>
+    </section>
+  </body>
+  <script src="/public/js/script2.js"></script>
+</html>
