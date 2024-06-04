@@ -17,12 +17,38 @@ html {
     width: 150px;
     height: 240px;
   }
+
+  .page {
+    font-size: 8px;
+    text-decoration: none;
+    padding: 12px;
+    background-color: var(--horo-blue);
+    border-radius: 10px;
+  }
+
+  .current-page {
+    background-color: #6e6eb3;
+    padding: 15px;
+  }
 }
 
 @media screen and (min-width: 700px) {
   .watch {
     width: 200px;
     height: 280px;
+  }
+
+  .page {
+    font-size: 15px;
+    text-decoration: none;
+    padding: 20px;
+    background-color: var(--horo-blue);
+    border-radius: 10px;
+  }
+
+  .current-page {
+    background-color: #6e6eb3;
+    padding: 25px;
   }
 }
 
@@ -39,6 +65,7 @@ html {
     height: 400px;
   }
 }
+
 .watch img {
   color: black;
   width: 100%;
@@ -82,17 +109,4 @@ html {
   align-items: center;
   justify-content: center;
   gap: 3px;
-}
-
-.prev-next a {
-  text-decoration: none;
-  padding: 30px;
-  background-color: red;
-}
-
-.page {
-  text-decoration: none;
-  padding: 20px;
-  background-color: var(--horo-blue);
-  border-radius: 10px;
 }
