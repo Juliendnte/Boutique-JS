@@ -7,7 +7,7 @@ const listValueArticle = ["marque.label", "model", "ref", "fabrication.label", "
 
 class ArticleController {
     static async getArticles(req, res) {
-        if (Object.keys(req.query).every(key => listValueArticle.includes(key.toLowerCase()))){
+        if (Object.keys(req.query).length && !Object.keys(req.query).every(key => listValueArticle.includes(key.toLowerCase()))){
             return res.status(401).send({
                 message: "Erreur de query",
                 status: 401
@@ -109,7 +109,7 @@ class ArticleController {
             });
         }
     }
-    //A revoir
+
     static async searchArticles(req, res) {
         const search = req.query.search;
 
@@ -120,26 +120,28 @@ class ArticleController {
 
             req.query.limit = limit;
             req.query.offset = offset;
-            const articles = await article.search(search);
+
+            const articles = await article.search({search , limit, offset});
+
             for (const art of articles) {
                 const photos = await article.getImages(art.Id, true);
                 art.Images = photos.map(photo => `${baseUrl}/assets/${photo.URL}`);
             }
-            const total = Object.entries(articles).length;
-            const last_page = Math.ceil(article.total / limit)
 
+            const total = Object.entries(articles).length;//Pour savoir j'ai combien d'article
             if (!articles || total === 0) {
                 return res.status(404).json({
                     message: `Articles not found`,
                     status: 404
                 });
             }
-
+            const last_page = Math.ceil(article.total / limit)
+            const current_page = Math.ceil(offset / limit) + 1;
             const next = article.total - limit <= offset ? null : href.includes("?") ? `${href}&limit=${limit}&offset=${offset + limit}` : `${href}?limit=${limit}&offset=${offset + limit}`;//Si article.total et total sont égaux alors pas de suivant
             const previous = offset ?  href.includes("?") ? `${href}&limit=${limit}&offset=${offset - limit}`:`${href}?limit=${limit}&offset=${offset - limit}` : null;//Si l'offset est différent de 0 pagination sinon y en a pas
 
             res.status(200).json({
-                message: 'Article found with search '+search.search,
+                message: 'Article found with search '+ search,
                 status: 200,
                 articles: {
                     href,
@@ -149,6 +151,7 @@ class ArticleController {
                     previous,
                     total,
                     last_page,
+                    current_page,
                     items: articles
                 }
             })
