@@ -5,6 +5,15 @@ const baseUrl = process.env.BASE_URL;
 const pagination = 12;
 const listValueArticle = ["marque.label", "model", "ref", "fabrication.label", "dimension", "matiere.label", "color.label", "movement.label", "complications", "waterproof", "bracelet.label", "color_bracelet.label", "availability", "price", "reduction", "stock", "limit", "offset"];
 
+function buildQueryWithoutLimitOffset(query) {
+    const filteredQuery = Object.entries(query)
+        .filter(([key]) => key.toLowerCase() !== 'limit' && key.toLowerCase() !== 'offset')
+        .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+        .join('&');
+
+    return filteredQuery ? `?${filteredQuery}` : '';
+}
+
 class ArticleController {
     static async getArticles(req, res) {
         if (Object.keys(req.query).length && !Object.keys(req.query).every(key => listValueArticle.includes(key.toLowerCase()))){
@@ -31,7 +40,7 @@ class ArticleController {
 
             const total = Object.entries(articles).length;//Pour savoir j'ai combien d'article
             if (!articles || total === 0) {
-                return res.status(404).json({
+                return res.status(404).send({
                     message: `Articles not found`,
                     status: 404
                 });
@@ -41,7 +50,7 @@ class ArticleController {
             const next = article.total - limit <= offset ? null : href.includes("?") ? `${href}&limit=${limit}&offset=${offset + limit}` : `${href}?limit=${limit}&offset=${offset + limit}`;//Si article.total et total sont égaux alors pas de suivant
             const previous = offset ?  href.includes("?") ? `${href}&limit=${limit}&offset=${offset - limit}`:`${href}?limit=${limit}&offset=${offset - limit}` : null;//Si l'offset est différent de 0 pagination sinon y en a pas
 
-            return res.status(200).json({
+            return res.status(200).send({
                 message: `Articles successfully found`,
                 status: 200,
                 articles: {
@@ -57,7 +66,7 @@ class ArticleController {
                 }
             });
         }catch (err){
-            res.status(500).json({
+            res.status(500).send({
                 message:err,
                 status:500
             });
@@ -68,15 +77,15 @@ class ArticleController {
         const articleById = req.article;//Grâce au middleware articleExists
         try {
             const img = await article.getImages(articleById.Id);//Prends toutes les images de l'article indiqué
-            articleById.img = img.map(image => `${baseUrl}/assets/${image.URL}`);//Met le chemin dans le json
+            articleById.img = img.map(image => `${baseUrl}/assets/${image.URL}`);//Met le chemin dans le send
 
-            return res.status(200).json({
+            return res.status(200).send({
                 message: `Article with id ${req.params.id} successfully found`,
                 status: 200,
                 article: articleById
             })
         }catch (err){
-            res.status(500).json({
+            res.status(500).send({
                 message:err,
                 status:500
             })
@@ -89,7 +98,7 @@ class ArticleController {
 
         //Check si une clé du body appartient a cette liste
         if (!body || !Object.keys(body).every((key) => ["price", "availability",  "stock"].includes(key.toLowerCase()))) {
-            return res.status(400).json({
+            return res.status(400).send({
                 message: "Vous ne pouvez modifiés que un de ses champs [Price, Availability, Stock]",
                 status: 400,
             });
@@ -98,12 +107,12 @@ class ArticleController {
         try {
             await article.updatePatchArticle(id, body);
 
-            return res.status(200).json({
+            return res.status(200).send({
                 message: `Article with id ${id} successfully updated`,
                 status: 200,
             });
         } catch (err) {
-            res.status(500).json({
+            res.status(500).send({
                 message: err,
                 status: 500,
             });
@@ -130,7 +139,7 @@ class ArticleController {
 
             const total = Object.entries(articles).length;//Pour savoir j'ai combien d'article
             if (!articles || total === 0) {
-                return res.status(404).json({
+                return res.status(404).send({
                     message: `Articles not found`,
                     status: 404
                 });
@@ -140,7 +149,7 @@ class ArticleController {
             const next = article.total - limit <= offset ? null : href.includes("?") ? `${href}&limit=${limit}&offset=${offset + limit}` : `${href}?limit=${limit}&offset=${offset + limit}`;//Si article.total et total sont égaux alors pas de suivant
             const previous = offset ?  href.includes("?") ? `${href}&limit=${limit}&offset=${offset - limit}`:`${href}?limit=${limit}&offset=${offset - limit}` : null;//Si l'offset est différent de 0 pagination sinon y en a pas
 
-            res.status(200).json({
+            res.status(200).send({
                 message: 'Article found with search '+ search,
                 status: 200,
                 articles: {
@@ -156,7 +165,7 @@ class ArticleController {
                 }
             })
         }catch (err){
-            res.status(500).json({
+            res.status(500).send({
                 message:err,
                 status:500
             });
@@ -172,13 +181,13 @@ class ArticleController {
                 const photos = await article.getImages(art.Id, true);
                 art.Images = photos.map(photo => `${baseUrl}/assets/${photo.URL}`);
             }
-            res.status(200).json({
+            res.status(200).send({
                 message: `Similar articles for id ${id} `,
                 status: 200,
                 articles
             })
         }catch (err){
-            res.status(500).json({
+            res.status(500).send({
                 message: err,
                 status: 500
             })
@@ -191,18 +200,18 @@ class ArticleController {
         try {
             const Favoris = await article.getAllFav(userID); //Récupère tous les favoris a l'id de l'user
             if (!Favoris) {
-                return res.status(404).json({
+                return res.status(404).send({
                     message: `No favori were found to the user at id ${userID}`,
                     status: 404,
                 });
             }
-            return res.status(200).json({
+            return res.status(200).send({
                 message: "Favorite articles by user",
                 status: 200,
                 Favoris,
             });
         } catch (err) {
-            res.status(500).json({
+            res.status(500).send({
                 message: err,
                 status: 500,
             });
@@ -215,18 +224,18 @@ class ArticleController {
         try {
             const Commande = await article.getAllCommande(userID);
             if (!Commande) {
-                return res.status(404).json({
+                return res.status(404).send({
                     message: `No command were found to the user at id ${userID}`,
                     status: 404,
                 });
             }
-            return res.status(200).json({
+            return res.status(200).send({
                 message: "Command articles by user",
                 status: 200,
                 Commande,
             });
         } catch (err) {
-            res.status(500).json({
+            res.status(500).send({
                 message: err,
                 status: 500,
             });
@@ -239,12 +248,12 @@ class ArticleController {
 
         try {
             await article.postFav(userID, articleID); //L'user met en favoris l'article
-            res.status(200).json({
+            res.status(200).send({
                 message: `Article ${articleID} successfully been add in favoris`,
                 status: 200,
             });
         } catch (err) {
-            res.status(500).json({
+            res.status(500).send({
                 message: err,
                 status: 500,
             });
@@ -262,19 +271,19 @@ class ArticleController {
                     Stock: stock - 1,
                 });
             } else {
-                return res.status(409).json({
+                return res.status(409).send({
                     message: "No stock for article " + articleID,
                     status: 409,
                 });
             }
             await article.postCommande(userID, articleID); //L'user a mit dans l'historique de commande
 
-            res.status(200).json({
+            res.status(200).send({
                 message: `Command ${articleID} successfully been add to command`,
                 status: 200,
             });
         } catch (err) {
-            res.status(500).json({
+            res.status(500).send({
                 message: err,
                 status: 500,
             });
@@ -286,27 +295,48 @@ class ArticleController {
         const articleId = req.params.id;
         try {
             await article.deleteFav(userID, articleId);
-            res.status(200).json({
+            res.status(200).send({
                 message: `Article with id ${articleId} successfully been deleted from favoris`,
                 status: 200,
             });
         } catch (err) {
-            res.status(500).json({
+            res.status(500).send({
                 message: err,
                 status: 500,
             });
         }
     }
-
-}
-
-function buildQueryWithoutLimitOffset(query) {
-    const filteredQuery = Object.entries(query)
-        .filter(([key]) => key.toLowerCase() !== 'limit' && key.toLowerCase() !== 'offset')
-        .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
-        .join('&');
-
-    return filteredQuery ? `?${filteredQuery}` : '';
+    
+    static async getArticleColor(req, res){
+        const img = await article.getImages(req.article.Id)
+        const match = img[0].URL.match(/^(.*\/)[^\/]*\/[^\/]*$/);
+        let extractedPath;
+        if (match) {
+            extractedPath = match[1];
+        }else{
+            return res.status(404).send({
+                message: "Error image path",
+                status: 404
+            })
+        }
+        
+        try{
+            const articlesId = await article.getArticlesColor(extractedPath);
+            articlesId.forEach((art) => {
+                art.articleHref = "/article/" + art.articleHref
+            })
+            res.status(200).send({
+                message: "Article Color found",
+                status: 200,
+                articlesId
+            })
+        }catch (err){
+            res.status(500).send({
+                message: err,
+                status: 500,
+            })
+        }
+    }
 }
 
 module.exports = ArticleController;

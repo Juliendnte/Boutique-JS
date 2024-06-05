@@ -250,6 +250,32 @@ class ArticleModel{
         });
     }
 
+    static getArticlesColor(path){
+        return new Promise((resolve, reject) => {
+            path += "%";
+            const sql = `
+                WITH RankedPhotos AS (
+                    SELECT
+                        p.Id_Article,
+                        p.URL,
+                        ROW_NUMBER() OVER (PARTITION BY p.Id_Article ORDER BY p.URL) AS rn
+                    FROM
+                        photo p
+                    WHERE
+                        p.URL LIKE ?
+                )
+                SELECT
+                    Id_Article AS articleHref,
+                    URL
+                FROM
+                    RankedPhotos
+                WHERE
+                    rn = 1;
+
+            `
+            connection.query(sql,path,(err, results)=> err ? reject(err) : resolve(results));
+        })
+    }
 }
 
 module.exports = ArticleModel;
