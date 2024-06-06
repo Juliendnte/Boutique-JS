@@ -22,7 +22,7 @@ class logModel{
     static register(user){
         return new Promise((resolve,reject)=>{
             const sql = `INSERT INTO users (Name, Email, Pwd, Salt, Adresse)VALUES(?,?,?,?,DEFAULT)`;
-            connection.query(sql,[user.username,user.email, user.hashedPassword.hashedPassword, user.hashedPassword.salt], (err, results)=> err ? reject(err) : resolve(results[0]));
+            connection.query(sql,[user.username,user.email, user.Password.hashedPassword, user.Password.salt], (err, results)=> err ? reject(err) : resolve(results[0]));
         });
     }
 }

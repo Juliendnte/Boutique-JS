@@ -9,8 +9,4 @@ const port = process.env.PORT || 4000;//Si process.env.PORT est vide il prend la
 const host = process.env.HOST || 'localhost';
 
 //lancement de l'api
-try {
-    app.listen(port, host, () => console.log(`Server listening on ${process.env.BASE_URL}`));
-}catch(err){
-    console.error(err);
-}
+app.listen(port, host, () => console.log(`Server listening on ${process.env.BASE_URL}`));

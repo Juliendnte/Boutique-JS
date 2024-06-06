@@ -165,21 +165,21 @@ class ArticleModel{
     static getAllFav(id){
         return new Promise((resolve,reject)=>{
             const sql = `SELECT a.* FROM favoris f JOIN article a ON f.Id_article = a.Id WHERE f.Id_user = ?;`
-            connection.query(sql, id, (err, results)=> err ? reject(err) : resolve(results[0]));
+            connection.query(sql, id, (err, results)=> err ? reject(err) : resolve(results));
         })
     }
 
     static getAllCommande(id){
         return new Promise((resolve,reject)=>{
             const sql = `SELECT a.* FROM commande c JOIN article a ON c.Id_article = a.Id WHERE c.Id_user = ?;`
-            connection.query(sql, id, (err, results)=> err ? reject(err) : resolve(results[0]));
+            connection.query(sql, id, (err, results)=> err ? reject(err) : resolve(results));
         })
     }
 
     static postFav(userId, articleId){
         return new Promise((resolve, reject) => {
-            const sql = `INSERT INTO favoris (Id_user,Id_article) VALUES(?,?)`;
-            connection.query(sql,[userId,articleId],(err,results)=> err ? reject(err) : resolve(results[0]));
+            const sql = `INSERT INTO favoris (Id_user, Id_article) VALUES(?,?)`;
+            connection.query(sql,[userId, articleId],(err,results)=> err ? reject(err) : resolve(results[0]));
         })
     }
 
@@ -250,6 +250,32 @@ class ArticleModel{
         });
     }
 
+    static getArticlesColor(path){
+        return new Promise((resolve, reject) => {
+            path += "%";
+            const sql = `
+                WITH RankedPhotos AS (
+                    SELECT
+                        p.Id_Article,
+                        p.URL,
+                        ROW_NUMBER() OVER (PARTITION BY p.Id_Article ORDER BY p.URL) AS rn
+                    FROM
+                        photo p
+                    WHERE
+                        p.URL LIKE ?
+                )
+                SELECT
+                    Id_Article AS articleHref,
+                    URL
+                FROM
+                    RankedPhotos
+                WHERE
+                    rn = 1;
+
+            `
+            connection.query(sql,path,(err, results)=> err ? reject(err) : resolve(results));
+        })
+    }
 }
 
 module.exports = ArticleModel;

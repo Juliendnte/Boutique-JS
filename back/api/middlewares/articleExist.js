@@ -3,7 +3,13 @@ const article = require("../models/articleModel");
 //Middleware pour savoir si la donnée est l'id envoyée
 const articleExists = async (req, res, next) => {
     const id = req.params.id;//Récupere l'id
-
+    console.log(/[a-zA-Z ]/.test(id))
+    if (/[a-zA-Z ]/.test(id)){
+        return res.status(404).json({
+            message: `Article with id ${id} not found`,
+            status: 404
+        });
+    }
     try {
         const articleById = await article.getArticleById(id);//Récupere la donnée a l'id envoyée
 
