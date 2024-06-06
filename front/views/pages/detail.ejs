@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
+    <%- include('../components/head'); %>
+    <link rel="stylesheet" href="/public/css/detail.css" />
+    <title>Detail</title>
+  </head>
+  <body>
+    <%- include('../components/header'); %>
+    <%-include('../components/burger-list'); %>
+    <div class="search-bar-ctn">
+      <%- include('../components/search-bar'); %>
+    </div>
+    <section class="main">
+      <div class="caroussel-ctn center">
+        <a href="/result?next=http://localhost:4000/articles?limit=12&offset=<%- (Math.ceil(watch.Id/12)-1)*12%>"class="retour" >
+          <img src="/public/img/retour.png" alt="Boutton retour">
+          <p>Retour</p>
+        </a>
+        <div class="swiper mySwiper">
+          <div class="swiper-wrapper">
+            <%watch.img.forEach(function (img){%>
+            <div class="swiper-slide">
+              <img src="<%=img%>" alt="Image Montre" />
+            </div>
+            <%})%>
+          </div>
+          <div class="swiper-button-next"></div>
+          <div class="swiper-button-prev"></div>
+          <div class="swiper-pagination"></div>
+        </div>
+      </div>
+      <div class="infos">
+        <div class="infos-ctn">
+          <p class="marque"><%=watch.marque%></p>
+          <div class="text-ctn">
+            <p class="first" >Model:</p>
+            <p class="text second"><%=watch.Model%></p>
+          </div>
+          
+          <br />
+          <div class="text-ctn">
+            <p class="first" >Référence:</p>
+            <p class="text second"><%=watch.Ref%></p>
+          </div>
+          <br />
+          
+          <p class="text prix"><%=watch.Price%> €</p>
+          <br />
+          <div class="text-ctn">
+            <p class="first" >Frabriquée en: </p>
+            <p class="text second"><%=watch.fab%></p>
+          </div>
+          <br />
+
+          <div class="colors">
+            <% color.forEach((elem)=>{%>
+              <%if(elem.Id === watch.Id){%>
+                <a class="color selected" href="/detail?id=<%=elem.Id%>">
+                  <img src="http://localhost:4000/assets/<%=elem.URL%>" alt="Image autre couleur">
+                </a>
+              <%}else{%>
+              <a class="color" href="/detail?id=<%=elem.Id%>">
+                <img src="http://localhost:4000/assets/<%=elem.URL%>" alt="Image autre couleur">
+              </a>
+              <%}%>
+            <%})%>
+          </div>
+          <br />
+          <div class="text-ctn-decription">
+            <p class="first" >Description:</p><br>
+            <p class="text second" id="description"><%=watch.Description%></p>
+          </div>
+          <br>
+          <button class="voir-plus">Voir plus</button><br>
+          
+          </br>
+          <div class="text-ctn">
+            <p class="first" >Dimension: </p>
+            <p class="text second"><%=watch.Dimension%></p>
+          </div> <br>
+          <div class="text-ctn">
+            <p class="first" >Matière: </p>
+            <p class="text second"><%=watch.matiere%></p>
+          </div> <br>
+          <div class="text-ctn">
+            <p class="first" >Couleur:</p>
+            <p class="text second"><%=watch.color%></p>
+          </div> <br>
+          <div class="text-ctn">
+            <p class="first" >Mouvement:</p>
+            <p class="text second"><%=watch.movement%></p>
+          </div> <br>
+          <div class="text-ctn-description">
+            <p class="first" >Complications:</p>
+            <p class="text second"><%=watch.Complications%></p>
+          </div> <br>
+          <div class="text-ctn">
+            <p class="first" >Etanchéité:</p>
+            <p class="text second"> <%=watch.Waterproof%></p>
+          </div> <br>
+          <div class="text-ctn">
+            <p class="first" >Bracelet:</p>
+            <p class="text second"><%=watch.bracelet%></p>
+          </div> <br>
+          <div class="text-ctn">
+            <p class="first" >Couleur du bracelet:</p>
+            <p class="text second"><%=watch.color_Bracelet%></p>
+          </div>
+          <div class="btn-ctn">
+            <%if (watch.Availability > 0){%>
+              <button class="add-to-basket">Ajouter au panier</button>
+            <%}else{%>
+              <button class="disable">Cet article est indisponible</button>
+            <%}%>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="similar">
+      <% similar.forEach((article)=>{%>
+        <a class="sim-ctn" href="/detail?id=<%=article.Id%>">
+          <div class="sim-img-ctn">
+            <img src="<%=article.Images[0]%>" alt="" class="dessus">
+            <img src="<%=article.Images[1]%>" alt="" class="dessous">
+          </div>
+          <div class="sim-info-ctn">
+            <p class="sim-model"><%=article.Model%></p>
+            <p class="sim-marque"><%=article.marqueLabel%></p>
+          </div>
+        </a>
+      <%})%>
+    </section>
+  </body>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script src="/public/js/script2.js"></script>
+</html>

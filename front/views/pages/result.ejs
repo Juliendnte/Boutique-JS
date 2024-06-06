@@ -15,11 +15,14 @@
     </div>
     <div class="item-ctn">
       <% lst.items.forEach(function (article) { %>
-      <div class="watch">
-        <img src="<%= article.Images[0] %>" alt="Image <%= article.Model %>" />
+      <a class="watch" href="/detail?id=<%= article.Id%>">
+        <div class="img-ctn">
+          <img class="dessus" src="<%= article.Images[0] %>" alt="Image <%= article.Model %>" />
+          <img class="dessous" src="<%= article.Images[1] %>" alt="Image <%= article.Model %> 2" />
+        </div>
         <p class="model"><%= article.Model %></p>
-        <p class="marque"><%= article.Marque_Label %></p>
-      </div>
+        <p class="marque"><%= article.marqueLabel %></p>
+      </a>
       <%}); %>
     </div>
     <div class="pagination">
@@ -55,8 +58,6 @@
         ><%= lst.current_page-1 %></a
       >
       <%}%>
-
-
       
       <% for(var i=lst.current_page-1; i < lst.last_page; i++) { %>
       <% if (i-2 === lst.current_page){%> <!--Pour faire que 2 après-->
