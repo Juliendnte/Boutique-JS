@@ -58,10 +58,17 @@
           <br />
 
           <div class="colors">
-            <%watch.%>
-            <div class="example selected"></div>
-            <div class="example"></div>
-            <div class="example"></div>
+            <% color.forEach((elem)=>{%>
+              <%if(elem.Id === watch.Id){%>
+                <a class="color selected" href="/detail?id=<%=elem.Id%>">
+                  <img src="http://localhost:4000/assets/<%=elem.URL%>" alt="Image autre couleur">
+                </a>
+              <%}else{%>
+              <a class="color" href="/detail?id=<%=elem.Id%>">
+                <img src="http://localhost:4000/assets/<%=elem.URL%>" alt="Image autre couleur">
+              </a>
+              <%}%>
+            <%})%>
           </div>
           <br />
           <div class="text-ctn-decription">
@@ -114,7 +121,20 @@
         </div>
       </div>
     </section>
-    <section class="similar"></section>
+    <section class="similar">
+      <% similar.forEach((article)=>{%>
+        <a class="sim-ctn" href="/detail?id=<%=article.Id%>">
+          <div class="sim-img-ctn">
+            <img src="<%=article.Images[0]%>" alt="" class="dessus">
+            <img src="<%=article.Images[1]%>" alt="" class="dessous">
+          </div>
+          <div class="sim-info-ctn">
+            <p class="sim-model"><%=article.Model%></p>
+            <p class="sim-marque"><%=article.marqueLabel%></p>
+          </div>
+        </a>
+      <%})%>
+    </section>
   </body>
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   <script src="/public/js/script2.js"></script>

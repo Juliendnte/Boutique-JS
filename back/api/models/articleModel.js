@@ -265,7 +265,7 @@ class ArticleModel{
                         p.URL LIKE ?
                 )
                 SELECT
-                    Id_Article AS articleHref,
+                    Id_Article AS Id,
                     URL
                 FROM
                     RankedPhotos

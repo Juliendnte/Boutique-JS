@@ -30,10 +30,18 @@ exports.CreateAccount = (req, res) => {
 };
 
 exports.WatchDetail = async (req, res) => {
+  let colorReq;
   let watchReq;
+  let similarReq;
   watchReq = await axios.get(url + "/article/" + req.query.id);
-  console.log(watchReq.data.article)
+  colorReq = await axios.get(url + "/color/" + req.query.id);
+  similarReq = await axios.get(url + "/similar/" + req.query.id);
+  console.log(watchReq.data.article);
+  console.log(colorReq.data.articlesId);
+  console.log(similarReq.data.articles);
   res.render("../views/pages/detail", {
     watch: watchReq.data.article,
+    color: colorReq.data.articlesId,
+    similar: similarReq.data.articles,
   });
 };
