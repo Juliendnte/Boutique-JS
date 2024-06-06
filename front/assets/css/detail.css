@@ -10,10 +10,18 @@ body {
     flex-direction: column;
   }
 
-  .caroussel-ctn,
   .infos {
     width: 100vw;
+    height: 170vh;
+  }
+
+  .caroussel-ctn {
+    width: 100vw;
     height: 60vh;
+  }
+
+  .retour {
+    padding-top: 70px;
   }
 }
 
@@ -21,7 +29,7 @@ body {
   .caroussel-ctn,
   .infos {
     width: 50vw;
-    height: 110vh;
+    height: 130vh;
   }
   .main {
     display: flex;
@@ -42,6 +50,7 @@ body {
 
 .caroussel-ctn {
   background-color: #fff;
+  position: relative;
 }
 
 .swiper,
@@ -148,4 +157,53 @@ body {
 .second {
   color: var(--horo-blue);
   font-family: var(--light);
+}
+
+.retour {
+  margin: 2em;
+  width: 5%;
+  height: auto;
+  position: absolute;
+  z-index: 9;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.retour p {
+  color: var(--horo-blue);
+  font-family: var(--light);
+}
+
+.retour img {
+  width: 100%;
+  height: auto;
+}
+
+.btn-ctn {
+  height: 10vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-to-basket {
+  border: none;
+  border-radius: 50px;
+  font-family: var(--light);
+  padding: 20px 40px;
+  background-color: #1d1d1d;
+}
+
+.disable {
+  border: none;
+  border-radius: 50px;
+  font-family: var(--light);
+  padding: 20px 40px;
+  background-color: #a8a8a8;
 }

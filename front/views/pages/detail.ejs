@@ -17,6 +17,10 @@
     </div>
     <section class="main">
       <div class="caroussel-ctn center">
+        <a href="/result?next=http://localhost:4000/articles?limit=12&offset=<%- (Math.ceil(watch.Id/12)-1)*12%>"class="retour" >
+          <img src="/public/img/retour.png" alt="Boutton retour">
+          <p>Retour</p>
+        </a>
         <div class="swiper mySwiper">
           <div class="swiper-wrapper">
             <%watch.img.forEach(function (img){%>
@@ -54,6 +58,7 @@
           <br />
 
           <div class="colors">
+            <%watch.%>
             <div class="example selected"></div>
             <div class="example"></div>
             <div class="example"></div>
@@ -83,7 +88,7 @@
             <p class="first" >Mouvement:</p>
             <p class="text second"><%=watch.movement%></p>
           </div> <br>
-          <div class="text-ctn">
+          <div class="text-ctn-description">
             <p class="first" >Complications:</p>
             <p class="text second"><%=watch.Complications%></p>
           </div> <br>
@@ -98,6 +103,13 @@
           <div class="text-ctn">
             <p class="first" >Couleur du bracelet:</p>
             <p class="text second"><%=watch.color_Bracelet%></p>
+          </div>
+          <div class="btn-ctn">
+            <%if (watch.Availability > 0){%>
+              <button class="add-to-basket">Ajouter au panier</button>
+            <%}else{%>
+              <button class="disable">Cet article est indisponible</button>
+            <%}%>
           </div>
         </div>
       </div>
