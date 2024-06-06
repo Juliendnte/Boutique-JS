@@ -1,0 +1,151 @@
+body {
+  width: 100vw;
+  height: max-content;
+  overflow-x: hidden;
+}
+
+@media screen and (max-width: 1024px) {
+  .main {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .caroussel-ctn,
+  .infos {
+    width: 100vw;
+    height: 60vh;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .caroussel-ctn,
+  .infos {
+    width: 50vw;
+    height: 110vh;
+  }
+  .main {
+    display: flex;
+    flex-direction: row;
+  }
+}
+
+.search-bar-ctn {
+  position: relative;
+}
+
+.infos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ebebeb;
+}
+
+.caroussel-ctn {
+  background-color: #fff;
+}
+
+.swiper,
+.swipper-wrapper {
+  width: 100%;
+  height: 100%;
+}
+
+.swiper-slide {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.swiper-slide img {
+  width: 70%;
+  height: auto;
+}
+
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.infos-ctn {
+  width: 90%;
+  height: 90%;
+}
+
+.text,
+.text2 {
+  color: var(--horo-blue);
+}
+
+.text2 {
+  font-size: 15px;
+}
+
+.marque {
+  color: var(--horo-blue);
+  padding: 2em;
+  font-family: var(--bold);
+  font-size: 20px;
+  text-transform: uppercase;
+}
+
+.prix {
+  font-family: var(--bold);
+}
+
+.reference {
+  font-size: 15px;
+  color: #2a147c;
+}
+
+.voir-plus {
+  color: var(--horo-blue);
+  border: none;
+  background: none;
+  font-family: var(--bold);
+}
+
+.similar {
+  overflow: hidden;
+  width: 100vw;
+  height: 30vh;
+  background-color: #c5c5c5;
+}
+
+.colors {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.example {
+  width: 100px;
+  height: 100px;
+  background-color: #fff;
+}
+
+.selected {
+  border: 2px solid var(--horo-blue);
+}
+
+.text-ctn {
+  gap: 0.5em;
+  display: flex;
+  flex-direction: row;
+}
+
+.text-ctn-decription {
+  display: flex;
+  flex-direction: column;
+}
+
+.first {
+  color: var(--horo-blue);
+  font-family: var(--bold);
+}
+
+.second {
+  color: var(--horo-blue);
+  font-family: var(--light);
+}

@@ -6,5 +6,6 @@ routeur.get("/index", controller.Index);
 routeur.get("/result", controller.Result);
 routeur.get("/login", controller.Login);
 routeur.get("/create-account", controller.CreateAccount);
+routeur.get("/detail", controller.WatchDetail);
 
 module.exports = routeur;

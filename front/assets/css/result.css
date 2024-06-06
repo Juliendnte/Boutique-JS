@@ -66,16 +66,42 @@ html {
   }
 }
 
-.watch img {
+.img-ctn {
+  position: relative;
+  display: flex;
+  justify-content: center;
   color: black;
   width: 100%;
-  height: auto;
+  height: 60%;
+}
+
+.dessus {
+  position: absolute;
+  width: auto;
+  height: 100%;
+}
+
+.dessous {
+  position: absolute;
+  width: auto;
+  height: 100%;
+  opacity: 0;
+}
+
+.watch:hover .dessous {
+  transition: all 0.5s;
+  opacity: 1;
 }
 
 .search-bar-ctn {
   position: relative;
 }
 
+.watch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 .watch p {
   color: black;
 }
@@ -94,6 +120,12 @@ html {
   text-align: center;
 }
 
+.marque-model {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
 .model {
   font-size: 15px;
 }
@@ -106,7 +138,7 @@ html {
   width: 100vw;
   height: 100px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   gap: 3px;
 }

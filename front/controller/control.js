@@ -28,3 +28,12 @@ exports.Login = (req, res) => {
 exports.CreateAccount = (req, res) => {
   res.render("../views/pages/create-account");
 };
+
+exports.WatchDetail = async (req, res) => {
+  let watchReq;
+  watchReq = await axios.get(url + "/article/" + req.query.id);
+  console.log(watchReq.data.article)
+  res.render("../views/pages/detail", {
+    watch: watchReq.data.article,
+  });
+};
