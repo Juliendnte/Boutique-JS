@@ -1,7 +1,10 @@
 const crypto = require('crypto');
 const log = require("../models/logModel");
 const jwt = require('jsonwebtoken');
+const nodemailer = require("nodemailer")
 require("dotenv").config();
+
+
 
 const jwtkey = process.env.JWT_KEY
 const pepper = process.env.PEPPER//Difference entre pepper et salt et que le salt est dans la bdd et le pepper en local . Les deux servent a modifiée le mdp
@@ -11,6 +14,16 @@ const hashPassword = (password, salt) => {
     const hashedPassword = hash.digest('hex');
     return {salt, hashedPassword};
 };
+const transporter = nodemailer.createTransport({
+    host: 'smtp.protonmail.com',
+    port: 465,
+    secure: true,
+    auth: {
+        user: process.env.EMAIL,
+        pass: process.env.E_PASSWORD
+    }
+});
+
 
 class UserController {
     static async Register(req, res) {
@@ -24,7 +37,7 @@ class UserController {
         const Password  = hashPassword(password, crypto.randomBytes(16).toString('hex'));//hash mon password
         try{
             await log.register({username, email, Password});
-            res.status(201).json({
+            res.status(201).send({
                 message : `User registered successfully`,
                 status: 201
             })
@@ -45,13 +58,13 @@ class UserController {
             else if (isValidEmail(email))
                 user = await log.login(email);
             else{
-                return res.status(401).json({
+                return res.status(401).send({
                     message:`Invalid username, email or password`,
                     status: 401
                 });
             }
             if (!user){
-                return res.status(401).json({
+                return res.status(401).send({
                     message:`Invalid username, email or password`,
                     status: 401
                 });
@@ -59,15 +72,15 @@ class UserController {
             const hashedPassword = hashPassword(password, user.Salt);//Récupere le password hashé
             if (hashedPassword.hashedPassword === user.Pwd) {//Test s'il est egale au password de l'utilisateur a l'email donné par l'utilisateur
                 const Token = jwt.sign({ Sub: user.Id }, jwtkey, { expiresIn: remember ? '365j':'24h' });//Me passe un token pendant 24h et le régle avec le jwtkey
-                res.status(200).json({ Token });//Je renvoie un nouveau token a chaque login
+                res.status(200).send({ Token });//Je renvoie un nouveau token a chaque login
             } else {
-                return res.status(401).json({
+                return res.status(401).send({
                     message:`Invalid username, email or password`,
                     status: 401
                 });
             }
         }catch (err){
-            res.status(500).json({
+            res.status(500).send({
                 message:err,
                 status:500
             });
@@ -75,14 +88,61 @@ class UserController {
     }
 
     static async getUser(req, res) {
-        res.status(200).json({
+        res.status(200).send({
             message: 'User successfully found',
             status: 200,
             user: req.user
         })
     }
-}
 
+    static async ForgotPassword(req, res) {
+        const { email } = req.body;
+        try{
+            const user = log.getUserByEmail(email);
+            if (!user) {
+                return res.status(400).send({
+                    message:'No user with that email',
+                    status: 400
+                });
+            }
+            const token = jwt.sign({ sub: user.id }, jwtkey, { expiresIn: '1h' });
+            const resetURL = `http://localhost:3000/resetPassword?token=${token}`;
+            await transporter.sendMail({
+                to: user.email,
+                from: 'process.env.EMAIL',
+                subject: '[Horo-Haven] Réinitialisation du mot de passe',
+                html: `<p>Bonjour ${user.name},</p><p>Vous avez demandé à réinitialiser votre mot de passe.</p><p>Cliquez sur ce <a href="${resetURL}">lien</a> pour réinitialiser votre mot de passe.</p><p>Si vous n'avez pas fait cette demande, veuillez ignorer cet e-mail.</p>`
+            });
+
+            res.status(200).send({
+                message: 'Password reset link has been sent to your email',
+                status: 200
+            });
+        }catch (err){
+            res.status(500).send({
+                message:err,
+                status:500
+            });
+        }
+    }
+
+    static async ResetPassword(req, res) {
+        const { password } = req.body;
+        try{
+            const Password  = hashPassword(password, crypto.randomBytes(16).toString('hex'));//hash mon password
+            await log.setPassword(Password, req.user.id)
+            res.status(200).send({
+                message : `Password updated successfully`,
+                status: 200
+            })
+        }catch (err){
+            res.status(500).send({
+                message:err,
+                status: 500
+            })
+        }
+    }
+}
 
 function isValidEmail(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

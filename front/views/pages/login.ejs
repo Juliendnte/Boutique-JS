@@ -15,14 +15,14 @@
       <div class="search-bar-ctn">
         <%- include('../components/search-bar'); %>
       </div>
-      <div class="log-ctn">
+      <form action="/treatment/login" method="post" class="log-ctn">
         <img src="/public/img/logo.png" alt="Logo Login" />
         <h1 class="login-text">Login</h1>
-        <input type="text" placeholder="Username or E-mail" />
-        <input type="text" placeholder="Password" />
+        <input name="name" type="text" placeholder="Username or E-mail" />
+        <input name="password" type="text" placeholder="Password" />
         <div class="remember-forget-ctn">
           <div class="remember">
-            <input type="checkbox" />
+            <input name="remember" type="checkbox" />
             <p>Remember me</p>
           </div>
           <a href="">Forgot Password ?</a>
@@ -30,7 +30,7 @@
 
         <button>LOGIN</button>
         <a href="/create-account">Don't have an account ? Create one here</a>
-      </div>
+      </form>
     </section>
   </body>
   <script src="/public/js/script2.js"></script>

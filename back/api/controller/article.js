@@ -319,7 +319,7 @@ class ArticleController {
                 status: 404
             })
         }
-        
+
         try{
             const articlesId = await article.getArticlesColor(extractedPath);
             articlesId.forEach((art) => {

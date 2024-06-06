@@ -25,6 +25,27 @@ class logModel{
             connection.query(sql,[user.username,user.email, user.Password.hashedPassword, user.Password.salt], (err, results)=> err ? reject(err) : resolve(results[0]));
         });
     }
+
+    static getUserByEmail(email){
+        return new Promise((resolve,reject)=>{
+            const sql = `SELECT * FROM users WHERE Email = ?`;
+            connection.query(sql,[email],(err,results)=> err ? reject(err) : resolve(results[0]));
+        })
+    }
+
+    static getUserById(id){
+        return new Promise((resolve,reject)=>{
+            const sql = `SELECT * FROM users WHERE Id = ?`;
+            connection.query(sql, [id],(err,results)=> err ? reject(err) : resolve(results[0]));
+        })
+    }
+
+    static setPassword(password, id){
+        return new Promise((resolve,reject)=>{
+            const sql = `UPDATE users SET Pwd = ?, Salt = ? WHERE Id = ?;`;
+            connection.query(sql, [password.hashedPassword, password.Salt ,id],(err,results)=> err ? reject(err) : resolve(results[0]));
+        })
+    }
 }
 
 module.exports = logModel;
