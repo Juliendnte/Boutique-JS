@@ -118,9 +118,36 @@ colors.forEach((color) => {
   color.addEventListener("click", ChangeSelected);
 });
 
+const favButton = document.querySelector(".favoris-btn");
+const imgFavoris = document.querySelector(".favoris-btn-img");
+
+favButton.addEventListener("click", () => {
+  if (favButton.classList[1] === "fav-selected") {
+    imgFavoris.src = "/public/img/fav.png";
+    favButton.classList.remove("fav-selected");
+  } else {
+    imgFavoris.src = "/public/img/fav-selected.png";
+    favButton.classList.add("fav-selected");
+  }
+});
+
 function ChangeSelected(e) {
   colors.forEach((color) => {
     color.classList.remove("selected");
   });
   e.target.classList.add("selected");
+}
+
+function UpdateFavoris() {
+  let fav = JSON.parse(localStorage.getItem("favoris")) || [];
+  let toRem = favButton.classList[1];
+  console.log(toRem);
+  if (!fav.find((f) => toRem === f)) {
+    fav.push(toRem);
+    localStorage.setItem("favoris", JSON.stringify(fav));
+  } else {
+    fav.splice(index, 1);
+    localStorage.setItem("favoris", JSON.stringify(fav));
+    console.log("Item removed succesfully");
+  }
 }

@@ -11,7 +11,7 @@
   </head>
   <body>
     <%- include('../components/header'); %>
-    <%-include('../components/burger-list'); %>
+    <%- include('../components/burger-list'); %>
     <div class="search-bar-ctn">
       <%- include('../components/search-bar'); %>
     </div>
@@ -21,6 +21,9 @@
           <img src="/public/img/retour.png" alt="Boutton retour">
           <p>Retour</p>
         </a>
+        <button class="favoris-btn <%=watch.Id%>">
+          <img class="favoris-btn-img "src="/public/img/fav.png" alt="Boutton favoris">
+        </button>
         <div class="swiper mySwiper">
           <div class="swiper-wrapper">
             <%watch.img.forEach(function (img){%>
