@@ -156,8 +156,7 @@ class ArticleController {
       }
       const last_page = Math.ceil(article.total / limit);
       const current_page = Math.ceil(offset / limit) + 1;
-      const next =
-        article.total - limit <= offset ? null : href.includes("?") ? `${href}&limit=${limit}&offset=${offset + limit}` : `${href}?limit=${limit}&offset=${offset + limit}`; //Si article.total et total sont égaux alors pas de suivant
+      const next = article.total - limit <= offset ? null : href.includes("?") ? `${href}&limit=${limit}&offset=${offset + limit}`: `${href}?limit=${limit}&offset=${offset + limit}`; //Si article.total et total sont égaux alors pas de suivant
       const previous = offset ? href.includes("?") ? `${href}&limit=${limit}&offset=${offset - limit}` : `${href}?limit=${limit}&offset=${offset - limit}` : null; //Si l'offset est différent de 0 pagination sinon y en a pas
 
       res.status(200).send({
@@ -206,11 +205,12 @@ class ArticleController {
   }
 
   static async getFav(req, res) {
-    const userID = req.user.id; //Pris du middleware auth
+    const userID = req.user.Sub; //Pris du middleware auth
 
     try {
       const Favoris = await article.getAllFav(userID); //Récupère tous les favoris a l'id de l'user
-      if (!Favoris) {
+
+      if (!Favoris.length) {
         return res.status(404).send({
           message: `No favori were found to the user at id ${userID}`,
           status: 404,
@@ -230,7 +230,7 @@ class ArticleController {
   }
 
   static async getCommande(req, res) {
-    const userID = req.user.id;
+    const userID = req.user.Sub;
 
     try {
       const Commande = await article.getAllCommande(userID);
@@ -254,7 +254,7 @@ class ArticleController {
   }
 
   static async postFav(req, res) {
-    const userID = req.user.id;
+    const userID = req.user.Sub;
     const articleID = req.params.id;
 
     try {
@@ -272,7 +272,7 @@ class ArticleController {
   }
 
   static async postCommande(req, res) {
-    const userID = req.user.id;
+    const userID = req.user.Sub;
     const articleID = req.params.id;
 
     try {
@@ -302,7 +302,7 @@ class ArticleController {
   }
 
   static async deleteFav(req, res) {
-    const userID = req.user.id;
+    const userID = req.user.Sub;
     const articleId = req.params.id;
     try {
       await article.deleteFav(userID, articleId);

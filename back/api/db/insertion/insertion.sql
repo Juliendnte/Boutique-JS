@@ -173,7 +173,7 @@ INSERT INTO `article` (
     "Montre automatique à remontage automatique Audemars Piguet Royal Oak (15500STOO1220ST01) d'occasion, dotée d'un boîtier en acier inoxydable de 41 mm entourant un cadran bleu grande tapisserie sur un bracelet en acier inoxydable avec boucle déployante. Les fonctions incluent les heures, les minutes, les secondes et la date. Cette montre est soigneusement sélectionnée et méticuleusement expertisée par nos maîtres horlogers Horo Haven, garantissant ainsi son authenticité et sa qualité irréprochable. Livrée avec ses papiers d'origine, chaque pièce incarne l'exclusivité et l'élégance intemporelle que seul Horo Haven peut vous  offrir. " ),
 
 
-    (2, "Royal Oak Extra-Thin", 6, 290000, 1, "39mm", 1,2, "50m", 2, "Heures et Minutes , Secondes , Date", 6, 6,DEFAULT,NULL, 1,
+    (2, "Royal Oak Extra-Thin", "19433OL.MM.1220IR.01", 290000, 1, "39mm", 1,2, "50m", 2, "Heures et Minutes , Secondes , Date", 6, 6,DEFAULT,NULL, 1,
     "Montre automatique à remontage automatique Audemars Piguet Royal Oak Extra-Thin (15202BCZZ1241BC02) d'occasion, dotée d'un boîtier en or blanc 18 carats de 39 mm avec lunette et attaches en diamant entourant un cadran en diamant bleu sur un bracelet en diamant en or blanc 18 carats. Les fonctions incluent les heures et les minutes. Cette montre est soigneusement sélectionnée et méticuleusement expertisée par nos maîtres horlogers Horo Haven, garantissant ainsi son authenticité et sa qualité irréprochable. Livrée avec ses papiers d'origine, chaque pièce incarne l'exclusivité et l'élégance intemporelle que seul Horo Haven peut vous  offrir. " ),
 
 
@@ -910,7 +910,6 @@ INSERT INTO `photo` (`URL`, `Id_Article`) VALUES
                                               ('montres/omega/de_ville/acier_inoxydable/img_2.avif', 67),
                                               ('montres/omega/de_ville/acier_inoxydable/img_3.avif', 67),
                                               ('montres/omega/de_ville/acier_inoxydable/img_4.avif', 67),
-                                              ('montres/omega/de_ville/acier_inoxydable/img_5.avif', 67),
 
                                               ('montres/omega/de_ville/or_rose/img_1.avif', 68),
                                               ('montres/omega/de_ville/or_rose/img_2.avif', 68),

@@ -1,6 +1,17 @@
 const url = "http://localhost:4000";
 const axios = require("axios");
-const nodemailer = require('nodemailer');
+
+/*
+-Gérer les cas d'erreurs
+-Panier
+-Affichage du payement
+-Partie utilisateur{
+  -Historique de commande
+  -Favoris
+}
+-Filtre
+-Finir tous ce qui est liée au compte mot de passe oublié, token etc ...
+ */
 
 exports.Index = (req, res) => {
   res.render("../views/pages/index");
@@ -9,16 +20,16 @@ exports.Index = (req, res) => {
 exports.Result = async (req, res) => {
   let watches;
   if (req.query.next) {
-    watches = await axios.get(req.query.next + "&offset=" + req.query.offset);
+    watches = await axios.get(`${req.query.next}&offset=${req.query.offset}`+ (req.query.search ? `&search=${req.query.search}`: ""));
   } else if (req.query.previous) {
-    watches = await axios.get(
-      req.query.previous + "&offset=" + req.query.offset
-    );
+    watches = await axios.get(`${req.query.previous}&offset=${req.query.offset}`+ (req.query.search ? `&search=${req.query.search}`: ""));
   } else {
-    watches = await axios.get(url + "/articles");
+    watches = await axios.get(url + (req.query.search ? "/search?search=" + req.query.search : "/articles"));
   }
+
   res.render("../views/pages/result", {
     lst: watches.data.articles,
+    search: !!req.query.search
   });
 };
 
@@ -37,17 +48,12 @@ exports.WatchDetail = async (req, res) => {
   watchReq = await axios.get(url + "/article/" + req.query.id);
   colorReq = await axios.get(url + "/color/" + req.query.id);
   similarReq = await axios.get(url + "/similar/" + req.query.id);
-  console.log(watchReq.data.article);
-  console.log(colorReq.data.articlesId);
-  console.log(similarReq.data.articles);
   res.render("../views/pages/detail", {
     watch: watchReq.data.article,
     color: colorReq.data.articlesId,
     similar: similarReq.data.articles,
   });
 };
-
-
 
 exports.LoginTreatment = async (req, res) => {
   const {name, password, remember} = req.body;
@@ -78,6 +84,50 @@ exports.RegisterTreatment = async (req, res) => {
   const response = await axios.post("http://localhost:4000/register", {username,password,email});
   console.log("register treatment "+response);
   res.redirect('/Index');
+}
+
+exports.SearchTreatment = async (req, res) => {
+  const {search} = req.body;
+  res.redirect(`/result?search=${search}`);
+}
+
+exports.forgotPasswordGet = async (req, res) => {
+  res.render("../views/pages/forgotPassword");
+}
+
+exports.forgotPasswordPost = async (req, res) => {
+  const {email} = req.body;
+  if (!isValidEmail(email)){
+    res.render("../views/pages/forgotPassword", {
+      send: false
+    });
+  }else{
+    const response = await axios.post("/forgetPassword", {email})
+    console.log(response)
+    res.render("../views/pages/forgotPassword", {
+      send: response.status === 200
+    });
+  }
+}
+
+exports.resetPasswordGet = async (req, res) => {
+  const token = req.query.token
+  res.render("../views/pages/resetPassword",{
+    token
+  })
+}
+
+exports.resetPasswordPost = async (req, res) => {
+  const {token} = req.params.token;
+  const {password} = req.body;
+  const response = await axios.post(url + "/resetPassword",{password}, {
+    headers: {
+      'Authorization': token,
+      'Content-Type': 'application/json'
+    }
+  });
+  console.log(response.data);
+  res.render("../views/pages/index")
 }
 
 function isValidEmail(email) {

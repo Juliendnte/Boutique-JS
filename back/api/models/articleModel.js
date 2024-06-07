@@ -155,9 +155,10 @@ class ArticleModel{
                            LEFT JOIN bracelet ON a.Id_Bracelet = bracelet.Id
                            LEFT JOIN color_bracelet ON a.Id_Color_Bracelet = color_bracelet.Id  
                         WHERE
-                           (marque.Label LIKE ? OR a.Model LIKE ? OR a.Ref LIKE ?)
-                       LIMIT ? OFFSET ?`;
-            this.total = (await this.getTotal(sql, values)).total;
+                           (marque.Label LIKE ? OR a.Model LIKE ? OR a.Ref LIKE ?)`;
+            this.total = (await this.getTotal(sql, values.slice(0, values.length - 2))).total;
+            sql += " LIMIT ? OFFSET ? "
+
             connection.query(sql,values,(err,results)=> err ? reject(err) : resolve(results));
         });
     }

@@ -10,7 +10,7 @@ function validateToken(req, res, next) {
         if (err) {
             return res.status(403).send("Forbidden");
         }
-        console.log("authentification ./middlewares/auth affichage d'une variable user \n"+user)
+
         req.user = user;
         next();//Prochain middleware
     });
