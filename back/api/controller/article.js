@@ -3,38 +3,14 @@ const article = require("../models/articleModel");
 
 const baseUrl = process.env.BASE_URL;
 const pagination = 12;
-const listValueArticle = [
-  "marque.label",
-  "model",
-  "ref",
-  "fabrication.label",
-  "dimension",
-  "matiere.label",
-  "color.label",
-  "movement.label",
-  "complications",
-  "waterproof",
-  "bracelet.label",
-  "color_bracelet.label",
-  "availability",
-  "price",
-  "reduction",
-  "stock",
-  "limit",
-  "offset",
-];
+const listValueArticle = ["marque.label","model","ref","fabrication.label","dimension","matiere.label","color.label","movement.label","complications","waterproof", "bracelet.label","color_bracelet.label","availability", "price","reduction", "stock","limit", "offset"];
 
 function buildQueryWithoutLimitOffset(query) {
-  const filteredQuery = Object.entries(query)
-    .filter(
+  const filteredQuery = Object.entries(query).filter(
       ([key]) => key.toLowerCase() !== "limit" && key.toLowerCase() !== "offset"
-    )
-    .map(
-      ([key, value]) =>
-        `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
-    )
-    .join("&");
-
+    ).map(
+      ([key, value]) =>`${encodeURIComponent(key)}=${encodeURIComponent(value)}`
+    ).join("&");
   return filteredQuery ? `?${filteredQuery}` : "";
 }
 
@@ -55,8 +31,7 @@ class ArticleController {
     try {
       const offset = parseInt(req.query.offset) || 0; //S'il a déjà set l'offset sinon c'est 0
       const limit = parseInt(req.query.limit) || pagination;
-      const href =
-        baseUrl + "/articles" + buildQueryWithoutLimitOffset(req.query); // href avec query mais sans limit ou offset
+      const href = baseUrl + "/articles" + buildQueryWithoutLimitOffset(req.query); // href avec query mais sans limit ou offset
 
       req.query.limit = limit;
       req.query.offset = offset;
@@ -77,17 +52,8 @@ class ArticleController {
       }
       const last_page = Math.ceil(article.total / limit);
       const current_page = Math.ceil(offset / limit) + 1;
-      const next =
-        article.total - limit <= offset
-          ? null
-          : href.includes("?")
-          ? `${href}&limit=${limit}&offset=${offset + limit}`
-          : `${href}?limit=${limit}&offset=${offset + limit}`; //Si article.total et total sont égaux alors pas de suivant
-      const previous = offset
-        ? href.includes("?")
-          ? `${href}&limit=${limit}&offset=${offset - limit}`
-          : `${href}?limit=${limit}&offset=${offset - limit}`
-        : null; //Si l'offset est différent de 0 pagination sinon y en a pas
+      const next = article.total - limit <= offset ? null : href.includes("?") ? `${href}&limit=${limit}&offset=${offset + limit}`: `${href}?limit=${limit}&offset=${offset + limit}`; //Si article.total et total sont égaux alors pas de suivant
+      const previous = offset ? href.includes("?") ? `${href}&limit=${limit}&offset=${offset - limit}` : `${href}?limit=${limit}&offset=${offset - limit}` : null; //Si l'offset est différent de 0 pagination sinon y en a pas
 
       return res.status(200).send({
         message: `Articles successfully found`,
@@ -143,8 +109,7 @@ class ArticleController {
       )
     ) {
       return res.status(400).send({
-        message:
-          "Vous ne pouvez modifiés que un de ses champs [Price, Availability, Stock]",
+        message: "Vous ne pouvez modifiés que un de ses champs [Price, Availability, Stock]",
         status: 400,
       });
     }
@@ -170,8 +135,7 @@ class ArticleController {
     try {
       const offset = parseInt(req.query.offset) || 0; //S'il a déjà set l'offset sinon c'est 0
       const limit = parseInt(req.query.limit) || pagination;
-      const href =
-        baseUrl + "/search" + buildQueryWithoutLimitOffset(req.query); // href avec query mais sans limit ou offset
+      const href = baseUrl + "/search" + buildQueryWithoutLimitOffset(req.query); // href avec query mais sans limit ou offset
 
       req.query.limit = limit;
       req.query.offset = offset;
@@ -193,16 +157,8 @@ class ArticleController {
       const last_page = Math.ceil(article.total / limit);
       const current_page = Math.ceil(offset / limit) + 1;
       const next =
-        article.total - limit <= offset
-          ? null
-          : href.includes("?")
-          ? `${href}&limit=${limit}&offset=${offset + limit}`
-          : `${href}?limit=${limit}&offset=${offset + limit}`; //Si article.total et total sont égaux alors pas de suivant
-      const previous = offset
-        ? href.includes("?")
-          ? `${href}&limit=${limit}&offset=${offset - limit}`
-          : `${href}?limit=${limit}&offset=${offset - limit}`
-        : null; //Si l'offset est différent de 0 pagination sinon y en a pas
+        article.total - limit <= offset ? null : href.includes("?") ? `${href}&limit=${limit}&offset=${offset + limit}` : `${href}?limit=${limit}&offset=${offset + limit}`; //Si article.total et total sont égaux alors pas de suivant
+      const previous = offset ? href.includes("?") ? `${href}&limit=${limit}&offset=${offset - limit}` : `${href}?limit=${limit}&offset=${offset - limit}` : null; //Si l'offset est différent de 0 pagination sinon y en a pas
 
       res.status(200).send({
         message: "Article found with search " + search,
