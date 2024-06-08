@@ -43,7 +43,7 @@ class logModel{
     static setPassword(password, id){
         return new Promise((resolve,reject)=>{
             const sql = `UPDATE users SET Pwd = ?, Salt = ? WHERE Id = ?;`;
-            connection.query(sql, [password.hashedPassword, password.Salt ,id],(err,results)=> err ? reject(err) : resolve(results[0]));
+            connection.query(sql, [password.hashedPassword, password.salt ,id],(err,results)=> err ? reject(err) : resolve(results[0]));
         })
     }
 }

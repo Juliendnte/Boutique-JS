@@ -54,6 +54,8 @@ h1 {
 
 .sign-up-ctn input[type="text"],
 .sign-up-ctn input[type="mail"],
+.sign-up-ctn input[type="password"],
+.log-ctn input[type="password"],
 .log-ctn input[type="text"] {
   width: 60%;
   background-color: var(--horo-blue);

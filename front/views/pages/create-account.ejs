@@ -15,13 +15,13 @@
       <div class="search-bar-ctn">
         <%- include('../components/search-bar'); %>
       </div>
-      <form action="/treatment/regiter" method="post" class="sign-up-ctn">
+      <form action="/treatment/register" method="post" class="sign-up-ctn">
         <img src="/public/img/logo.png" alt="Logo Horo Haven" />
         <h1>Create account</h1>
         <input name="username" type="text" placeholder="Username" required />
         <input name="email" type="mail" placeholder="E-mail" required />
-        <input type="text" placeholder="Password" required />
-        <input name="password" type="text" placeholder="Confirm Password" required />
+        <input type="password" placeholder="Password" required />
+        <input name="password" type="password" placeholder="Confirm Password" required />
         <button>CREATE ACCOUNT</button>
         <a href="/login">Already have an account ? Click here</a>
       </form>

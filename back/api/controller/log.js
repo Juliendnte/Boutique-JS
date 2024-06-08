@@ -117,17 +117,19 @@ class UserController {
                     status: 400
                 });
             }
-            const token = jwt.sign({ Sub: user.id }, jwtkey, { expiresIn: '1h' });
+            const token = jwt.sign({ Sub: user.Id }, jwtkey, { expiresIn: '1h' });
             const resetURL = `http://localhost:3000/resetPassword?token=${token}`;
 
-            let info = await transporter.sendMail({
+            await transporter.sendMail({
                 from: process.env.EMAIL,
                 to: user.Email,
                 subject: '[Horo-Haven] Réinitialisation du mot de passe',
-                html: `<p>Bonjour ${user.Name},</p><p>Vous avez demandé à réinitialiser votre mot de passe.</p><p>Cliquez sur ce <a href="${resetURL}">lien</a> pour réinitialiser votre mot de passe.</p><p>Si vous n'avez pas fait cette demande, veuillez ignorer cet e-mail.</p>`
+                html: `<p>Bonjour ${user.Name},</p>
+                <p>Vous avez demandé à réinitialiser votre mot de passe.</p>
+                <p>Cliquez sur ce <a href="${resetURL}">lien</a> pour réinitialiser votre mot de passe.</p>
+                <p>Si vous n'avez pas fait cette demande, veuillez ignorer cet e-mail.</p>`
             });
 
-            console.log(info)
             res.status(200).send({
                 message: 'Password reset link has been sent to your email',
                 status: 200

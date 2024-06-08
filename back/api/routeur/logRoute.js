@@ -7,7 +7,7 @@ const middleware = {
 
 routeur.post("/login", UserController.Login);
 routeur.post("/register", UserController.Register);
-routeur.post("/forgetPassword", UserController.ForgotPassword)
+routeur.post("/forgotPassword", UserController.ForgotPassword)
 routeur.post("/resetPassword", middleware.validateToken, UserController.ResetPassword);
 routeur.get("/user", middleware.validateToken, UserController.getUser)
 
