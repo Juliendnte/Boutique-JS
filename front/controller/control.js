@@ -5,7 +5,6 @@ let error = {
   status: 0
 }
 /*
--Gérer les cas d'erreurs
 -Panier
 -Affichage du payement
 -Partie utilisateur{
@@ -13,10 +12,11 @@ let error = {
   -Favoris
 }
 -Filtre
--Finir tous ce qui est liée au compte mot de passe oublié, token etc ...
 -Surveiller quand il créer son compte qu'il met le même mdp
 -Mieux sécurisé l'api (faire plus attention a ce que met l'utilisateur)
- */
+-Pagination cassé
+-Footer n'est toujours pas fait
+*/
 
 exports.Index = (req, res) => {
   res.render("../views/pages/index");
@@ -33,9 +33,11 @@ exports.Result = async (req, res) => {
       watches = await axios.get(url + (req.query.search ? "/search?search=" + req.query.search : "/articles"));
     }
   }catch (err){
-    res.render("../views/pages/result",{
-      err: watches.data.message
-    });
+    error = {
+      message : "Probleme serveur",
+      status: 500
+    }
+    res.redirect("/error500")
     return
   }
 
@@ -46,7 +48,6 @@ exports.Result = async (req, res) => {
 };
 
 exports.Login = (req, res) => {
-  console.log(error)
   res.render("../views/pages/login", error);
   error = {
     message : "",
@@ -54,8 +55,22 @@ exports.Login = (req, res) => {
   }
 };
 
+exports.Marque = async (req, res) => {
+  try{
+    const response = await axios.get(url + "/marque")
+    res.render("../views/pages/marque",{
+      marque: response.data.marque
+    });
+  }catch (err){
+    error = {
+      message : "Probleme serveur",
+      status: 500
+    }
+    res.redirect("/error500");
+  }
+}
+
 exports.CreateAccount = (req, res) => {
-  console.log(error)
   res.render("../views/pages/create-account", error);
   error = {
     message : "",
@@ -72,24 +87,39 @@ exports.WatchDetail = async (req, res) => {
     colorReq = await axios.get(url + "/color/" + req.query.id);
     similarReq = await axios.get(url + "/similar/" + req.query.id);
   }catch (err){
-    if (watchReq.data.message){
-      error.message = watchReq.data.message;
-      error.status = watchReq.data.status;
-    }else if (colorReq.data.message){
-      error.message = colorReq.data.message;
-      error.status = colorReq.data.status;
+    if (err.watchReq){
+      error.message = err.watchReq.data.message;
+      error.status = err.watchReq.data.status;
+    }else if (err.colorReq){
+      error.message = err.colorReq.data.message;
+      error.status = err.colorReq.data.status;
+    }else if (err.similarReq){
+      error.message = err.similarReq.data.message
+      error.status = err.similarReq.data.status;
     }else{
-      error.message = similarReq.data.message
-      error.status = similarReq.data.status;
+      error = {
+        message : "Probleme serveur",
+        status: 500
+      }
     }
-    res.redirect("/");
+    res.redirect("/error500");
     return
   }
-  res.render("../views/pages/detail", {
-    watch: watchReq.data.article,
-    color: colorReq.data.articlesId,
-    similar: similarReq.data.articles,
-  });
+  if (await getFavId(req.cookies.Token, watchReq.data.article.Id)){
+    res.render("../views/pages/detail", {
+      watch: watchReq.data.article,
+      color: colorReq.data.articlesId,
+      similar: similarReq.data.articles,
+      like: "true"
+    });
+  }else {
+    res.render("../views/pages/detail", {
+      watch: watchReq.data.article,
+      color: colorReq.data.articlesId,
+      similar: similarReq.data.articles,
+      like: false
+    });
+  }
 };
 
 exports.LoginTreatment = async (req, res) => {
@@ -130,22 +160,28 @@ exports.LoginTreatment = async (req, res) => {
 
 exports.RegisterTreatment = async (req, res) => {
   const {username , password, email} = req.body;
-  const response = await axios.post(url + "/register", {username,password,email});
-  if (response.data === 201){
-    res.redirect('/Index')
-  }else{
-    error.message = response.data.message
-    error.status = response.data.status
-    res.redirect("/create-account")
+  try {
+    const response = await axios.post(url + "/register", {username,password,email});
+    if (response.data.status === 201){
+      res.redirect('/Index')
+      return
+    }else{
+      error.message = response.data.message
+      error.status = response.data.status
+    }
+  }catch (err){
+    error.message = err.response.data.message
+    error.status = err.response.data.status
   }
+  res.redirect("/create-account")
 }
 
-exports.SearchTreatment = async (req, res) => {
+exports.SearchTreatment = (req, res) => {
   const {search} = req.body;
   res.redirect(`/result?search=${search}`);
 }
 
-exports.forgotPasswordGet = async (req, res) => {
+exports.forgotPasswordGet = (req, res) => {
   res.render("../views/pages/forgotPassword", {
     send : null
   });
@@ -166,7 +202,7 @@ exports.forgotPasswordPost = async (req, res) => {
   }
 }
 
-exports.resetPasswordGet = async (req, res) => {
+exports.resetPasswordGet = (req, res) => {
   const token = req.query.token;
   res.render("../views/pages/resetPassword",{
     token
@@ -186,7 +222,7 @@ exports.resetPasswordPost = async (req, res) => {
   res.redirect("/Index")
 }
 
-exports.Error = async (req, res) => {
+exports.Error = (req, res) => {
   error = {
     message : error.message ? error.message : "Nous ne trouvons pas la page que vous recherchez.",
     status: error.status? error.status: 404
@@ -195,6 +231,94 @@ exports.Error = async (req, res) => {
   error = {
     message : "",
     status: 0
+  }
+}
+
+exports.User = async (req, res) =>{ 
+  const token = req.cookies.Token;
+
+  try {
+    const fav= await getFav(token);
+    const commande = await axios.get(url + "/commande", {
+      headers: {
+        'Authorization': token,
+        'Content-Type': 'application/json'
+      }
+    })
+    res.render("../views/pages/user", {
+      fav: fav.data.Favoris,
+      commande
+    })
+  }catch (err) {
+    error.message = err.fav.data.message
+    error.status = err.fav.data.status
+    res.redirect("/login")
+  }
+}
+
+exports.AjoutFav = async (req, res) =>{
+  const id = req.params.id
+  const token = req.cookies.Token;
+  if (await getFavId(token, id)){
+    try {
+      await axios.get(`${url}/fav/${id}`, {
+        headers: {
+          'Authorization': token,
+          'Content-Type': 'application/json'
+        }
+      })
+    }catch (err){
+      error.message = err.response.data.message
+      error.status = err.response.data.status
+
+    }
+    res.redirect(`/detail?id=${id}&like=true`)
+  }else{
+    try {
+      await axios.delete(`${url}/fav/${id}`, {
+        headers: {
+          'Authorization': token,
+          'Content-Type': 'application/json'
+        }
+      })
+    }catch (err){
+      error.message = err.response.data.message
+      error.status = err.response.data.status
+    }
+    res.redirect(`/detail?id=${id}&like=false`)
+  }
+}
+
+async function getFavId(token, id) {
+  try {
+    const response = await axios.get(url + "/fav", {
+      headers: {
+        'Authorization': token,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    for (const fav of response.data.Favoris) {
+      if (fav.Id === id) {
+        return true;
+      }
+    }
+    return false;
+  } catch (e) {
+    return false;
+  }
+}
+
+async function getFav(token) {
+  try {
+    return await axios.get(url + "/fav", {
+      headers: {
+        'Authorization': token,
+        'Content-Type': 'application/json'
+      }
+    });
+  } catch (e) {
+    return false;
   }
 }
 

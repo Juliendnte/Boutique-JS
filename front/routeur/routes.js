@@ -14,11 +14,9 @@ routeur.get("/forgotPassword", controller.forgotPasswordGet)
 routeur.post("/forgotPassword", controller.forgotPasswordPost)
 routeur.get("/resetPassword", controller.resetPasswordGet);
 routeur.post("/resetPassword/:token", controller.resetPasswordPost);
+routeur.get("/marque", controller.Marque);
+routeur.get("/user" , controller.User)
 routeur.get("/:blabla", controller.Error)
-/*
-routeur.get("/basket");
-routeur.get("/user");
-routeur.get("/marque");
-*/
+routeur.get("/ajoutFav/:id", controller.AjoutFav)
 
 module.exports = routeur;

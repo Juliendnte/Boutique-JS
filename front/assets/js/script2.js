@@ -94,8 +94,7 @@ const button = document.querySelector(".voir-plus");
 button.addEventListener("click", ShortenDescription);
 
 function ShortenDescription() {
-  const newText = descriptionContainer.slice(0, 200) + "...";
-  description.innerHTML = newText;
+  description.innerHTML = descriptionContainer.slice(0, 200) + "...";
   description.style =
     "  background: linear-gradient(to bottom, #1d1c69 10%, #454491 50%, #9f9edb 60%);-webkit-text-fill-color: transparent;-webkit-background-clip: text;background-clip: text;color: transparent;";
   button.innerHTML = "Voir plus";
@@ -136,18 +135,4 @@ function ChangeSelected(e) {
     color.classList.remove("selected");
   });
   e.target.classList.add("selected");
-}
-
-function UpdateFavoris() {
-  let fav = JSON.parse(localStorage.getItem("favoris")) || [];
-  let toRem = favButton.classList[1];
-  console.log(toRem);
-  if (!fav.find((f) => toRem === f)) {
-    fav.push(toRem);
-    localStorage.setItem("favoris", JSON.stringify(fav));
-  } else {
-    fav.splice(index, 1);
-    localStorage.setItem("favoris", JSON.stringify(fav));
-    console.log("Item removed succesfully");
-  }
 }
