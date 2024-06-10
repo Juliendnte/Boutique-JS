@@ -8,7 +8,9 @@
     <%- include('../components/head'); %>
     <link rel="stylesheet" href="/public/css/detail.css" />
     <title>Detail</title>
+
   </head>
+
   <body>
     <%- include('../components/header'); %>
     <%- include('../components/burger-list'); %>
@@ -116,7 +118,7 @@
           </div>
           <div class="btn-ctn">
             <%if (watch.Availability > 0){%>
-              <button class="add-to-basket">Ajouter au panier</button>
+              <button class="add-to-basket <%=watch.Id%>">Ajouter au panier</button>
             <%}else{%>
               <button class="disable">Cet article est indisponible</button>
             <%}%>
@@ -141,4 +143,6 @@
   </body>
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   <script src="/public/js/script2.js"></script>
-</html>
+  <script src="/public/js/detail.js"></script>
+
+  </html>

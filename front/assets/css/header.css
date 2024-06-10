@@ -89,6 +89,9 @@ header {
 }
 
 @media screen and (min-width: 1024px) {
+  .search-bar {
+    height: 0;
+  }
   .burger {
     display: none;
   }
@@ -155,10 +158,6 @@ header {
 }
 
 @media screen and (min-width: 700px) {
-  .search-bar {
-    height: 0;
-  }
-
   .burger-list-ctn {
     font-size: 27px;
   }

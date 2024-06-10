@@ -45,7 +45,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #ebebeb;
+  background-color: #f6f6f6;
 }
 
 .caroussel-ctn {
@@ -121,7 +121,6 @@ body {
   display: flex;
   flex-direction: row;
   align-items: center;
-  background-color: #c5c5c5;
 }
 
 .colors {
@@ -280,3 +279,4 @@ body {
   color: black;
   font-family: var(--light);
 }
+

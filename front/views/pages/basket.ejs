@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <%- include('../components/head'); %>
+    <link rel="stylesheet" href="/public/css/basket.css" />
+    <link rel="stylesheet" href="/public/css/accueil.css" />
+
+    <title>Basket</title>
+  </head>
+  <body>
+    <%- include('../components/header'); %>
+    <%-include('../components/burger-list'); %>
+    <section>
+      <div class="search-bar-ctn">
+        <%- include('../components/search-bar'); %>
+      </div>
+      <div class="main">
+        <div class="articles" id="basket-ctn">
+          <p>Articles</p>
+
+        </div>
+        <div class="payement">
+          <p class="to-pad info-client">Informations client</p>
+          <div class="nom-prenom to-pad">
+            <div class="inputBox">
+              <input placeholder="ex: Vincent" type="text" required="" />
+              <span>Nom</span>
+            </div>
+            <div class="inputBox">
+              <input placeholder="ex: Franky" type="text" required="" />
+              <span>Prenom</span>
+            </div>
+          </div>
+          <span class="separate to-pad"></span>
+
+          <div class="to-pad">
+            <div class="inputBox">
+              <input
+                placeholder="ex: La Garde Batiment F"
+                class="rue"
+                type="text"
+                required=""
+              />
+              <span>Rue</span>
+            </div>
+          </div>
+          <div class="ville-postal to-pad">
+            <div class="inputBox">
+              <input placeholder="ex: Ouapy" type="text" required="" />
+              <span>Ville</span>
+            </div>
+            <div class="inputBox">
+              <input placeholder="ex: 13005" type="text" required="" />
+              <span>Code postal</span>
+            </div>
+          </div>
+          <span class="separate to-pad"></span>
+          <div class="to-pad">
+            <div class="inputBox">
+              <input
+                placeholder="ex: 1418 3945 1109 0593"
+                class="carte-infos"
+                type="text"
+                required=""
+                oninput="insertSpace()"
+                maxlength="19"
+              />
+              <span>Carte</span>
+            </div>
+          </div>
+          <div class="exp-cvc to-pad">
+            <div class="inputBox">
+              <input placeholder="ex: 11/09" type="text" required="" />
+              <span>Date d'expiration</span>
+            </div>
+            <div class="inputBox">
+              <input placeholder="ex: 069" type="text" required="" />
+              <span>CVC</span>
+            </div>
+          </div>
+          <span class="separate to-pad"></span>
+          <p class="detail-commande elem">Detail de la commande</p>
+          <p class="price elem">Royal-Oak: 12156€</p>
+          <p class="price elem">Code 11:59: 24517€</p>
+          <p class="price elem">Navitimer: 12730€</p>
+          <p class="price elem">Grand-Complication: 12€</p>
+          <p class="price to-pad">Total: 266345€</p>
+
+          <div class="acheter">
+            <button class="buy-btn">Ajouter au panier </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+  <script src="/public/js/script2.js"></script>
+</html>
