@@ -124,3 +124,5 @@ function addToBasket(e) {
   console.log("liste : " + JSON.parse(localStorage.getItem("panier")));
   localStorage.setItem("panier", JSON.stringify(liste));
 }
+
+

@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <%- include('../components/head'); %>
+    <title>Marque</title>
+</head>
+<body>
+    <% marque.forEach(function (Label) { %>
+        <a href="/result?search=<%=Label.Label%>"><%= Label.Label%></a>
+    <%});%>
+</body>
+</html>

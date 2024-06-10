@@ -210,9 +210,7 @@ CREATE TABLE IF NOT EXISTS `users` (
     `Pwd` varchar(200) NOT NULL,
     `Salt` varchar(100) NOT NULL,
     `Adresse` varchar(100) DEFAULT NULL,
-    PRIMARY KEY (`Id`),
-    UNIQUE KEY `Email` (`Email`),
-    UNIQUE KEY `Name` (`Name`)
+    PRIMARY KEY (`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --

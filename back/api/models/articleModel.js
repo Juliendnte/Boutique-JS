@@ -1,4 +1,6 @@
 const connection = require("../config/authBDD")
+const {resolve} = require("path");
+const {reject} = require("nodemailer/.ncurc");
 //Pour se connecter a la base de données
 
 class ArticleModel{
@@ -276,6 +278,13 @@ class ArticleModel{
             `
             connection.query(sql,path,(err, results)=> err ? reject(err) : resolve(results));
         })
+    }
+
+    static getMarque(){
+        return new Promise((resolve, reject) => {
+            const sql = `SELECT Label FROM marque`
+            connection.query(sql, (err, results)=> err ? reject(err) : resolve(results));
+        });
     }
 }
 

@@ -32,6 +32,7 @@ class UserController {
                 message: 'Email invalid',
                 status: 401
             })
+            return
         }else if (!username){
             res.status(401).send({
                 message: 'Username invalid',
@@ -75,7 +76,7 @@ class UserController {
             }
             const hashedPassword = hashPassword(password, user.Salt);//Récupere le password hashé
             if (hashedPassword.hashedPassword === user.Pwd) {//Test s'il est egale au password de l'utilisateur a l'email donné par l'utilisateur
-                const Token = jwt.sign({ Sub: user.Id }, jwtkey, { expiresIn: remember ? '365j':'24h' });//Me passe un token pendant 24h et le régle avec le jwtkey
+                const Token = jwt.sign({ Sub: user.Id }, jwtkey, { expiresIn: remember ? '365d':'24h' });//Me passe un token pendant 24h et le régle avec le jwtkey
                 res.status(200).send({ Token });//Je renvoie un nouveau token a chaque login
             } else {
                 return res.status(401).send({
@@ -94,11 +95,18 @@ class UserController {
     static async getUser(req, res) {
         try {
             const user = await log.getUserById(req.user.Sub);
-            res.status(200).send({
-                message: 'User successfully found',
-                status: 200,
-                user
-            })
+            if (!user){
+                res.status(404).send({
+                    message: 'User not found',
+                    status: 404
+                })
+            }else{
+                res.status(200).send({
+                    message: 'User successfully found',
+                    status: 200,
+                    user
+                })
+            }
         }catch (err){
             res.status(500).send({
                 message : err,

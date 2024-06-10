@@ -23,9 +23,15 @@
           <img src="/public/img/retour.png" alt="Boutton retour">
           <p>Retour</p>
         </a>
-        <button class="favoris-btn <%=watch.Id%>">
+        <%if (like==="true"){%>
+        <a href="/ajoutFav/<%=watch.Id%>" class="favoris-btn">
+          <img class="favoris-btn-img "src="/public/img/fav-selected.png" alt="Boutton favoris">
+        </a>
+        <%}else{%>
+        <a href="/ajoutFav/<%=watch.Id%>" class="favoris-btn">
           <img class="favoris-btn-img "src="/public/img/fav.png" alt="Boutton favoris">
-        </button>
+        </a>
+        <%}%>
         <div class="swiper mySwiper">
           <div class="swiper-wrapper">
             <%watch.img.forEach(function (img){%>

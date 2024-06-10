@@ -212,7 +212,7 @@ class ArticleController {
 
       if (!Favoris.length) {
         return res.status(404).send({
-          message: `No favori were found to the user at id ${userID}`,
+          message: `No favoris found`,
           status: 404,
         });
       }
@@ -253,15 +253,15 @@ class ArticleController {
     }
   }
 
-  static async postFav(req, res) {
+  static async addFav(req, res) {
     const userID = req.user.Sub;
-    const articleID = req.params.id;
+    const id = req.params.id;
 
     try {
-      await article.postFav(userID, articleID); //L'user met en favoris l'article
-      res.status(200).send({
-        message: `Article ${articleID} successfully been add in favoris`,
-        status: 200,
+      await article.postFav(userID, id); //L'user met en favoris l'article
+      res.status(201).send({
+        message: `Article ${id} successfully been add in favoris`,
+        status: 201,
       });
     } catch (err) {
       res.status(500).send({
@@ -340,6 +340,20 @@ class ArticleController {
         articlesId,
       });
     } catch (err) {
+      res.status(500).send({
+        message: err,
+        status: 500,
+      });
+    }
+  }
+
+  static async getMarque(req, res){
+    try{
+      const marque = await article.getMarque();
+      res.status(200).send({
+        marque
+      })
+    }catch (err){
       res.status(500).send({
         message: err,
         status: 500,
