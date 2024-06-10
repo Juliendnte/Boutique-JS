@@ -287,7 +287,8 @@ exports.User = async (req, res) =>{
 exports.AjoutFav = async (req, res) =>{
   const id = req.params.id
   const token = req.cookies.Token;
-  if (await getFavId(token, id)){
+
+  if (!(await getFavId(token, id))){
     try {
       await axios.get(`${url}/fav/${id}`, {
         headers: {
@@ -327,15 +328,17 @@ async function getFavId(token, id) {
     });
 
     for (const fav of response.data.Favoris) {
-      if (fav.Id === id) {
+      if (fav.Id == id) {
         return true;
       }
     }
+
     return false;
   } catch (e) {
     return false;
   }
 }
+
 
 async function getFav(token) {
   try {
