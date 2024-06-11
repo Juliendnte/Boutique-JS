@@ -289,9 +289,38 @@ class ArticleModel{
 
     static getArticlesListId(list){
         return new Promise((resolve, reject) => {
-            let sql = `SELECT * FROM  article WHERE Id = ? `
+            let sql = `
+                        SELECT        
+                            a.Id,
+                            a.Description,
+                            marque.Label AS marque,
+                            a.Model,
+                            a.Ref,
+                            fabrication.Label AS fab,
+                            a.Dimension,
+                            matiere.Label AS matiere,
+                            color.Label AS color,
+                            movement.Label AS movement,
+                            a.Complications,
+                            a.Waterproof,
+                            bracelet.Label AS bracelet,
+                            color_bracelet.Label AS color_Bracelet,
+                            a.Availability,
+                            a.Price,
+                            a.Reduction,
+                            a.Stock 
+                        FROM
+                            article a
+                            LEFT JOIN marque ON a.Id_Marque = marque.Id
+                            LEFT JOIN fabrication ON a.Id_Fab = fabrication.Id
+                            LEFT JOIN matiere ON a.Id_Matiere = matiere.Id
+                            LEFT JOIN color ON a.Id_Color = color.Id
+                            LEFT JOIN movement ON a.Id_Movement = movement.Id
+                            LEFT JOIN bracelet ON a.Id_Bracelet = bracelet.Id
+                            LEFT JOIN color_bracelet ON a.Id_Color_Bracelet = color_bracelet.Id 
+                        WHERE a.Id = ? `
             for (let i = 1; i < list.length; i++) {
-                sql += " OR Id = ?";
+                sql += " OR a.Id = ?";
             }
             connection.query(sql, list, (err, results)=> err ? reject(err) : resolve(results));
         })
