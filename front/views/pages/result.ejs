@@ -13,6 +13,7 @@
     <div class="search-bar-ctn">
       <%- include('../components/search-bar'); %>
     </div>
+    <%if (error === null){%>
     <div class="item-ctn">
       <% lst.items.forEach(function (article) { %>
       <a class="watch" href="/detail?id=<%= article.Id%>">
@@ -98,6 +99,9 @@
 
       <a href="/result?previous=<%= lst.next %>" class="page">Next</a>
     </div>
+    <%}else {%>
+      <p><%= message%></p>
+    <%}%>
   </body>
   <script src="/public/js/script2.js"></script>
 </html>

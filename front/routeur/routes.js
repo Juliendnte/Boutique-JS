@@ -19,5 +19,6 @@ routeur.get("/marque", controller.Marque);
 routeur.get("/user" , controller.User)
 routeur.get("/:blabla", controller.Error)
 routeur.get("/ajoutFav/:id", controller.AjoutFav)
+routeur.post("/payement")
 
 module.exports = routeur;

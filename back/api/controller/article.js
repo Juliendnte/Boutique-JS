@@ -377,6 +377,10 @@ class ArticleController {
       // Convertir les valeurs en entiers si nécessaire
       list = list.map(item => parseInt(item, 10));
       const listArticles = await article.getArticlesListId(list);
+      for (const art of listArticles) {
+        const photos = await article.getImages(art.Id, true);
+        art.Images = photos.map((photo) => `${baseUrl}/assets/${photo.URL}`);
+      }
       res.status(200).send({
         message : "Articles selectionned",
         status: 200,
