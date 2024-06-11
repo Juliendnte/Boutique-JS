@@ -20,5 +20,6 @@ routeur.get("/search",controllerArticle.searchArticles)
 routeur.get("/similar/:id", middleware.articleExists, controllerArticle.getArticleSimilar)
 routeur.get("/color/:id",middleware.articleExists, controllerArticle.getArticleColor);
 routeur.get("/marque", controllerArticle.getMarque)
+routeur.get("/articlesID", controllerArticle.getArticlesId)
 
 module.exports = routeur;

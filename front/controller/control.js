@@ -70,6 +70,14 @@ exports.Login = (req, res) => {
   }
 };
 
+exports.CreateAccount = (req, res) => {
+  res.render("../views/pages/create-account", error);
+  error = {
+    message: "",
+    status: 0,
+  };
+};
+
 exports.Marque = async (req, res) => {
   try{
     const response = await axios.get(url + "/marque")
@@ -84,14 +92,6 @@ exports.Marque = async (req, res) => {
     res.redirect("/error500");
   }
 }
-
-exports.CreateAccount = (req, res) => {
-  res.render("../views/pages/create-account", error);
-  error = {
-    message: "",
-    status: 0,
-  };
-};
 
 exports.WatchDetail = async (req, res) => {
   let colorReq;
@@ -287,34 +287,17 @@ exports.User = async (req, res) =>{
 exports.AjoutFav = async (req, res) =>{
   const id = req.params.id
   const token = req.cookies.Token;
-  if (await getFavId(token, id)){
-    try {
-      await axios.get(`${url}/fav/${id}`, {
-        headers: {
-          'Authorization': token,
-          'Content-Type': 'application/json'
-        }
-      })
-    }catch (err){
-      error.message = err.response.data.message
-      error.status = err.response.data.status
-
-    }
-    res.redirect(`/detail?id=${id}&like=true`)
-  }else{
-    try {
-      await axios.delete(`${url}/fav/${id}`, {
-        headers: {
-          'Authorization': token,
-          'Content-Type': 'application/json'
-        }
-      })
-    }catch (err){
-      error.message = err.response.data.message
-      error.status = err.response.data.status
-    }
-    res.redirect(`/detail?id=${id}&like=false`)
+  const headers= {
+    'Authorization': token,
+    'Content-Type': 'application/json'
   }
+  try{
+    await getFavId(token, id) ? await axios.delete(`${url}/fav/${id}`, {headers}) : await axios.get(`${url}/fav/${id}`, {headers})
+  }catch (err){
+    error.message = err.response.data.message
+    error.status = err.response.data.status
+  }
+  res.redirect(`/detail?id=${id}`)
 }
 
 async function getFavId(token, id) {
@@ -327,15 +310,17 @@ async function getFavId(token, id) {
     });
 
     for (const fav of response.data.Favoris) {
-      if (fav.Id === id) {
+      if (fav.Id == id) {
         return true;
       }
     }
+
     return false;
   } catch (e) {
     return false;
   }
 }
+
 
 async function getFav(token) {
   try {

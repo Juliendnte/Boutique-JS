@@ -360,6 +360,35 @@ class ArticleController {
       });
     }
   }
+
+  static async getArticlesId(req, res){
+    try{
+      let list = req.query.id;
+
+      if (!list) {
+        return res.status(400).send({ error: 'No list provided' });
+      }
+
+      // Gérer à la fois les cas de 'list=1&list=2&list=3' et 'list=1,2,3'
+      if (!Array.isArray(list)) {
+        list = list.split(',');
+      }
+
+      // Convertir les valeurs en entiers si nécessaire
+      list = list.map(item => parseInt(item, 10));
+      const listArticles = await article.getArticlesListId(list);
+      res.status(200).send({
+        message : "Articles selectionned",
+        status: 200,
+        listArticles
+      })
+    }catch (err){
+      res.status(500).send({
+        message: err,
+        status: 500,
+      });
+    }
+  }
 }
 
 module.exports = ArticleController;
