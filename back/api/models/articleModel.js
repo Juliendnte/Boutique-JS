@@ -286,6 +286,16 @@ class ArticleModel{
             connection.query(sql, (err, results)=> err ? reject(err) : resolve(results));
         });
     }
+
+    static getArticlesListId(list){
+        return new Promise((resolve, reject) => {
+            let sql = `SELECT * FROM  article WHERE Id = ? `
+            for (let i = 1; i < list.length; i++) {
+                sql += " OR Id = ?";
+            }
+            connection.query(sql, list, (err, results)=> err ? reject(err) : resolve(results));
+        })
+    }
 }
 
 module.exports = ArticleModel;
