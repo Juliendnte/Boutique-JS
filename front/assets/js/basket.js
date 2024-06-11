@@ -1,32 +1,18 @@
 let basketListCtn = document.querySelector("#basket-ctn");
 console.log("basketListCtn : " + basketListCtn);
 let gros_truc = document.querySelector(".gros-truc");
+let total;
 
-function displayBasket() {
-  let liste = JSON.parse(localStorage.getItem("panier")) || [];
-  basketListCtn.innerHTML = "";
-  for (const elem of liste) {
-    let ctn = document.createElement("div");
-    ctn.classList = "panier-item";
-    ctn.innerHTML = `
-      <img class="item-img" src="${elem.img}">
-      <div class="infos-item">
-        <p>${elem.marque}</p>
-        <p>${elem.model}</p>
-        <p>${elem.prix} €</p>
-      </div>
-      <div class="stock">
-      <button id="moins" class="${elem.id}">-</button>
-      <p id="${elem.id}" class="quantity">${elem.nb}</p>
-      <button id="plus" class="${elem.id}">+</button>
-      </div>
-      <img class="${elem.id} delete-item-img" src="/public/img/trash.png">
-    `;
-    basketListCtn.appendChild(ctn);
-  }
-  const listPLus = document.querySelectorAll("#plus");
-  const listMoins = document.querySelectorAll("#moins");
-  listPLus.forEach((button) => {
+async function getWatches(lst) {
+  lst = lst.join();
+  const data = await fetch(`http://localhost:4000/articlesID?id=${lst}`);
+  return data.json();
+}
+
+async function affectEvent() {
+  const listPlus = document.querySelectorAll(".plus");
+  const listMoins = document.querySelectorAll(".moins");
+  listPlus.forEach((button) => {
     button.addEventListener("click", basketIncrease);
   });
 
@@ -34,11 +20,51 @@ function displayBasket() {
     button.addEventListener("click", basketDecrease);
   });
 
-  const listStock = document.querySelectorAll(".quantity");
   const listSuppr = document.querySelectorAll(".delete-item-img");
 
   listSuppr.forEach((button) => {
-    button.addEventListener("click", elemSuppr);
+    button.addEventListener("click", trashElemSuppr);
+  });
+}
+
+async function displayBasket() {
+  let liste = JSON.parse(localStorage.getItem("panier")) || [];
+  let listReq = [];
+  liste.forEach((watch) => {
+    listReq.push(watch.id);
+  });
+  basketListCtn.innerHTML = "";
+
+  getWatches(listReq).then(async (watches) => {
+    total = watches.listArticles;
+    for (const elem of watches.listArticles) {
+      let ctn = document.createElement("div");
+      ctn.classList = "panier-item";
+      let quantity;
+      liste.forEach((item) => {
+        if (elem.Id === item.id) {
+          quantity = item.nb;
+        }
+      });
+
+      ctn.innerHTML = `
+          <img class="item-img" src="${elem.Images[0]}">
+          <div class="infos-item">
+            <p id="marque">${elem.marque}</p>
+            <p>${elem.Model}</p>
+            <p>${elem.Price} €</p>
+          </div>
+          <div class="stock">
+            <button class="${elem.Id} moins">-</button>
+            <p id="${elem.Id}" class="quantity">${quantity}</p>
+            <button class="${elem.Id} plus">+</button>
+          </div>
+          <img class="${elem.Id} delete-item-img" src="/public/img/trash.png">
+        `;
+      basketListCtn.appendChild(ctn);
+    }
+    await affectEvent();
+    detailCommande();
   });
 }
 
@@ -57,10 +83,10 @@ function basketIncrease(e) {
           item.nb = newStock;
         }
       });
-      console.log(panier);
       localStorage.setItem("panier", JSON.stringify(panier));
     }
   });
+  detailCommande();
 }
 
 function basketDecrease(e) {
@@ -79,17 +105,25 @@ function basketDecrease(e) {
             item.nb = newStock;
           }
         });
+        localStorage.setItem("panier", JSON.stringify(panier));
       }
     }
   });
+  displayBasket();
 }
 
 function elemSuppr(e) {
   let panier = JSON.parse(localStorage.getItem("panier"));
   let toRem = e.target.classList[0];
-  console.log(typeof toRem);
   let index = panier.findIndex((produit) => produit.id === parseInt(toRem));
-  console.log("index : " + index);
+  panier.splice(index, 1);
+  localStorage.setItem("panier", JSON.stringify(panier));
+}
+
+function trashElemSuppr(e) {
+  let panier = JSON.parse(localStorage.getItem("panier"));
+  let toRem = e.target.classList[0];
+  let index = panier.findIndex((produit) => produit.id === parseInt(toRem));
   panier.splice(index, 1);
   localStorage.setItem("panier", JSON.stringify(panier));
   displayBasket();
@@ -146,4 +180,38 @@ function clickAdress(e){
   const postcode = document.querySelector("input[name=postcode]")
   ville.value = data[1];
   postcode.value = data[2];
+}
+function detailCommande() {
+  const detailCommande = document.querySelector(".detail-commande-ctn");
+  detailCommande.innerHTML = "";
+  const totalCommande = document.querySelector("#total");
+
+  var totalValue = 0;
+
+  for (const elem of total) {
+    let Nb = 0;
+    let panier = JSON.parse(localStorage.getItem("panier"));
+    panier.forEach((item) => {
+      if (item.id === elem.Id) {
+        Nb = item.nb;
+      }
+    });
+    let elemPrice = document.createElement("p");
+    elemPrice.classList = "price to-pad";
+    elemPrice.innerText = `X${Nb} ${elem.Model} : ${elem.Price}€`;
+    totalValue += parseInt(elem.Price) * Nb;
+    detailCommande.appendChild(elemPrice);
+  }
+
+  totalCommande.innerText = "Total : " + totalValue + "€";
+}
+
+function insertSpace() {
+  const carteInput = document.querySelector(".carte-infos");
+  let valeur = carteInput.value.replace(/\s/g, "");
+  let nouvelleValeur = "";
+  for (let i = 0; i < valeur.length; i += 4) {
+    nouvelleValeur += valeur.substr(i, 4) + " ";
+  }
+  carteInput.value = nouvelleValeur.trim();
 }

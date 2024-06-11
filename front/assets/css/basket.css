@@ -92,6 +92,7 @@ section {
   }
 
   .articles {
+    padding-top: 50px;
     width: 60%;
     gap: 20px;
     min-height: 100vh;
@@ -255,6 +256,7 @@ section {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  width: 40%;
 }
 
 .panier-item p,

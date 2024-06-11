@@ -87,15 +87,7 @@ function UpdateFavoris() {
   }
 }
 
-function insertSpace() {
-  const carteInput = document.querySelector(".carte-infos");
-  let valeur = carteInput.value.replace(/\s/g, "");
-  let nouvelleValeur = "";
-  for (let i = 0; i < valeur.length; i += 4) {
-    nouvelleValeur += valeur.substr(i, 4) + " ";
-  }
-  carteInput.value = nouvelleValeur.trim();
-}
+
 
 // localStorage
 
@@ -111,11 +103,6 @@ function addToBasket(e) {
   let toAdd = {
     id: parseInt(e.target.classList[1]),
     nb: 1,
-    img: e.target.classList[2],
-    marque: e.target.classList[3],
-    model: e.target.classList[4],
-    price: parseInt(e.target.classList[5]),
-    stock: parseInt(e.target.classList[6]),
   };
   let liste = JSON.parse(localStorage.getItem("panier")) || [];
   for (const elem of liste) {

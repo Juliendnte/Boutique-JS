@@ -22,11 +22,21 @@
           <p class="to-pad info-client">Informations client</p>
           <div class="nom-prenom to-pad">
             <div class="inputBox">
-              <input name="premon" placeholder="ex: Vincent" type="text" required />
+              <input
+                name="premon"
+                placeholder="ex: Vincent"
+                type="text"
+                required
+              />
               <span>Nom</span>
             </div>
             <div class="inputBox">
-              <input name="nom" placeholder="ex: Franky" type="text" required="" />
+              <input
+                name="nom"
+                placeholder="ex: Franky"
+                type="text"
+                required=""
+              />
               <span>Prenom</span>
             </div>
           </div>
@@ -43,24 +53,47 @@
           </div>
           <div class="ville-postal to-pad">
             <div class="inputBox">
-              <input name="ville" placeholder="ex: Ouapy" type="text" required="" />
+              <input
+                name="ville"
+                placeholder="ex: Ouapy"
+                type="text"
+                required=""
+              />
               <span>Ville</span>
             </div>
             <div class="inputBox">
-              <input name="postcode" placeholder="ex: 13005" type="text" required="" />
+              <input
+                name="postcode"
+                placeholder="ex: 13005"
+                type="text"
+                required=""
+              />
               <span>Code postal</span>
             </div>
           </div>
           <span class="separate to-pad"></span>
           <div class="to-pad">
             <div class="inputBox">
-              <input name="cb" placeholder="ex: 1418 3945 1109 0593" class="carte-infos" type="number" required oninput="insertSpace()" maxlength="19"/>
+              <input
+                name="cb"
+                placeholder="ex: 1418 3945 1109 0593"
+                class="carte-infos"
+                type="text"
+                required
+                oninput="insertSpace()"
+                maxlength="19"
+              />
               <span>Carte</span>
             </div>
           </div>
           <div class="exp-cvc to-pad">
             <div class="inputBox">
-              <input name="date" placeholder="ex: 11/09" type="text" required="" />
+              <input
+                name="date"
+                placeholder="ex: 11/09"
+                type="text"
+                required=""
+              />
               <span>Date d'expiration</span>
             </div>
             <div class="inputBox">
@@ -70,11 +103,8 @@
           </div>
           <span class="separate to-pad"></span>
           <p class="detail-commande elem">Detail de la commande</p>
-          <p class="price elem">Royal-Oak: 12156€</p>
-          <p class="price elem">Code 11:59: 24517€</p>
-          <p class="price elem">Navitimer: 12730€</p>
-          <p class="price elem">Grand-Complication: 12€</p>
-          <p class="price to-pad">Total: 266345€</p>
+          <div class="detail-commande-ctn"></div>
+          <p class="price to-pad" id="total">Vous n'avez aucun article</p>
 
           <div class="acheter">
             <button class="buy-btn">Ajouter au panier</button>
