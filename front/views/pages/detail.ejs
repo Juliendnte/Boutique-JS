@@ -124,7 +124,7 @@
           </div>
           <div class="btn-ctn">
             <%if (watch.Availability > 0){%>
-              <button class="add-to-basket <%=watch.Id%>">Ajouter au panier</button>
+              <button class="add-to-basket <%=watch.Id%> <%=watch.img[0]%> <%=watch.marque%> <%=watch.Model%> <%=watch.Price%> <%=watch.Stock%>">Ajouter au panier</button>
             <%}else{%>
               <button class="disable">Cet article est indisponible</button>
             <%}%>

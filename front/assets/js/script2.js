@@ -63,12 +63,3 @@ function hideSearch() {
   searchButton.addEventListener("click", displaySearch);
 }
 
-const basketListCtn = document.querySelector("#basket-ctn");
-
-function displayBasket() {
-  let liste = JSON.parse(localStorage.getItem("panier")) || [];
-  for (const elem of liste) {
-  }
-}
-
-displayBasket();
