@@ -107,10 +107,15 @@ const addToBasketButton = document.querySelector(".add-to-basket");
 addToBasketButton.addEventListener("click", addToBasket);
 
 function addToBasket(e) {
-  console.log("test");
+  console.log("price : " + e.target.classList[5]);
   let toAdd = {
     id: parseInt(e.target.classList[1]),
     nb: 1,
+    img: e.target.classList[2],
+    marque: e.target.classList[3],
+    model: e.target.classList[4],
+    price: parseInt(e.target.classList[5]),
+    stock: parseInt(e.target.classList[6]),
   };
   let liste = JSON.parse(localStorage.getItem("panier")) || [];
   for (const elem of liste) {
@@ -124,5 +129,3 @@ function addToBasket(e) {
   console.log("liste : " + JSON.parse(localStorage.getItem("panier")));
   localStorage.setItem("panier", JSON.stringify(liste));
 }
-
-
