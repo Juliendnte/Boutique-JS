@@ -1,28 +1,50 @@
 let basketListCtn = document.querySelector("#basket-ctn");
 console.log("basketListCtn : " + basketListCtn);
 
-function displayBasket() {
+async function getWatches(lst) {
+  lst = lst.join();
+  const data = await fetch(`http://localhost:4000/articlesID?id=${lst}`);
+  return data.json();
+}
+
+async function displayBasket() {
   let liste = JSON.parse(localStorage.getItem("panier")) || [];
+  console.log(liste);
+  let listReq = [];
+  liste.forEach((watch) => {
+    listReq.push(watch.id);
+  });
   basketListCtn.innerHTML = "";
-  for (const elem of liste) {
-    let ctn = document.createElement("div");
-    ctn.classList = "panier-item";
-    ctn.innerHTML = `
-      <img class="item-img" src="${elem.img}">
-      <div class="infos-item">
-        <p>${elem.marque}</p>
-        <p>${elem.model}</p>
-        <p>${elem.prix} €</p>
-      </div>
-      <div class="stock">
-      <button id="moins" class="${elem.id}">-</button>
-      <p id="${elem.id}" class="quantity">${elem.nb}</p>
-      <button id="plus" class="${elem.id}">+</button>
-      </div>
-      <img class="${elem.id} delete-item-img" src="/public/img/trash.png">
-    `;
-    basketListCtn.appendChild(ctn);
-  }
+
+  getWatches(listReq).then((watches) => {
+    for (const elem of watches.listArticles) {
+      let ctn = document.createElement("div");
+      ctn.classList = "panier-item";
+      let quantity;
+      liste.forEach((item) => {
+        if (elem.Id === item.id) {
+          quantity = item.nb;
+        }
+      });
+
+      ctn.innerHTML = `
+          <img class="item-img" src="${elem.img[0]}">
+          <div class="infos-item">
+            <p id="marque">${elem.Marque}</p>
+            <p>${elem.Model}</p>
+            <p>${elem.Price} €</p>
+          </div>
+          <div class="stock">
+            <button id="moins" class="${elem.Id}">-</button>
+            <p id="${elem.Id}" class="quantity">${quantity}</p>
+            <button id="plus" class="${elem.Id}">+</button>
+          </div>
+          <img class="${elem.Id} delete-item-img" src="/public/img/trash.png">
+        `;
+      basketListCtn.appendChild(ctn);
+    }
+  });
+
   const listPLus = document.querySelectorAll("#plus");
   const listMoins = document.querySelectorAll("#moins");
   listPLus.forEach((button) => {

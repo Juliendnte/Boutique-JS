@@ -111,11 +111,6 @@ function addToBasket(e) {
   let toAdd = {
     id: parseInt(e.target.classList[1]),
     nb: 1,
-    img: e.target.classList[2],
-    marque: e.target.classList[3],
-    model: e.target.classList[4],
-    price: parseInt(e.target.classList[5]),
-    stock: parseInt(e.target.classList[6]),
   };
   let liste = JSON.parse(localStorage.getItem("panier")) || [];
   for (const elem of liste) {
