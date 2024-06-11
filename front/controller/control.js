@@ -122,6 +122,7 @@ exports.WatchDetail = async (req, res) => {
     res.redirect("/error500");
     return
   }
+
   if (await getFavId(req.cookies.Token, watchReq.data.article.Id)){
     res.render("../views/pages/detail", {
       watch: watchReq.data.article,
@@ -301,12 +302,6 @@ exports.AjoutFav = async (req, res) =>{
   }
   res.redirect(`/detail?id=${id}`)
 }
-
-exports.Payement = async (req, res) =>{
-  let {prenom, nom, street, ville, postcode, cb, date, cvc} = req.body
-  street = encodeURIComponent(street);
-  const response = await axios.get(`https://api-adresse.data.gouv.fr/search/?q=${street}&postcode=${postcode}`)
-};
 
 async function getFavId(token, id) {
   try {

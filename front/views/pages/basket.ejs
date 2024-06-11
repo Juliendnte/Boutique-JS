@@ -33,9 +33,12 @@
           <span class="separate to-pad"></span>
 
           <div class="to-pad">
-            <div class="inputBox">
-              <input name="street" placeholder="ex: 11 boulevard du metro" class="rue" type="text" required=""/>
+            <div class="inputBox street">
+              <input name="street" placeholder="ex: 11 bd du metro" class="rue" type="text" required="" onblur="removeActiveClass()" oninput="AddresseStreet()" onfocus="AddresseStreet()"/>
               <span>Rue</span>
+              <div class="gros-truc">
+
+              </div>
             </div>
           </div>
           <div class="ville-postal to-pad">

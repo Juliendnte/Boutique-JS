@@ -1,5 +1,6 @@
 let basketListCtn = document.querySelector("#basket-ctn");
 console.log("basketListCtn : " + basketListCtn);
+let gros_truc = document.querySelector(".gros-truc");
 
 function displayBasket() {
   let liste = JSON.parse(localStorage.getItem("panier")) || [];
@@ -92,4 +93,57 @@ function elemSuppr(e) {
   panier.splice(index, 1);
   localStorage.setItem("panier", JSON.stringify(panier));
   displayBasket();
+}
+
+async function AddresseStreet(){
+  const street = document.querySelector("input[name=street]")
+  if (street.value.length > 5) {
+    try {
+      gros_truc.classList.add("active");
+      const response = await getAdresse(street.value);
+      updateAddresses(response);
+    } catch (err) {
+      console.log(err);
+    }
+  } else {
+    removeActiveClass()
+    gros_truc.innerHTML = '';
+  }
+}
+
+async function getAdresse(street) {
+  const data = await fetch(`https://api-adresse.data.gouv.fr/search/?q=${street}`)
+  return data.json();
+}
+
+function updateAddresses(response) {
+  const addresses = response.features.map(feature => feature.properties);
+  let innerHTMLContent = '';
+
+  addresses.forEach(address => {
+    innerHTMLContent += `
+      <div class="petit-truc" onclick="clickAdress(this)">
+        <p>${address.name || 'Unknown street'}</p>
+        <p>${address.city || 'Unknown city'}</p>
+        <p>${address.postcode || 'Unknown postal code'}</p>
+      </div>
+    `;
+  });
+
+  gros_truc.innerHTML = innerHTMLContent;
+}
+
+function removeActiveClass() {
+  setTimeout(() => {
+    gros_truc.classList.remove("active");
+  },400);
+}
+
+function clickAdress(e){
+  const paragraphs = e.querySelectorAll("p");
+  const data = Array.from(paragraphs).map(p => p.textContent);
+  const ville = document.querySelector("input[name=ville]")
+  const postcode = document.querySelector("input[name=postcode]")
+  ville.value = data[1];
+  postcode.value = data[2];
 }
