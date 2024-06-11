@@ -87,15 +87,7 @@ function UpdateFavoris() {
   }
 }
 
-function insertSpace() {
-  const carteInput = document.querySelector(".carte-infos");
-  let valeur = carteInput.value.replace(/\s/g, "");
-  let nouvelleValeur = "";
-  for (let i = 0; i < valeur.length; i += 4) {
-    nouvelleValeur += valeur.substr(i, 4) + " ";
-  }
-  carteInput.value = nouvelleValeur.trim();
-}
+
 
 // localStorage
 
