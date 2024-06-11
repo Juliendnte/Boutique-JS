@@ -30,36 +30,38 @@ exports.Result = async (req, res) => {
   let watches;
   try {
     if (req.query.next) {
-      watches = await axios.get(
-        `${req.query.next}&offset=${req.query.offset}` +
-          (req.query.search ? `&search=${req.query.search}` : "")
-      );
+      watches = await axios.get(`${req.query.next}&offset=${req.query.offset}` + (req.query.search ? `&search=${req.query.search}` : ""));
     } else if (req.query.previous) {
-      watches = await axios.get(
-        `${req.query.previous}&offset=${req.query.offset}` +
-          (req.query.search ? `&search=${req.query.search}` : "")
-      );
+      watches = await axios.get(`${req.query.previous}&offset=${req.query.offset}` + (req.query.search ? `&search=${req.query.search}` : ""));
     } else {
-      watches = await axios.get(
-        url +
-          (req.query.search
-            ? "/search?search=" + req.query.search
-            : "/articles")
-      );
+      watches = await axios.get(url + (req.query.search ? "/search?search=" + req.query.search : "/articles"));
     }
   }catch (err){
-    error = {
-      message : "Probleme serveur",
-      status: 500
+    if (err.response.data.status !== 404) {
+      error = {
+        message : "Probleme serveur",
+        status: 500
+      }
+      res.redirect("/error500")
+      return
+    }else {
+      error =`Aucune montres trouvé pour ${req.query.search} `
     }
-    res.redirect("/error500")
-    return
   }
-
-  res.render("../views/pages/result", {
-    lst: watches.data.articles,
-    search: !!req.query.search,
-  });
+  try{
+    res.render("../views/pages/result", {
+      lst: watches.data.articles,
+      search: !!req.query.search,
+      error: null
+    });
+  }catch (err){
+    res.render("../views/pages/result", {
+      lst: null,
+      search: true,
+      error: true,
+      message : error
+    });
+  }
 };
 
 exports.Login = (req, res) => {
@@ -300,6 +302,12 @@ exports.AjoutFav = async (req, res) =>{
   res.redirect(`/detail?id=${id}`)
 }
 
+exports.Payement = async (req, res) =>{
+  let {prenom, nom, street, ville, postcode, cb, date, cvc} = req.body
+  street = encodeURIComponent(street);
+  const response = await axios.get(`https://api-adresse.data.gouv.fr/search/?q=${street}&postcode=${postcode}`)
+};
+
 async function getFavId(token, id) {
   try {
     const response = await axios.get(url + "/fav", {
@@ -320,7 +328,6 @@ async function getFavId(token, id) {
     return false;
   }
 }
-
 
 async function getFav(token) {
   try {

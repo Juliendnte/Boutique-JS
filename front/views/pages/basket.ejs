@@ -19,15 +19,15 @@
           <p>Articles</p>
 
         </div>
-        <div class="payement">
+        <form action="/payement" method="post" class="payement">
           <p class="to-pad info-client">Informations client</p>
           <div class="nom-prenom to-pad">
             <div class="inputBox">
-              <input placeholder="ex: Vincent" type="text" required="" />
+              <input name="premon" placeholder="ex: Vincent" type="text" required />
               <span>Nom</span>
             </div>
             <div class="inputBox">
-              <input placeholder="ex: Franky" type="text" required="" />
+              <input name="nom" placeholder="ex: Franky" type="text" required="" />
               <span>Prenom</span>
             </div>
           </div>
@@ -35,46 +35,34 @@
 
           <div class="to-pad">
             <div class="inputBox">
-              <input
-                placeholder="ex: La Garde Batiment F"
-                class="rue"
-                type="text"
-                required=""
-              />
+              <input name="street" placeholder="ex: 11 boulevard du metro" class="rue" type="text" required=""/>
               <span>Rue</span>
             </div>
           </div>
           <div class="ville-postal to-pad">
             <div class="inputBox">
-              <input placeholder="ex: Ouapy" type="text" required="" />
+              <input name="ville" placeholder="ex: Ouapy" type="text" required="" />
               <span>Ville</span>
             </div>
             <div class="inputBox">
-              <input placeholder="ex: 13005" type="text" required="" />
+              <input name="postcode" placeholder="ex: 13005" type="text" required="" />
               <span>Code postal</span>
             </div>
           </div>
           <span class="separate to-pad"></span>
           <div class="to-pad">
             <div class="inputBox">
-              <input
-                placeholder="ex: 1418 3945 1109 0593"
-                class="carte-infos"
-                type="text"
-                required=""
-                oninput="insertSpace()"
-                maxlength="19"
-              />
+              <input name="cb" placeholder="ex: 1418 3945 1109 0593" class="carte-infos" type="number" required oninput="insertSpace()" maxlength="19"/>
               <span>Carte</span>
             </div>
           </div>
           <div class="exp-cvc to-pad">
             <div class="inputBox">
-              <input placeholder="ex: 11/09" type="text" required="" />
+              <input name="date" placeholder="ex: 11/09" type="text" required="" />
               <span>Date d'expiration</span>
             </div>
             <div class="inputBox">
-              <input placeholder="ex: 069" type="text" required="" />
+              <input name="cvc" placeholder="ex: 069" type="text" required="" />
               <span>CVC</span>
             </div>
           </div>
@@ -89,7 +77,7 @@
           <div class="acheter">
             <button class="buy-btn">Ajouter au panier </button>
           </div>
-        </div>
+        </form>
       </div>
     </section>
   </body>
