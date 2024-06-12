@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr">
   <head>
-    <%- include('../components/head'); %>
+    <%- include('../components/head', {connect}); %>
     <link rel="stylesheet" href="/public/css/login.css" />
     <link rel="stylesheet" href="/public/css/accueil.css" />
 
@@ -20,7 +20,7 @@
         <h1 class="login-text">Login</h1>
         <input name="name" type="text" placeholder="Username or E-mail" />
         <input name="password" type="password" placeholder="Password" />
-        <p><%=message%></p>
+        <p><%=error.message%></p>
         <div class="remember-forget-ctn">
           <div class="remember">
             <input name="remember" type="checkbox" />

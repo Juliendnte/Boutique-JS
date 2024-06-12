@@ -15,12 +15,21 @@ let error = {
 -Footer n'est toujours pas fait
 */
 
-exports.Index = (req, res) => {
-  res.render("../views/pages/index");
+exports.Index = async (req, res) => {
+  res.render("../views/pages/index", {
+    connect: await getFav(req.cookies.Token)
+  });
 };
 
-exports.Basket = (req, res) => {
-  res.render("../views/pages/basket");
+exports.Basket = async (req, res) => {
+  res.render("../views/pages/basket", {
+    connect: await getFav(req.cookies.Token),
+    error
+  });
+  error = {
+    message: "",
+    status: 0,
+  };
 };
 
 exports.Result = async (req, res) => {
@@ -60,28 +69,36 @@ exports.Result = async (req, res) => {
     res.render("../views/pages/result", {
       lst: watches.data.articles,
       search: !!req.query.search,
-      error: null,
+      connect: await getFav(req.cookies.Token),
+      error: null
     });
   } catch (err) {
     res.render("../views/pages/result", {
       lst: null,
       search: true,
       error: true,
-      message: error,
+      connect: await getFav(req.cookies.Token),
+      message : error
     });
   }
 };
 
-exports.Login = (req, res) => {
-  res.render("../views/pages/login", error);
+exports.Login = async (req, res) => {
+  res.render("../views/pages/login", {
+    error,
+    connect: await getFav(req.cookies.Token)
+  });
   error = {
     message: "",
     status: 0,
   };
 };
 
-exports.CreateAccount = (req, res) => {
-  res.render("../views/pages/create-account", error);
+exports.CreateAccount = async (req, res) => {
+  res.render("../views/pages/create-account", {
+    error,
+    connect: await getFav(req.cookies.Token)
+  });
   error = {
     message: "",
     status: 0,
@@ -130,22 +147,14 @@ exports.WatchDetail = async (req, res) => {
     res.redirect("/error500");
     return;
   }
-
-  if (await getFavId(req.cookies.Token, watchReq.data.article.Id)) {
-    res.render("../views/pages/detail", {
-      watch: watchReq.data.article,
-      color: colorReq.data.articlesId,
-      similar: similarReq.data.articles,
-      like: "true",
-    });
-  } else {
-    res.render("../views/pages/detail", {
-      watch: watchReq.data.article,
-      color: colorReq.data.articlesId,
-      similar: similarReq.data.articles,
-      like: false,
-    });
-  }
+  const like = await getFavId(req.cookies.Token, watchReq.data.article.Id)
+  res.render("../views/pages/detail", {
+    watch: watchReq.data.article,
+    color: colorReq.data.articlesId,
+    similar: similarReq.data.articles,
+    like,
+    connect: await getFav(req.cookies.Token)
+  });
 };
 
 exports.LoginTreatment = async (req, res) => {
@@ -216,9 +225,11 @@ exports.SearchTreatment = (req, res) => {
   res.redirect(`/result?search=${search}`);
 };
 
-exports.forgotPasswordGet = (req, res) => {
+exports.forgotPasswordGet = async (req, res) => {
   res.render("../views/pages/forgotPassword", {
     send: null,
+    connect: await getFav(req.cookies.Token)
+
   });
 };
 
@@ -234,6 +245,7 @@ exports.forgotPasswordPost = async (req, res) => {
     });
     res.render("../views/pages/forgotPassword", {
       send: response.status === 200,
+      connect: await getFav(req.cookies.Token)
     });
   }
 };
@@ -292,10 +304,10 @@ exports.User = async (req, res) => {
         "Content-Type": "application/json",
       },
     });
-    console.log(user.data);
     res.render("../views/pages/user", {
       fav: fav.data ? fav.data.Favoris : [],
       commande,
+      connect: await getFav(req.cookies.Token),
       user: user.data,
     });
   } catch (err) {
@@ -313,14 +325,42 @@ exports.AjoutFav = async (req, res) => {
     "Content-Type": "application/json",
   };
   try {
-    (await getFavId(token, id))
-      ? await axios.delete(`${url}/fav/${id}`, { headers })
-      : await axios.get(`${url}/fav/${id}`, { headers });
+    (await getFavId(token, id)) ? await axios.delete(`${url}/fav/${id}`, { headers }) : await axios.get(`${url}/fav/${id}`, { headers });
   } catch (err) {
     error.message = err.response.data.message;
     error.status = err.response.data.status;
   }
   res.redirect(`/detail?id=${id}`);
+};
+
+exports.Logout = async (req, res) =>{
+  res.clearCookie("Token");
+  res.redirect("/index");
+};
+
+exports.Payemenent = async (req, res) =>{
+  const {cb, date, cvc, price} = req.body;
+  const card = {
+    number: cb.replace(/\s/g, ""),
+    expiration_date: date,
+    cvc
+  }
+  const payment_intent = {
+    price : parseInt(price)
+  }
+  try{
+    await axios.post("https://challenge-js.ynovaix.com/payment", {card, payment_intent}, {
+      headers: {
+        Authorization: "8285b5fe-484e-4d33-bc74-9040ca9b2b09",
+        "Content-Type": "application/json",
+      },
+    });
+    res.render("../views/pages/kichta", {price});
+  }catch (err) {
+    error.message = err.response.data.message;
+    error.status = err.response.data.status;
+    res.redirect("/basket")
+  }
 };
 
 async function getFavId(token, id) {
@@ -337,10 +377,9 @@ async function getFavId(token, id) {
         return true;
       }
     }
-
     return false;
   } catch (e) {
-    return false;
+    return e.response ? null : false;
   }
 }
 
@@ -353,10 +392,7 @@ async function getFav(token) {
       },
     });
   } catch (e) {
-    if (e.response.data.status === 404) {
-      return [];
-    }
-    return false;
+    return e.response ? null : false;
   }
 }
 
