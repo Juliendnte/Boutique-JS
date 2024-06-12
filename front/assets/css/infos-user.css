@@ -1,0 +1,86 @@
+html {
+  overflow-x: hidden;
+}
+
+body {
+  width: 100vw;
+  height: 87vh;
+}
+
+.infos-user-ctn {
+  font-family: var(--bold);
+  width: 100%;
+  height: 30%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.infos-user-ctn p {
+  font-size: 30px;
+}
+
+.fav,
+.historique-commande {
+  font-family: var(--light);
+  font-size: 20px;
+  width: 50%;
+  height: 100%;
+  border: solid 1px black;
+}
+
+.fav-histo {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 70%;
+}
+
+.infos-user-ctn p,
+.fav-histo p {
+  color: black;
+}
+
+.commande-ctn,
+.fav-ctn {
+  width: 100%;
+  height: 80%;
+  display: flex;
+  gap: 20px;
+  flex-direction: column;
+  align-items: center;
+}
+
+.to-pad {
+  padding: 2em;
+}
+
+.elem-fav {
+  width: 90%;
+  height: 100px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+  background-color: #dbdbdb;
+}
+
+.img-item {
+  width: auto;
+  height: 80%;
+}
+
+.text-ctn {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+}
+
+.delete-item-img {
+  height: 30%;
+  width: auto;
+}
+
+.text-ctn p {
+  font-size: 18px;
+}

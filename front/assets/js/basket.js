@@ -28,12 +28,12 @@ async function affectEvent() {
 }
 
 async function displayBasket() {
-  let liste = JSON.parse(localStorage.getItem("panier")) || [];
-  let listReq = [];
+  let liste = JSON.parse(localStorage.getItem("panier")) || []; // je récupère mon panier
+  let listReq = []; // pour passer tout les elements en query dans la fonction
   liste.forEach((watch) => {
     listReq.push(watch.id);
   });
-  basketListCtn.innerHTML = "";
+  basketListCtn.innerHTML = ""; // nettoyage du ctn dans le HTML pour pas avoir de doublons
 
   getWatches(listReq).then(async (watches) => {
     total = watches.listArticles;
@@ -61,10 +61,10 @@ async function displayBasket() {
           </div>
           <img class="${elem.Id} delete-item-img" src="/public/img/trash.png">
         `;
-      basketListCtn.appendChild(ctn);
+      basketListCtn.appendChild(ctn); // on l'ajoute...
     }
-    await affectEvent();
-    detailCommande();
+    await affectEvent(); //on remet les events sur les bouttons
+    detailCommande(); // on refresh pour actualiser en fct du localStorage
   });
 }
 
@@ -129,8 +129,8 @@ function trashElemSuppr(e) {
   displayBasket();
 }
 
-async function AddresseStreet(){
-  const street = document.querySelector("input[name=street]")
+async function AddresseStreet() {
+  const street = document.querySelector("input[name=street]");
   if (street.value.length > 5) {
     try {
       gros_truc.classList.add("active");
@@ -140,26 +140,28 @@ async function AddresseStreet(){
       console.log(err);
     }
   } else {
-    removeActiveClass()
-    gros_truc.innerHTML = '';
+    removeActiveClass();
+    gros_truc.innerHTML = "";
   }
 }
 
 async function getAdresse(street) {
-  const data = await fetch(`https://api-adresse.data.gouv.fr/search/?q=${street}`)
+  const data = await fetch(
+    `https://api-adresse.data.gouv.fr/search/?q=${street}`
+  );
   return data.json();
 }
 
 function updateAddresses(response) {
-  const addresses = response.features.map(feature => feature.properties);
-  let innerHTMLContent = '';
+  const addresses = response.features.map((feature) => feature.properties);
+  let innerHTMLContent = "";
 
-  addresses.forEach(address => {
+  addresses.forEach((address) => {
     innerHTMLContent += `
       <div class="petit-truc" onclick="clickAdress(this)">
-        <p>${address.name || 'Unknown street'}</p>
-        <p>${address.city || 'Unknown city'}</p>
-        <p>${address.postcode || 'Unknown postal code'}</p>
+        <p>${address.name || "Unknown street"}</p>
+        <p>${address.city || "Unknown city"}</p>
+        <p>${address.postcode || "Unknown postal code"}</p>
       </div>
     `;
   });
@@ -170,17 +172,20 @@ function updateAddresses(response) {
 function removeActiveClass() {
   setTimeout(() => {
     gros_truc.classList.remove("active");
-  },400);
+  }, 500);
 }
 
-function clickAdress(e){
+function clickAdress(e) {
   const paragraphs = e.querySelectorAll("p");
-  const data = Array.from(paragraphs).map(p => p.textContent);
-  const ville = document.querySelector("input[name=ville]")
-  const postcode = document.querySelector("input[name=postcode]")
+  const data = Array.from(paragraphs).map((p) => p.textContent);
+  const rue = document.querySelector("input[name=street]")
+  const ville = document.querySelector("input[name=ville]");
+  const postcode = document.querySelector("input[name=postcode]");
+  rue.value = data[0];
   ville.value = data[1];
   postcode.value = data[2];
 }
+
 function detailCommande() {
   const detailCommande = document.querySelector(".detail-commande-ctn");
   detailCommande.innerHTML = "";

@@ -1,10 +1,36 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
+  <head>
     <%- include('../components/head'); %>
+    <link rel="stylesheet" href="/public/css/infos-user.css" />
     <title>User</title>
-</head>
-<body>
+  </head>
+  <body>
+    <%- include('../components/header'); %>
+    <%-include('../components/burger-list'); %>
+    <section class="infos-user-ctn">
+      <div class="search-bar-ctn">
+        <%- include('../components/search-bar'); %>
+      </div>
+      <div class="infos-user">
+        <p>Bonjour <%=user.user.Name%> !</p>
+      </div>
+    </section>
+    <section class="fav-histo">
+      <div class="fav">
+        <p class="to-pad">Favoris</p>
+        <div class="fav-ctn" id="fav-ctn">
+          <p>Vous n'avez aucun favoris</p>
+        </div>
+      </div>
 
-</body>
+      <div class="historique-commande">
+        <p class="to-pad">Historique des commandes</p>
+        <div class="commande-ctn">
+          <p>Vous n'avez passer aucune commande</p>
+        </div>
+      </div>
+    </section>
+  </body>
+  <script src="/public/js/infos-user.js"></script>
 </html>
