@@ -5,14 +5,11 @@ let error = {
   status: 0,
 };
 /*
--Panier
--Affichage du payement
 -Partie utilisateur{
   -Historique de commande
   -Favoris
 }
 -Filtre
--Surveiller quand il créer son compte qu'il met le même mdp
 -Mieux sécurisé l'api (faire plus attention a ce que met l'utilisateur)
 -Pagination cassé
 -Footer n'est toujours pas fait
