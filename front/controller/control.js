@@ -22,7 +22,6 @@ exports.Index = async (req, res) => {
 };
 
 exports.Basket = async (req, res) => {
-   console.log(error)
   res.render("../views/pages/basket", {
     connect: await getFav(req.cookies.Token),
     error
@@ -226,9 +225,11 @@ exports.SearchTreatment = (req, res) => {
   res.redirect(`/result?search=${search}`);
 };
 
-exports.forgotPasswordGet = (req, res) => {
+exports.forgotPasswordGet = async (req, res) => {
   res.render("../views/pages/forgotPassword", {
     send: null,
+    connect: await getFav(req.cookies.Token)
+
   });
 };
 
@@ -244,6 +245,7 @@ exports.forgotPasswordPost = async (req, res) => {
     });
     res.render("../views/pages/forgotPassword", {
       send: response.status === 200,
+      connect: await getFav(req.cookies.Token)
     });
   }
 };
@@ -302,10 +304,10 @@ exports.User = async (req, res) => {
         "Content-Type": "application/json",
       },
     });
-    console.log(user.data);
     res.render("../views/pages/user", {
       fav: fav.data ? fav.data.Favoris : [],
       commande,
+      connect: await getFav(req.cookies.Token),
       user: user.data,
     });
   } catch (err) {
@@ -390,7 +392,6 @@ async function getFav(token) {
       },
     });
   } catch (e) {
-    console.log(e.response.data)
     return e.response ? null : false;
   }
 }
