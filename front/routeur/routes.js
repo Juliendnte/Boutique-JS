@@ -17,7 +17,10 @@ routeur.get("/resetPassword", controller.resetPasswordGet);
 routeur.post("/resetPassword/:token", controller.resetPasswordPost);
 routeur.get("/marque", controller.Marque);
 routeur.get("/user" , controller.User)
-routeur.get("/:blabla", controller.Error)
 routeur.get("/ajoutFav/:id", controller.AjoutFav)
+routeur.get("/logOut", controller.Logout)
+routeur.post("/payement", controller.Payemenent)
+routeur.get("/valid", )
+routeur.get("/:blabla", controller.Error)
 
 module.exports = routeur;

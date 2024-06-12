@@ -12,7 +12,7 @@
   </head>
 
   <body>
-    <%- include('../components/header'); %>
+    <%- include('../components/header', {connect}); %>
     <%- include('../components/burger-list'); %>
     <div class="search-bar-ctn">
       <%- include('../components/search-bar'); %>
@@ -23,11 +23,11 @@
           <img src="/public/img/retour.png" alt="Boutton retour">
           <p>Retour</p>
         </a>
-        <%if (like==="true"){%>
+        <%if (like===true){%>
         <a href="/ajoutFav/<%=watch.Id%>" class="favoris-btn">
           <img class="favoris-btn-img " src="/public/img/fav-selected.png" alt="Boutton favoris">
         </a>
-        <%}else{%>
+        <%}else if (like===false){%>
         <a href="/ajoutFav/<%=watch.Id%>" class="favoris-btn">
           <img class="favoris-btn-img " src="/public/img/fav.png" alt="Boutton favoris">
         </a>

@@ -8,7 +8,7 @@
     <title>Montres</title>
   </head>
   <body>
-    <%- include('../components/header'); %>
+    <%- include('../components/header', {connect}); %>
     <%-include('../components/burger-list'); %>
     <div class="search-bar-ctn">
       <%- include('../components/search-bar'); %>
@@ -74,7 +74,9 @@
         <%}%>
     </div>
     <%}else {%>
-      <p><%= message%></p>
+      <div class="item-ctn">
+        <p class="errorMessage"><%= message%></p>
+      </div>
     <%}%>
   </body>
   <script src="/public/js/script2.js"></script>

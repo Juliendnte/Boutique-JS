@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <%- include('../components/head'); %>
+    <link rel="stylesheet" href="/public/css/favoris.css" />
+    <title>Payement</title>
+  </head>
+  <body>
+    <p>Merci d'avoir payé <%=price%>€ mon salaud</p>
+    <a href="/index">Retour au bled</a>
+    <script>
+      localStorage.removeItem("panier")
+    </script>
+  </body>
+</html>

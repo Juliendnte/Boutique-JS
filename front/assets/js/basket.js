@@ -181,10 +181,12 @@ function clickAdress(e){
   ville.value = data[1];
   postcode.value = data[2];
 }
+
 function detailCommande() {
   const detailCommande = document.querySelector(".detail-commande-ctn");
   detailCommande.innerHTML = "";
   const totalCommande = document.querySelector("#total");
+  const input = document.querySelector("input[name=price]")
 
   var totalValue = 0;
 
@@ -202,7 +204,7 @@ function detailCommande() {
     totalValue += parseInt(elem.Price) * Nb;
     detailCommande.appendChild(elemPrice);
   }
-
+  input.value = totalValue;
   totalCommande.innerText = "Total : " + totalValue + "€";
 }
 

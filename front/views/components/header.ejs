@@ -26,14 +26,20 @@
       <img src="/public/img/search-blanc.png" alt="Search logo" />
       <p>Search</p>
     </div>
+    <%if (connect !== null) {%>
     <div class="favoris">
       <img src="/public/img/fav-blanc.png" alt="Favoris logo" />
       <p>Favoris</p>
     </div>
+    <div>
+       <a href="/logOut">Deconnexion</a>
+    </div>
+    <%}else {%>
     <a class="login" href="/login">
       <img src="/public/img/login-blanc.png" alt="Login logo" />
       <p>Login</p>
     </a>
+    <%}%>
     <a class="panier" href="/basket">
       <img src="/public/img/cart-blanc.png" alt="Cart logo" />
       <p>Cart</p>
