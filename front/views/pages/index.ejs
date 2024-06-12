@@ -10,7 +10,16 @@
     include('../components/burger-list'); %>
 
     <div class="vid-ctn">
-      <video class="video" src="/public/video/VIDEO.mp4" loop muted autoplay playsinline>Votre navigateur ne supporte pas la vidéo</video>
+      <video
+        class="video"
+        src="/public/video/VIDEO.mp4"
+        loop
+        muted
+        autoplay
+        playsinline
+      >
+        Votre navigateur ne supporte pas la vidéo
+      </video>
       <div class="filtre first">
         <%- include('../components/search-bar'); %>
         <p>HORO HAVEN</p>
@@ -25,6 +34,7 @@
         <p>Vente, réparation et expertise de montres de luxe.</p>
       </div>
     </div>
+    <%- include('../components/footer'); %>
   </body>
   <script src="/public/js/script.js"></script>
 </html>
