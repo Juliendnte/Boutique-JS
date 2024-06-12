@@ -27,77 +27,51 @@
       <%}); %>
     </div>
     <div class="pagination">
-      <a href="/result?previous=<%= lst.previous %>" class="page">Previous</a>
+      <% if (lst.previous !== null) {%>
+        <a href="/result?previous=<%= lst.previous %>" class="page">Previous</a>
+      <%} else {%>
+          <div class="page">Previous</div>
+        <%}%>
 
       <!-- first_page-->
       <% if((lst.current_page)>4){%>
-      <a
-        href="/result?next=http://localhost:4000/articles?limit=12&offset=0"
-        class="page"
-        ><%= 1 %></a
-      >
+      <a href="/result?next=<%= lst.href.includes("?") ? lst.href + "&" : lst.href + "?" %>limit=12&offset=0" class="page"> 1 </a>
       <p class="page">...</p>
-
-      <% } else if (lst.current_page===2 || lst.current_page===4){ %> 
-        <a
-        href="/result?next=http://localhost:4000/articles?limit=12&offset=0"
-        class="page"
-        ><%= 1 %></a
-      >
+      <% } else if (lst.current_page===2 || lst.current_page===4){ %>
+        <a href="/result?next=<%= lst.href.includes("?") ? lst.href + "&" : lst.href + "?" %>limit=12&offset=0" class="page"> 1 </a>
       <%}%>
       <!-- Pour en avoir 2 avant -->
 
       <% if (lst.current_page-2 >= 1){%>
-        <a
-        href="/result?next=http://localhost:4000/articles?limit=12&offset=<%= +(lst.current_page-2)*12 %>"
-        class="page"
-        ><%= lst.current_page-2 %></a
-      >
-      <a
-        href="/result?next=http://localhost:4000/articles?limit=12&offset=<%= +(lst.current_page-1)*12 %>"
-        class="page"
-        ><%= lst.current_page-1 %></a
-      >
+        <a href="/result?next=<%= lst.href.includes("?") ? lst.href + "&" : lst.href + "?" %>limit=12&offset=<%= +(lst.current_page-2)*12 %>" class="page"><%= lst.current_page-2 %></a>
+        <a href="/result?next=<%= lst.href.includes("?") ? lst.href + "&" : lst.href + "?" %>limit=12&offset=<%= +(lst.current_page-1)*12 %>" class="page"><%= lst.current_page-1 %></a>
       <%}%>
-      
+
       <% for(var i=lst.current_page-1; i < lst.last_page; i++) { %>
       <% if (i-2 === lst.current_page){%> <!--Pour faire que 2 après-->
         <% if (i === lst.last_page-1){%>
-          <a
-        href="/result?next=http://localhost:4000/articles?limit=12&offset=<%= +i*12 %>"
-        class="page"
-        ><%=lst.last_page%></a
-      >
+          <a href="/result?next=<%= lst.href.includes("?") ? lst.href + "&" : lst.href + "?" %>limit=12&offset=<%= +i*12 %>" class="page"><%=lst.last_page%></a>
         <% } %>
       <%break%>
       <% } %>
       <% if (i=== lst.current_page-1){%>
-        <a
-        href="/result?next=http://localhost:4000/articles?limit=12&offset=<%= +i*12 %>"
-        class="page current-page"
-        ><%= i+1 %></a
-        >
+        <a href="/result?next=<%= lst.href.includes("?") ? lst.href + "&" : lst.href + "?" %>limit=12&offset=<%= +i*12 %>" class="page current-page"><%= i+1 %></a>
       <%} else {%>
-      <a
-        href="/result?next=http://localhost:4000/articles?limit=12&offset=<%= +i*12 %>"
-        class="page"
-        ><%= i+1 %></a
-      >
+      <a href="/result?next=<%= lst.href.includes("?") ? lst.href + "&" : lst.href + "?" %>limit=12&offset=<%= +i*12 %>" class="page"><%= i+1 %></a>
       <%}%>
-      <% } %> 
-
-      <!-- last_page --> 
-      
-      <% if((lst.current_page)<lst.last_page-3){%>
-      <p class="page">...</p>
-      <a
-        href="/result?next=http://localhost:4000/articles?limit=12&offset=<%= +(lst.last_page-1)*12 %>"
-        class="page"
-        ><%= lst.last_page %></a
-      >
       <% } %>
 
-      <a href="/result?previous=<%= lst.next %>" class="page">Next</a>
+      <!-- last_page -->
+
+      <% if((lst.current_page)<lst.last_page-3){%>
+      <p class="page">...</p>
+      <a href="/result?next=<%= lst.href.includes("?") ? lst.href + "&" : lst.href + "?" %>limit=12&offset=<%= +(lst.last_page-1)*12 %>" class="page"><%= lst.last_page %></a>
+      <% } %>
+        <% if (lst.next !== null) {%>
+          <a href="/result?next=<%= lst.next %>" class="page">Next</a>
+        <%} else {%>
+          <div class="page">Next</div>
+        <%}%>
     </div>
     <%}else {%>
       <p><%= message%></p>

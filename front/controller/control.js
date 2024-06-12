@@ -5,14 +5,11 @@ let error = {
   status: 0,
 };
 /*
--Panier
--Affichage du payement
 -Partie utilisateur{
   -Historique de commande
   -Favoris
 }
 -Filtre
--Surveiller quand il créer son compte qu'il met le même mdp
 -Mieux sécurisé l'api (faire plus attention a ce que met l'utilisateur)
 -Pagination cassé
 -Footer n'est toujours pas fait
@@ -37,15 +34,17 @@ exports.Result = async (req, res) => {
       watches = await axios.get(url + (req.query.search ? "/search?search=" + req.query.search : "/articles"));
     }
   }catch (err){
-    if (err.response.data.status !== 404) {
+    try{
+      if (err.response.data.status === 404) {
+        error =`Aucune montres trouvé pour ${req.query.search} `
+      }
+    }catch (e){
       error = {
         message : "Probleme serveur",
         status: 500
       }
       res.redirect("/error500")
       return
-    }else {
-      error =`Aucune montres trouvé pour ${req.query.search} `
     }
   }
   try{
