@@ -167,7 +167,25 @@ class ArticleModel{
 
     static getAllFav(id){
         return new Promise((resolve,reject)=>{
-            const sql = `SELECT a.* FROM favoris f JOIN article a ON f.Id_article = a.Id WHERE f.Id_user = ?;`
+            const sql = ` SELECT
+                              a.Id,
+                              marque.Label AS marqueLabel,
+                              a.Model,
+                              a.Availability,
+                              a.Price,
+                              a.Reduction,
+                              a.Stock
+                          FROM
+                              favoris f
+                                JOIN article a ON f.Id_article = a.Id
+                                  LEFT JOIN marque ON a.Id_Marque = marque.Id
+                                  LEFT JOIN fabrication ON a.Id_Fab = fabrication.Id
+                                  LEFT JOIN matiere ON a.Id_Matiere = matiere.Id
+                                  LEFT JOIN color ON a.Id_Color = color.Id
+                                  LEFT JOIN movement ON a.Id_Movement = movement.Id
+                                  LEFT JOIN bracelet ON a.Id_Bracelet = bracelet.Id
+                                  LEFT JOIN color_bracelet ON a.Id_Color_Bracelet = color_bracelet.Id
+                                                   WHERE f.Id_user = ?;`
             connection.query(sql, id, (err, results)=> err ? reject(err) : resolve(results));
         })
     }

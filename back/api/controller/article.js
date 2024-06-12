@@ -214,6 +214,10 @@ class ArticleController {
           status: 404,
         });
       }
+      for (const art of Favoris) {
+        const photos = await article.getImages(art.Id, true);
+        art.Images = photos.map((photo) => `${baseUrl}/assets/${photo.URL}`);
+      }
       return res.status(200).send({
         message: "Favorite articles by user",
         status: 200,

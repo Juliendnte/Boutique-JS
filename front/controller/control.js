@@ -11,8 +11,8 @@ let error = {
 }
 -Filtre
 -Mieux sécurisé l'api (faire plus attention a ce que met l'utilisateur)
--Pagination cassé
 -Footer n'est toujours pas fait
+-Commenté le code et le synthétisé
 */
 
 exports.Index = async (req, res) => {
@@ -148,12 +148,13 @@ exports.WatchDetail = async (req, res) => {
     return;
   }
   const like = await getFavId(req.cookies.Token, watchReq.data.article.Id)
+  const connect  =  await getFav(req.cookies.Token)
   res.render("../views/pages/detail", {
     watch: watchReq.data.article,
     color: colorReq.data.articlesId,
     similar: similarReq.data.articles,
     like,
-    connect: await getFav(req.cookies.Token)
+    connect
   });
 };
 
@@ -305,7 +306,7 @@ exports.User = async (req, res) => {
       },
     });
     res.render("../views/pages/user", {
-      fav: fav.data ? fav.data.Favoris : [],
+      fav: fav.data ? fav.data.Favoris : null,
       commande,
       connect: await getFav(req.cookies.Token),
       user: user.data,
@@ -327,10 +328,19 @@ exports.AjoutFav = async (req, res) => {
   try {
     (await getFavId(token, id)) ? await axios.delete(`${url}/fav/${id}`, { headers }) : await axios.get(`${url}/fav/${id}`, { headers });
   } catch (err) {
-    error.message = err.response.data.message;
-    error.status = err.response.data.status;
+    try{
+      error.message = err.response.data.message;
+      error.status = err.response.data.status;
+    }catch (err){
+      error = {
+        message: "Probleme serveur",
+        status: 500,
+      };
+      res.redirect("/error500");
+      return;
+    }
   }
-  res.redirect(`/detail?id=${id}`);
+  res.redirect(`back`);
 };
 
 exports.Logout = async (req, res) =>{
@@ -355,8 +365,10 @@ exports.Payemenent = async (req, res) =>{
         "Content-Type": "application/json",
       },
     });
+    await axios.get(url+ "/commande")
     res.render("../views/pages/kichta", {price});
   }catch (err) {
+    console.log(err)
     error.message = err.response.data.message;
     error.status = err.response.data.status;
     res.redirect("/basket")
@@ -379,7 +391,7 @@ async function getFavId(token, id) {
     }
     return false;
   } catch (e) {
-    return e.response ? null : false;
+    return e.response.data.status ? false : null;
   }
 }
 
@@ -392,7 +404,7 @@ async function getFav(token) {
       },
     });
   } catch (e) {
-    return e.response ? null : false;
+    return e.response.data.status ? false : null;
   }
 }
 
