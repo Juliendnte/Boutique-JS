@@ -20,7 +20,6 @@ routeur.get("/user" , controller.User)
 routeur.get("/ajoutFav/:id", controller.AjoutFav)
 routeur.get("/logOut", controller.Logout)
 routeur.post("/payement", controller.Payemenent)
-routeur.get("/valid", )
 routeur.get("/:blabla", controller.Error)
 
 module.exports = routeur;

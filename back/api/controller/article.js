@@ -206,10 +206,8 @@ class ArticleController {
 
   static async getFav(req, res) {
     const userID = req.user.Sub; //Pris du middleware auth
-
     try {
       const Favoris = await article.getAllFav(userID); //Récupère tous les favoris a l'id de l'user
-
       if (!Favoris.length) {
         return res.status(404).send({
           message: `No favoris found`,

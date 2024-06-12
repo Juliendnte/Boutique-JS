@@ -87,8 +87,6 @@ function UpdateFavoris() {
   }
 }
 
-
-
 // localStorage
 
 const basket = JSON.parse(localStorage.getItem("panier")) || [];
@@ -99,7 +97,6 @@ const addToBasketButton = document.querySelector(".add-to-basket");
 addToBasketButton.addEventListener("click", addToBasket);
 
 function addToBasket(e) {
-  console.log("price : " + e.target.classList[5]);
   let toAdd = {
     id: parseInt(e.target.classList[1]),
     nb: 1,
@@ -113,6 +110,5 @@ function addToBasket(e) {
     }
   }
   liste.push(toAdd);
-  console.log("liste : " + JSON.parse(localStorage.getItem("panier")));
   localStorage.setItem("panier", JSON.stringify(liste));
 }

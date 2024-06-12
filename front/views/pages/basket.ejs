@@ -36,11 +36,18 @@
 
           <div class="to-pad">
             <div class="inputBox street">
-              <input name="street" placeholder="ex: 11 bd du metro" class="rue" type="text" required="" onblur="removeActiveClass()" oninput="AddresseStreet()" onfocus="AddresseStreet()"/>
+              <input
+                name="street"
+                placeholder="ex: 11 bd du metro"
+                class="rue"
+                type="text"
+                required=""
+                onblur="removeActiveClass()"
+                oninput="AddresseStreet()"
+                onfocus="AddresseStreet()"
+              />
               <span>Rue</span>
-              <div class="gros-truc">
-
-              </div>
+              <div class="gros-truc"></div>
             </div>
           </div>
           <div class="ville-postal to-pad">
@@ -76,7 +83,7 @@
             <p class="price to-pad" id="total">Vous n'avez aucun article</p>
             <input hidden="hidden" name="price">
             <div class="acheter">
-              <button class="buy-btn">Ajouter au panier</button>
+              <button class="buy-btn">Payer</button>
             </div>
           <%} else{%>
               <p class="to-pad info-client">Informations client</p>
@@ -134,7 +141,7 @@
               <p class="price to-pad" id="total">Vous n'avez aucun article</p>
               <input hidden="hidden" name="price">
               <div class="acheter">
-                <button disabled class="buy-btn">Ajouter au panier</button>
+                <button disabled class="buy-btn">Payer</button>
               </div>
             <%}%>
         </form>

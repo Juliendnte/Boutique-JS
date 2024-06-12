@@ -37,34 +37,43 @@ exports.Result = async (req, res) => {
   let watches;
   try {
     if (req.query.next) {
-      watches = await axios.get(`${req.query.next}&offset=${req.query.offset}` + (req.query.search ? `&search=${req.query.search}` : ""));
+      watches = await axios.get(
+        `${req.query.next}&offset=${req.query.offset}` +
+          (req.query.search ? `&search=${req.query.search}` : "")
+      );
     } else if (req.query.previous) {
-      watches = await axios.get(`${req.query.previous}&offset=${req.query.offset}` + (req.query.search ? `&search=${req.query.search}` : ""));
+      watches = await axios.get(
+        `${req.query.previous}&offset=${req.query.offset}` +
+          (req.query.search ? `&search=${req.query.search}` : "")
+      );
     } else {
-      watches = await axios.get(url + (req.query.search ? "/search?search=" + req.query.search : "/articles"));
+      watches = await axios.get(
+        url +
+          (req.query.search
+            ? "/search?search=" + req.query.search
+            : "/articles")
+      );
     }
-  }catch (err){
-    try{
-      if (err.response.data.status === 404) {
-        error =`Aucune montres trouvé pour ${req.query.search} `
-      }
-    }catch (e){
+  } catch (err) {
+    if (err.response.data.status !== 404) {
       error = {
-        message : "Probleme serveur",
-        status: 500
-      }
-      res.redirect("/error500")
-      return
+        message: "Probleme serveur",
+        status: 500,
+      };
+      res.redirect("/error500");
+      return;
+    } else {
+      error = `Aucune montres trouvé pour ${req.query.search} `;
     }
   }
-  try{
+  try {
     res.render("../views/pages/result", {
       lst: watches.data.articles,
       search: !!req.query.search,
       connect: await getFav(req.cookies.Token),
       error: null
     });
-  }catch (err){
+  } catch (err) {
     res.render("../views/pages/result", {
       lst: null,
       search: true,
@@ -233,7 +242,6 @@ exports.forgotPasswordPost = async (req, res) => {
     const response = await axios.post("http://localhost:4000/forgotPassword", {
       email,
     });
-    console.log(response.data);
     res.render("../views/pages/forgotPassword", {
       send: response.status === 200,
     });
@@ -260,7 +268,6 @@ exports.resetPasswordPost = async (req, res) => {
       },
     }
   );
-  console.log(response.data);
   res.redirect("/Index");
 };
 
@@ -282,6 +289,12 @@ exports.User = async (req, res) => {
   const token = req.cookies.Token;
 
   try {
+    const user = await axios.get(url + "/user", {
+      headers: {
+        Authorization: token,
+        "Content-Type": "application/json",
+      },
+    });
     const fav = await getFav(token);
     const commande = await axios.get(url + "/commande", {
       headers: {
@@ -289,13 +302,15 @@ exports.User = async (req, res) => {
         "Content-Type": "application/json",
       },
     });
+    console.log(user.data);
     res.render("../views/pages/user", {
-      fav: fav.data.Favoris,
+      fav: fav.data ? fav.data.Favoris : [],
       commande,
+      user: user.data,
     });
   } catch (err) {
-    error.message = err.fav.data.message;
-    error.status = err.fav.data.status;
+    error.message = err.response.data.message;
+    error.status = err.response.data.status;
     res.redirect("/login");
   }
 };
