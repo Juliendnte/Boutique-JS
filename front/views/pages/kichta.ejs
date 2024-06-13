@@ -4,14 +4,14 @@
     <%- include('../components/head'); %>
     <link rel="stylesheet" href="/public/css/favoris.css" />
     <link rel="stylesheet" href="/public/css/footer.css" />
-
     <title>Payement</title>
   </head>
   <body>
     <p>Merci d'avoir payé <%=price%>€ mon salaud</p>
     <a href="/index">Retour au bled</a>
     <script>
-      localStorage.removeItem("panier")
+      localStorage.removeItem("panier");
     </script>
+    <%- include('../components/footer'); %>
   </body>
 </html>

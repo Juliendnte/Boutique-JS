@@ -373,8 +373,7 @@ exports.Payemenent = async (req, res) => {
       { card, payment_intent },
       {
         headers: {
-          Authorization: "8285b5fe-484e-4d33-bc74-9040ca9b2b09",
-          "Content-Type": "application/json",
+          Authorization: "2f107ff8-9f12-4d22-92ec-cc2f553b67d3",
         },
       }
     );
