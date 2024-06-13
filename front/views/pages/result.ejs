@@ -4,6 +4,8 @@
     <%- include('../components/head'); %>
     <link rel="stylesheet" href="/public/css/result.css" />
     <link rel="stylesheet" href="/public/css/accueil.css" />
+    <link rel="stylesheet" href="/public/css/footer.css" />
+
 
     <title>Montres</title>
   </head>
@@ -14,6 +16,9 @@
       <%- include('../components/search-bar'); %>
     </div>
     <%if (error === null){%>
+      <div class="filtres">
+
+      </div>
     <div class="item-ctn">
       <% lst.items.forEach(function (article) { %>
       <a class="watch" href="/detail?id=<%= article.Id%>">

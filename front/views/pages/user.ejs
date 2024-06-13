@@ -3,6 +3,8 @@
   <head>
     <%- include('../components/head'); %>
     <link rel="stylesheet" href="/public/css/infos-user.css" />
+    <link rel="stylesheet" href="/public/css/footer.css" />
+
     <title>User</title>
   </head>
   <body>
@@ -22,20 +24,18 @@
         <div class="fav-ctn" id="fav-ctn">
           <% if (fav === null) {%>
           <p>Vous n'avez aucun favoris</p>
-          <%} else {%>
-              <% fav.forEach(function (article) { %>
-                <div class="elem-fav">
-                  <img src=<%=article.Images[0]%> class="img-item">
-                  <div class="text-ctn">
-                    <p><%= article.Model %></p>
-                    <p><%= article.marqueLabel %></p>
-                  </div>
-                  <a href="/ajoutFav/<%= article.Id %>">
-                    <img class="delete-item-img" src="/public/img/trash.png">
-                  </a>
-                </div>
-              <%})%>
-          <%}%>
+          <%} else {%> <% fav.forEach(function (article) { %>
+          <div class="elem-fav">
+            <img src="<%=article.Images[0]%>" class="img-item" />
+            <div class="text-ctn">
+              <p><%= article.Model %></p>
+              <p><%= article.marqueLabel %></p>
+            </div>
+            <a href="/ajoutFav/<%= article.Id %>">
+              <img class="delete-item-img" src="/public/img/trash.png" />
+            </a>
+          </div>
+          <%})%> <%}%>
         </div>
       </div>
 
@@ -48,4 +48,5 @@
     </section>
     <%- include('../components/footer'); %>
   </body>
+  <script src="/public/js/script2.js"></script>
 </html>

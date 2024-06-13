@@ -124,6 +124,15 @@ header {
   .burger-list-ctn {
     visibility: hidden;
   }
+
+  .hono {
+    font-size: 12px;
+  }
+
+  footer img {
+    height: 50%;
+    width: auto;
+  }
 }
 
 @media screen and (max-width: 1024px) {
@@ -140,6 +149,19 @@ header {
   }
   .burger-list-ctn {
     visibility: visible;
+  }
+
+  footer a {
+    font-size: 10px;
+  }
+
+  .hono {
+    font-size: 8px;
+  }
+
+  footer img {
+    height: 30%;
+    width: auto;
   }
 }
 
@@ -202,36 +224,17 @@ header {
   padding-left: 2em;
 }
 
-footer {
-  font-family: var(--light);
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly;
-  width: 100vw;
-  height: 20vh;
-  min-height: 80px;
-  background-color: var(--horo-blue);
+.panier {
+  position: relative;
 }
 
-footer img {
-  height: 50%;
-  width: auto;
-}
-
-.git-ctn,
-.mention-normes {
-  width: 30%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.mention-normes {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.hono {
-  font-size: 12px;
+.nb {
+  color: var(--horo-blue);
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 2px 8px;
+  border-radius: 50%;
+  background-color: var(--cream);
+  margin-bottom: 10px;
 }

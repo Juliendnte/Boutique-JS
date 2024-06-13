@@ -111,4 +111,11 @@ function addToBasket(e) {
   }
   liste.push(toAdd);
   localStorage.setItem("panier", JSON.stringify(liste));
+  updateNb();
+}
+
+function updateNb() {
+  const nb = document.querySelector(".nb");
+  let panier = JSON.parse(localStorage.getItem("panier"));
+  nb.innerHTML = panier.length;
 }

@@ -222,6 +222,10 @@ body {
   background-color: #1d1d1d;
 }
 
+.add-to-basket:active {
+  background-color: #4d4d4d;
+}
+
 .disable {
   border: none;
   border-radius: 50px;
@@ -279,4 +283,3 @@ body {
   color: black;
   font-family: var(--light);
 }
-

@@ -1,12 +1,31 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
+  <head>
     <%- include('../components/head'); %>
     <title>Marque</title>
-</head>
-<body>
-    <% marque.forEach(function (Label) { %>
-        <a href="/result?search=<%=Label.Label%>"><%= Label.Label%></a>
-    <%});%>
-</body>
+    <link rel="stylesheet" href="/public/css/marque.css" />
+    <link rel="stylesheet" href="/public/css/footer.css" />
+
+  </head>
+  <body>
+    <%- include('../components/header', {connect}); %>
+    <%-include('../components/burger-list'); %>
+    <section>
+      <div class="search-bar-ctn">
+        <%- include('../components/search-bar'); %>
+      </div>
+      <div class="main">
+        <% marque.forEach(function (Label) { %>
+        <a href="/result?search=<%=Label.Label%>">
+          <img
+            src="/public/img/<%= Label.Label%>.png"
+            alt="Image <%= Label.Label%>"
+          />
+        </a>
+        <%});%>
+      </div>
+    </section>
+    <%- include('../components/footer'); %>
+  </body>
+  <script src="/public/js/script2.js"></script>
 </html>

@@ -63,3 +63,10 @@ function hideSearch() {
   searchButton.addEventListener("click", displaySearch);
 }
 
+function updateNb() {
+  const nb = document.querySelector(".nb");
+  let panier = JSON.parse(localStorage.getItem("panier"));
+  nb.innerHTML = panier.length;
+}
+
+updateNb();

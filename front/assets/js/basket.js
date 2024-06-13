@@ -33,21 +33,25 @@ async function displayBasket() {
   liste.forEach((watch) => {
     listReq.push(watch.id);
   });
+  basketListCtn.classList.remove("center");
   basketListCtn.innerHTML = ""; // nettoyage du ctn dans le HTML pour pas avoir de doublons
+  console.log(listReq.length);
+  if (listReq.length != 0) {
+    getWatches(listReq).then(async (watches) => {
+      total = watches.listArticles;
 
-  getWatches(listReq).then(async (watches) => {
-    total = watches.listArticles;
-    for (const elem of watches.listArticles) {
-      let ctn = document.createElement("div");
-      ctn.classList = "panier-item";
-      let quantity;
-      liste.forEach((item) => {
-        if (elem.Id === item.id) {
-          quantity = item.nb;
-        }
-      });
+      if (watches.listArticles != null) {
+        for (const elem of watches.listArticles) {
+          let ctn = document.createElement("div");
+          ctn.classList = "panier-item";
+          let quantity;
+          liste.forEach((item) => {
+            if (elem.Id === item.id) {
+              quantity = item.nb;
+            }
+          });
 
-      ctn.innerHTML = `
+          ctn.innerHTML = `
           <img class="item-img" src="${elem.Images[0]}">
           <div class="infos-item">
             <p id="marque">${elem.marque}</p>
@@ -61,11 +65,17 @@ async function displayBasket() {
           </div>
           <img class="${elem.Id} delete-item-img" src="/public/img/trash.png">
         `;
-      basketListCtn.appendChild(ctn); // on l'ajoute...
-    }
-    await affectEvent(); //on remet les events sur les bouttons
-    detailCommande(); // on refresh pour actualiser en fct du localStorage
-  });
+          basketListCtn.appendChild(ctn); // on l'ajoute...
+        }
+      }
+      await affectEvent(); //on remet les events sur les bouttons
+      detailCommande(); // on refresh pour actualiser en fct du localStorage
+    });
+  } else {
+    basketListCtn.innerHTML = `<p class="empty">Votre panier est vide</p>`;
+    basketListCtn.classList.add("center");
+  }
+  updateNb();
 }
 
 displayBasket();
@@ -178,7 +188,7 @@ function removeActiveClass() {
 function clickAdress(e) {
   const paragraphs = e.querySelectorAll("p");
   const data = Array.from(paragraphs).map((p) => p.textContent);
-  const rue = document.querySelector("input[name=street]")
+  const rue = document.querySelector("input[name=street]");
   const ville = document.querySelector("input[name=ville]");
   const postcode = document.querySelector("input[name=postcode]");
   rue.value = data[0];
@@ -190,26 +200,27 @@ function detailCommande() {
   const detailCommande = document.querySelector(".detail-commande-ctn");
   detailCommande.innerHTML = "";
   const totalCommande = document.querySelector("#total");
-  const input = document.querySelector("input[name=price]")
+  const input = document.querySelector("input[name=price]");
 
   var totalValue = 0;
-
-  for (const elem of total) {
-    let Nb = 0;
-    let panier = JSON.parse(localStorage.getItem("panier"));
-    panier.forEach((item) => {
-      if (item.id === elem.Id) {
-        Nb = item.nb;
-      }
-    });
-    let elemPrice = document.createElement("p");
-    elemPrice.classList = "price to-pad";
-    elemPrice.innerText = `X${Nb} ${elem.Model} : ${elem.Price}€`;
-    totalValue += parseInt(elem.Price) * Nb;
-    detailCommande.appendChild(elemPrice);
+  if (total != null) {
+    for (const elem of total) {
+      let Nb = 0;
+      let panier = JSON.parse(localStorage.getItem("panier"));
+      panier.forEach((item) => {
+        if (item.id === elem.Id) {
+          Nb = item.nb;
+        }
+      });
+      let elemPrice = document.createElement("p");
+      elemPrice.classList = "price to-pad";
+      elemPrice.innerText = `X${Nb} ${elem.Model} : ${elem.Price}€`;
+      totalValue += parseInt(elem.Price) * Nb;
+      detailCommande.appendChild(elemPrice);
+    }
+    input.value = totalValue;
+    totalCommande.innerText = "Total : " + totalValue + "€";
   }
-  input.value = totalValue;
-  totalCommande.innerText = "Total : " + totalValue + "€";
 }
 
 function insertSpace() {
@@ -221,3 +232,11 @@ function insertSpace() {
   }
   carteInput.value = nouvelleValeur.trim();
 }
+
+function updateNb() {
+  const nb = document.querySelector(".nb");
+  let panier = JSON.parse(localStorage.getItem("panier"));
+  nb.innerHTML = panier.length;
+}
+
+updateNb();

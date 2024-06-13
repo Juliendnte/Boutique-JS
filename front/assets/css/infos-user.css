@@ -8,6 +8,7 @@ body {
 }
 
 .infos-user-ctn {
+  position: relative;
   font-family: var(--bold);
   width: 100%;
   height: 30%;
@@ -26,7 +27,6 @@ body {
   font-size: 20px;
   width: 50%;
   height: 100%;
-  border: solid 1px black;
   overflow: scroll;
 }
 

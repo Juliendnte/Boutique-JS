@@ -27,13 +27,16 @@
       <p>Search</p>
     </div>
     <%if (connect !== null) {%>
-      <a class="favoris" href="/user">
-        <img src="/public/img/fav-blanc.png" alt="Favoris logo" />
-        <p>Favoris</p>
-      </a>
-    <div>
-       <a href="/logOut">Deconnexion</a>
-    </div>
+    <a class="favoris" href="/user">
+      <img src="/public/img/fav-blanc.png" alt="Favoris logo" />
+      <p>Favoris</p>
+    </a>
+
+    <a href="/logOut" class="login"
+      ><img src="/public/img/log-out.png" alt="LogOut logo" />
+      <p>Log Out</p>
+    </a>
+
     <%}else {%>
     <a class="login" href="/login">
       <img src="/public/img/login-blanc.png" alt="Login logo" />
@@ -43,6 +46,7 @@
     <a class="panier" href="/basket">
       <img src="/public/img/cart-blanc.png" alt="Cart logo" />
       <p>Cart</p>
+      <p class="nb">0</p>
     </a>
   </div>
 </header>

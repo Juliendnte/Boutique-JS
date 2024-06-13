@@ -5,26 +5,31 @@ let error = {
   status: 0,
 };
 /*
--Partie utilisateur{
-  -Historique de commande
-  -Favoris
-}
 -Filtre
 -Mieux sécurisé l'api (faire plus attention a ce que met l'utilisateur)
--Footer n'est toujours pas fait
 -Commenté le code et le synthétisé
 */
 
 exports.Index = async (req, res) => {
   res.render("../views/pages/index", {
-    connect: await getFav(req.cookies.Token)
+    connect: await getFav(req.cookies.Token),
   });
+};
+
+exports.MentionsLegales = async (req, res) => {
+  res.render("../views/pages/mentions-legales", {
+    connect: await getFav(req.cookies.Token),
+  });
+  error = {
+    message: "",
+    status: 0,
+  };
 };
 
 exports.Basket = async (req, res) => {
   res.render("../views/pages/basket", {
     connect: await getFav(req.cookies.Token),
-    error
+    error,
   });
   error = {
     message: "",
@@ -70,7 +75,7 @@ exports.Result = async (req, res) => {
       lst: watches.data.articles,
       search: !!req.query.search,
       connect: await getFav(req.cookies.Token),
-      error: null
+      error: null,
     });
   } catch (err) {
     res.render("../views/pages/result", {
@@ -78,7 +83,7 @@ exports.Result = async (req, res) => {
       search: true,
       error: true,
       connect: await getFav(req.cookies.Token),
-      message : error
+      message: error,
     });
   }
 };
@@ -86,7 +91,7 @@ exports.Result = async (req, res) => {
 exports.Login = async (req, res) => {
   res.render("../views/pages/login", {
     error,
-    connect: await getFav(req.cookies.Token)
+    connect: await getFav(req.cookies.Token),
   });
   error = {
     message: "",
@@ -97,7 +102,7 @@ exports.Login = async (req, res) => {
 exports.CreateAccount = async (req, res) => {
   res.render("../views/pages/create-account", {
     error,
-    connect: await getFav(req.cookies.Token)
+    connect: await getFav(req.cookies.Token),
   });
   error = {
     message: "",
@@ -106,10 +111,13 @@ exports.CreateAccount = async (req, res) => {
 };
 
 exports.Marque = async (req, res) => {
+  const connect = await getFav(req.cookies.Token);
+
   try {
     const response = await axios.get(url + "/marque");
     res.render("../views/pages/marque", {
       marque: response.data.marque,
+      connect,
     });
   } catch (err) {
     error = {
@@ -147,14 +155,14 @@ exports.WatchDetail = async (req, res) => {
     res.redirect("/error500");
     return;
   }
-  const like = await getFavId(req.cookies.Token, watchReq.data.article.Id)
-  const connect  =  await getFav(req.cookies.Token)
+  const like = await getFavId(req.cookies.Token, watchReq.data.article.Id);
+  const connect = await getFav(req.cookies.Token);
   res.render("../views/pages/detail", {
     watch: watchReq.data.article,
     color: colorReq.data.articlesId,
     similar: similarReq.data.articles,
     like,
-    connect
+    connect,
   });
 };
 
@@ -229,8 +237,7 @@ exports.SearchTreatment = (req, res) => {
 exports.forgotPasswordGet = async (req, res) => {
   res.render("../views/pages/forgotPassword", {
     send: null,
-    connect: await getFav(req.cookies.Token)
-
+    connect: await getFav(req.cookies.Token),
   });
 };
 
@@ -246,7 +253,7 @@ exports.forgotPasswordPost = async (req, res) => {
     });
     res.render("../views/pages/forgotPassword", {
       send: response.status === 200,
-      connect: await getFav(req.cookies.Token)
+      connect: await getFav(req.cookies.Token),
     });
   }
 };
@@ -326,12 +333,14 @@ exports.AjoutFav = async (req, res) => {
     "Content-Type": "application/json",
   };
   try {
-    (await getFavId(token, id)) ? await axios.delete(`${url}/fav/${id}`, { headers }) : await axios.get(`${url}/fav/${id}`, { headers });
+    (await getFavId(token, id))
+      ? await axios.delete(`${url}/fav/${id}`, { headers })
+      : await axios.get(`${url}/fav/${id}`, { headers });
   } catch (err) {
-    try{
+    try {
       error.message = err.response.data.message;
       error.status = err.response.data.status;
-    }catch (err){
+    } catch (err) {
       error = {
         message: "Probleme serveur",
         status: 500,
@@ -343,35 +352,39 @@ exports.AjoutFav = async (req, res) => {
   res.redirect(`back`);
 };
 
-exports.Logout = async (req, res) =>{
+exports.Logout = async (req, res) => {
   res.clearCookie("Token");
   res.redirect("/index");
 };
 
-exports.Payemenent = async (req, res) =>{
-  const {cb, date, cvc, price} = req.body;
+exports.Payemenent = async (req, res) => {
+  const { cb, date, cvc, price } = req.body;
   const card = {
     number: cb.replace(/\s/g, ""),
     expiration_date: date,
-    cvc
-  }
+    cvc,
+  };
   const payment_intent = {
-    price : parseInt(price)
-  }
-  try{
-    await axios.post("https://challenge-js.ynovaix.com/payment", {card, payment_intent}, {
-      headers: {
-        Authorization: "8285b5fe-484e-4d33-bc74-9040ca9b2b09",
-        "Content-Type": "application/json",
-      },
-    });
-    await axios.get(url+ "/commande")
-    res.render("../views/pages/kichta", {price});
-  }catch (err) {
-    console.log(err)
+    price: parseInt(price),
+  };
+  try {
+    await axios.post(
+      "https://challenge-js.ynovaix.com/payment",
+      { card, payment_intent },
+      {
+        headers: {
+          Authorization: "8285b5fe-484e-4d33-bc74-9040ca9b2b09",
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    await axios.get(url + "/commande");
+    res.render("../views/pages/kichta", { price });
+  } catch (err) {
+    console.log(err);
     error.message = err.response.data.message;
     error.status = err.response.data.status;
-    res.redirect("/basket")
+    res.redirect("/basket");
   }
 };
 

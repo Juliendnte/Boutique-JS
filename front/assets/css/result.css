@@ -143,7 +143,12 @@ html {
   gap: 3px;
 }
 
-.errorMessage{
+.errorMessage {
   color: #000000;
   margin-top: 30px;
+}
+
+.filtres {
+  width: 100vw;
+  height: 10vh;
 }
