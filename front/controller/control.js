@@ -16,6 +16,12 @@ exports.Index = async (req, res) => {
   });
 };
 
+exports.Confirm = async (req, res) => {
+  res.render("../views/pages/kichta", {
+    connect: await getFav(req.cookies.Token),
+  });
+};
+
 exports.MentionsLegales = async (req, res) => {
   res.render("../views/pages/mentions-legales", {
     connect: await getFav(req.cookies.Token),
@@ -258,10 +264,11 @@ exports.forgotPasswordPost = async (req, res) => {
   }
 };
 
-exports.resetPasswordGet = (req, res) => {
+exports.resetPasswordGet = async(req, res) => {
   const token = req.query.token;
   res.render("../views/pages/resetPassword", {
     token,
+    connect: await getFav(req.cookies.Token),
   });
 };
 

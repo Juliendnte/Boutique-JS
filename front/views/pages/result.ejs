@@ -16,9 +16,7 @@
       <%- include('../components/search-bar'); %>
     </div>
     <%if (error === null){%>
-      <div class="filtres">
-
-      </div>
+      
     <div class="item-ctn">
       <% lst.items.forEach(function (article) { %>
       <a class="watch" href="/detail?id=<%= article.Id%>">
@@ -28,6 +26,9 @@
         </div>
         <p class="model"><%= article.Model %></p>
         <p class="marque"><%= article.marqueLabel %></p>
+        <% if (article.Reduction){%>
+        <p class="reduction">Promo : -<%= article.Reduction %>%</p>
+        <%};%>
       </a>
       <%}); %>
     </div>
@@ -79,7 +80,7 @@
         <%}%>
     </div>
     <%}else {%>
-      <div class="item-ctn">
+      <div class="fail-ctn">
         <p class="errorMessage"><%= message%></p>
       </div>
     <%}%>

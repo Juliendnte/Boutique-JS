@@ -17,6 +17,8 @@ routeur.get("/resetPassword", controller.resetPasswordGet);
 routeur.post("/resetPassword/:token", controller.resetPasswordPost);
 routeur.get("/marque", controller.Marque);
 routeur.get("/user", controller.User);
+routeur.get("/confirmed", controller.Confirm);
+
 routeur.get("/ajoutFav/:id", controller.AjoutFav);
 routeur.get("/logOut", controller.Logout);
 routeur.post("/payement", controller.Payemenent);

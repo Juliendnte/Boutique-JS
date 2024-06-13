@@ -61,8 +61,13 @@
             <p class="text second"><%=watch.Ref%></p>
           </div>
           <br />
-          
-          <p class="text prix"><%=watch.Price%> €</p>
+          <%if(watch.Reduction === null){%>
+          <p class="text prix">Prix : <%=watch.Price%> €</p>
+          <%}else {%>
+            <p class="text prix">Promo : <%=watch.Reduction%> % </p><br>
+            <p class="text prix">Ancien prix : <s><%=watch.Price%> €</s></p>
+            <p class="text prix">Prix du moment : <%=(watch.Price *(100-watch.Reduction))/100%> €</p>
+          <%};%>
           <br />
           <div class="text-ctn">
             <p class="first" >Frabriquée en: </p>

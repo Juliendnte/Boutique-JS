@@ -1,11 +1,19 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
+  <head>
     <%- include('../components/head'); %>
     <title>Error <%=status%></title>
-</head>
-<body>
+    <link rel="stylesheet" href="/public/css/error.css" />
+  </head>
+  <body>
+    <img
+      src="/public/img/Horo Haven.png"
+      alt="Logo Horo Haven"
+    /><br /><br /><br />
     <p>Error <%=status%></p>
+    <br />
     <p><%=message%></p>
-</body>
+    <br /><br /><br />
+    <a href="/index"> Revenir à l'accueil </a>
+  </body>
 </html>

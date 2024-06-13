@@ -53,18 +53,7 @@ colors.forEach((color) => {
   color.addEventListener("click", ChangeSelected);
 });
 
-const favButton = document.querySelector(".favoris-btn");
 const imgFavoris = document.querySelector(".favoris-btn-img");
-
-favButton.addEventListener("click", () => {
-  if (favButton.classList[1] === "fav-selected") {
-    imgFavoris.src = "/public/img/fav.png";
-    favButton.classList.remove("fav-selected");
-  } else {
-    imgFavoris.src = "/public/img/fav-selected.png";
-    favButton.classList.add("fav-selected");
-  }
-});
 
 function ChangeSelected(e) {
   colors.forEach((color) => {

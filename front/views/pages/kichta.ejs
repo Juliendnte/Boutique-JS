@@ -2,16 +2,23 @@
 <html lang="fr">
   <head>
     <%- include('../components/head'); %>
-    <link rel="stylesheet" href="/public/css/favoris.css" />
+    <link rel="stylesheet" href="/public/css/error.css" />
     <link rel="stylesheet" href="/public/css/footer.css" />
     <title>Payement</title>
   </head>
   <body>
-    <p>Merci d'avoir payé <%=price%>€ mon salaud</p>
-    <a href="/index">Retour au bled</a>
+    <img
+      src="/public/img/Horo Haven.png"
+      alt="Logo Horo Haven"
+    /><br /><br /><br />
+    <p>Merci pour votre commande sur Horo Haven !</p>
+
+    <br /><br /><br />
+    <p>Votre numéro de commande est le #223</p>
+    <br /><br /><br />
+    <a href="/index"> Revenir à l'accueil </a>
     <script>
       localStorage.removeItem("panier");
     </script>
-    <%- include('../components/footer'); %>
   </body>
 </html>

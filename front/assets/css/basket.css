@@ -404,3 +404,8 @@ footer {
   font-size: 30px;
   color: black;
 }
+
+form a {
+  text-decoration: none;
+  font-family: var(--light );
+}

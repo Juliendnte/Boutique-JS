@@ -56,7 +56,8 @@ async function displayBasket() {
           <div class="infos-item">
             <p id="marque">${elem.marque}</p>
             <p>${elem.Model}</p>
-            <p>${elem.Price} €</p>
+            <p>${(elem.Price * (100 - elem.Reduction)) / 100} €</p>
+            
           </div>
           <div class="stock">
             <button class="${elem.Id} moins">-</button>
@@ -128,6 +129,7 @@ function elemSuppr(e) {
   let index = panier.findIndex((produit) => produit.id === parseInt(toRem));
   panier.splice(index, 1);
   localStorage.setItem("panier", JSON.stringify(panier));
+  displayBasket();
 }
 
 function trashElemSuppr(e) {
@@ -214,8 +216,10 @@ function detailCommande() {
       });
       let elemPrice = document.createElement("p");
       elemPrice.classList = "price to-pad";
-      elemPrice.innerText = `X${Nb} ${elem.Model} : ${elem.Price}€`;
-      totalValue += parseInt(elem.Price) * Nb;
+      elemPrice.innerText = `X${Nb} ${elem.Model} : ${
+        (elem.Price * (100 - elem.Reduction)) / 100
+      }€`;
+      totalValue += parseInt((elem.Price * (100 - elem.Reduction)) / 100) * Nb;
       detailCommande.appendChild(elemPrice);
     }
     input.value = totalValue;
