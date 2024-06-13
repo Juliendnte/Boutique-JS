@@ -2,13 +2,13 @@
 
 // Importation des modules
 const express = require("express");
-const app = express();
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const cookieParser = require('cookie-parser');
 const boutiqueRoutes = require("./routeur/routes");
 
 //Reglage du serveur
+const app = express();
 app.set("view engine", "ejs");
 app.use("/public/", express.static("assets"));
 app.use(bodyParser.json());

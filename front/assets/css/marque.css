@@ -26,8 +26,13 @@ section {
   color: var(--horo-blue);
   background-color: var(--cream);
   text-align: center;
+  transition: all 300ms ease-in-out;
 }
 
 .main a img {
   width: 100%;
+}
+
+.main a:hover{
+  scale: 1.1;
 }
