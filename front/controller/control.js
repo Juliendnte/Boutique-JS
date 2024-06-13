@@ -248,13 +248,20 @@ exports.forgotPasswordPost = async (req, res) => {
       send: false,
     });
   } else {
-    const response = await axios.post("http://localhost:4000/forgotPassword", {
-      email,
-    });
-    res.render("../views/pages/forgotPassword", {
-      send: response.status === 200,
-      connect: await getFav(req.cookies.Token),
-    });
+    try{
+      const response = await axios.post("http://localhost:4000/forgotPassword", {
+        email,
+      });
+      res.render("../views/pages/forgotPassword", {
+        send: response.status === 200,
+        connect: await getFav(req.cookies.Token),
+      });
+    }catch (err) {
+      res.render("../views/pages/forgotPassword", {
+        send: false,
+        connect: await getFav(req.cookies.Token),
+      });
+    }
   }
 };
 
@@ -373,7 +380,7 @@ exports.Payemenent = async (req, res) => {
       { card, payment_intent },
       {
         headers: {
-          Authorization: "8285b5fe-484e-4d33-bc74-9040ca9b2b09",
+          Authorization: "2f107ff8-9f12-4d22-92ec-cc2f553b67d3",
           "Content-Type": "application/json",
         },
       }
