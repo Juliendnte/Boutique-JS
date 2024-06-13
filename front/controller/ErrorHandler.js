@@ -58,3 +58,5 @@ class ErrorHandler {
         return this.error;
     }
 }
+
+module.exports = ErrorHandler;
