@@ -20,7 +20,7 @@ routeur.get("/user", controller.User);
 routeur.get("/ajoutFav/:id", controller.AjoutFav);
 routeur.get("/logOut", controller.Logout);
 routeur.post("/payement", controller.Payemenent);
-routeur.get("/:blabla", controller.Error);
 routeur.get("/mentionslegales", controller.MentionsLegales);
+routeur.get("/:blabla", controller.Error);
 
 module.exports = routeur;
