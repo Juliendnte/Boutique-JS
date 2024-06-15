@@ -1,19 +1,18 @@
-const connection = require("../config/authBDD")
-const {resolve} = require("path");
-const {reject} = require("nodemailer/.ncurc");
+const connection = require("../config/authBDD");
+const { resolve } = require("path");
+const { reject } = require("nodemailer/.ncurc");
 //Pour se connecter a la base de données
 
-class ArticleModel{
+class ArticleModel {
+  total = 0;
 
-    total = 0;
-
-    static getArticleById(id){
-        /*
+  static getArticleById(id) {
+    /*
          Les promesses permettent un chaînage fluide, une gestion centralisée des erreurs, et sont compatibles avec la syntaxe async/await.
          Cela conduit à un code plus propre, plus lisible et plus maintenable.
          */
-        return new Promise((resolve, reject) => {
-            const sql = `SELECT
+    return new Promise((resolve, reject) => {
+      const sql = `SELECT
                                      a.Id,
                                      a.Description,
                                      marque.Label AS marque,
@@ -42,20 +41,24 @@ class ArticleModel{
                                     LEFT JOIN bracelet ON a.Id_Bracelet = bracelet.Id
                                     LEFT JOIN color_bracelet ON a.Id_Color_Bracelet = color_bracelet.Id
                                 WHERE 
-                                    a.Id=?`//Le ? sert a contrer l'injection SQL
-            //[id] va remplacert le ? s'il y a plus que un ? il va remplacer dans l'ordre des variables dans cette liste
-            connection.query(sql,[id], (err, results)=> err ? reject(err) : resolve(results[0]));
-        });
-    }
+                                    a.Id=?`; //Le ? sert a contrer l'injection SQL
+      //[id] va remplacert le ? s'il y a plus que un ? il va remplacer dans l'ordre des variables dans cette liste
+      connection.query(sql, [id], (err, results) =>
+        err ? reject(err) : resolve(results[0])
+      );
+    });
+  }
 
-    static getAllArticle(query) {
-        return new Promise(async (resolve, reject) => {
-            // Requête SQL de base pour récupérer tous les articles avec la première image
-            let sql = `
+  static getAllArticle(query) {
+    return new Promise(async (resolve, reject) => {
+      // Requête SQL de base pour récupérer tous les articles avec la première image
+      let sql = `
                 SELECT
                     a.Id,
                     marque.Label AS marqueLabel,
                     a.Model,
+                    color.Label AS color,
+                    matiere.Label AS matiere,
                     a.Availability,
                     a.Price,
                     a.Reduction,
@@ -71,74 +74,96 @@ class ArticleModel{
                     LEFT JOIN color_bracelet ON a.Id_Color_Bracelet = color_bracelet.Id
             `;
 
-            const values = [];
-            let whereClauses = [];
-            let limitClause = "";
-            let offsetClause = "";
+      const values = [];
+      let whereClauses = [];
+      let limitClause = "";
+      let offsetClause = "";
 
-            // Construire les clauses WHERE, LIMIT et OFFSET
-            Object.entries(query).forEach(([key, value]) => {
-                if (key.toLowerCase() === "limit") {
-                    limitClause = ` LIMIT ?`;
-                    values.push(parseInt(value));
-                } else if (key.toLowerCase() === "offset") {
-                    offsetClause = ` OFFSET ?`;
-                    values.push(parseInt(value));
-                } else {
-                    const valuesArray = value.split(',');
-                    const placeholders = valuesArray.map(() => '?').join(',');
-                    whereClauses.push(valuesArray.length > 1 ? `${key} IN (${placeholders})` : `${key} = ?`);
-                    values.push(...valuesArray);
-                }
-            });
+      // Construire les clauses WHERE, LIMIT et OFFSET
+      Object.entries(query).forEach(([key, value]) => {
+        if (key.toLowerCase() === "limit") {
+          limitClause = ` LIMIT ?`;
+          values.push(parseInt(value));
+        } else if (key.toLowerCase() === "offset") {
+          offsetClause = ` OFFSET ?`;
+          values.push(parseInt(value));
+        } else {
+          const valuesArray = value.split(",");
+          const placeholders = valuesArray.map(() => "?").join(",");
+          whereClauses.push(
+            valuesArray.length > 1
+              ? `${key} IN (${placeholders})`
+              : `${key} = ?`
+          );
+          values.push(...valuesArray);
+        }
+      });
 
-            // Ajouter les clauses WHERE à la requête SQL
-            if (whereClauses.length > 0) {
-                sql += ' WHERE ' + whereClauses.join(' AND ');
-            }
+      // Ajouter les clauses WHERE à la requête SQL
+      if (whereClauses.length > 0) {
+        sql += " WHERE " + whereClauses.join(" AND ");
+      }
 
-            // Utilise la même requête sans limit ni offset
-            this.total = (await this.getTotal(sql, values.slice(0, values.length - (limitClause ? 1 : 0) - (offsetClause ? 1 : 0)))).total;
+      // Utilise la même requête sans limit ni offset
+      this.total = (
+        await this.getTotal(
+          sql,
+          values.slice(
+            0,
+            values.length - (limitClause ? 1 : 0) - (offsetClause ? 1 : 0)
+          )
+        )
+      ).total;
 
-            // Ajouter limit et offset à la requête principale
-            sql += limitClause + offsetClause;
+      // Ajouter limit et offset à la requête principale
+      sql += limitClause + offsetClause;
 
-            // Exécuter la requête avec les valeurs
-            connection.query(sql, values, (err, results) => err ? reject(err) : resolve(results));
-        });
-    }
+      // Exécuter la requête avec les valeurs
+      connection.query(sql, values, (err, results) =>
+        err ? reject(err) : resolve(results)
+      );
+    });
+  }
 
-    static updatePatchArticle(id, updateArticle){
-        return new Promise((resolve, reject) => {
-            let sql = `UPDATE article SET `;
-            const values = [];
+  static updatePatchArticle(id, updateArticle) {
+    return new Promise((resolve, reject) => {
+      let sql = `UPDATE article SET `;
+      const values = [];
 
-            /*
+      /*
             entries est l'objet en liste de liste
             [
                 ["Name","Julien],
                 ["Project","Boutique"]
             ]
              */
-            Object.entries(updateArticle).forEach(([key, value], index, entries) => {
-                sql += `${key}=?`;
-                values.push(value);
-                if (index < entries.length - 1) {
-                    sql += `, `;
-                }
-            });
-            sql += ` WHERE id=?`;
-            values.push(id);
+      Object.entries(updateArticle).forEach(([key, value], index, entries) => {
+        sql += `${key}=?`;
+        values.push(value);
+        if (index < entries.length - 1) {
+          sql += `, `;
+        }
+      });
+      sql += ` WHERE id=?`;
+      values.push(id);
 
-            connection.query(sql, values, (err, results) => err ? reject(err) : resolve(results[0]));
-        });
-    }
+      connection.query(sql, values, (err, results) =>
+        err ? reject(err) : resolve(results[0])
+      );
+    });
+  }
 
-    static search(query){
-        return new Promise(async (resolve,reject)=>{
-            const searchParam = `%${query.search}%`;
-            let values = [searchParam, searchParam, searchParam, query.limit, query.offset]
-            let sql = `
+  static search(query) {
+    return new Promise(async (resolve, reject) => {
+      const searchParam = `%${query.search}%`;
+      let values = [
+        searchParam,
+        searchParam,
+        searchParam,
+        query.limit,
+        query.offset,
+      ];
+      let sql = `
                         SELECT
                             a.Id,
                             marque.Label AS marqueLabel,
@@ -158,16 +183,20 @@ class ArticleModel{
                            LEFT JOIN color_bracelet ON a.Id_Color_Bracelet = color_bracelet.Id  
                         WHERE
                            (marque.Label LIKE ? OR a.Model LIKE ? OR a.Ref LIKE ?)`;
-            this.total = (await this.getTotal(sql, values.slice(0, values.length - 2))).total;
-            sql += " LIMIT ? OFFSET ? "
+      this.total = (
+        await this.getTotal(sql, values.slice(0, values.length - 2))
+      ).total;
+      sql += " LIMIT ? OFFSET ? ";
 
-            connection.query(sql,values,(err,results)=> err ? reject(err) : resolve(results));
-        });
-    }
+      connection.query(sql, values, (err, results) =>
+        err ? reject(err) : resolve(results)
+      );
+    });
+  }
 
-    static getAllFav(id){
-        return new Promise((resolve,reject)=>{
-            const sql = ` SELECT
+  static getAllFav(id) {
+    return new Promise((resolve, reject) => {
+      const sql = ` SELECT
                               a.Id,
                               marque.Label AS marqueLabel,
                               a.Model,
@@ -185,62 +214,76 @@ class ArticleModel{
                                   LEFT JOIN movement ON a.Id_Movement = movement.Id
                                   LEFT JOIN bracelet ON a.Id_Bracelet = bracelet.Id
                                   LEFT JOIN color_bracelet ON a.Id_Color_Bracelet = color_bracelet.Id
-                                                   WHERE f.Id_user = ?;`
-            connection.query(sql, id, (err, results)=> err ? reject(err) : resolve(results));
-        })
-    }
+                                                   WHERE f.Id_user = ?;`;
+      connection.query(sql, id, (err, results) =>
+        err ? reject(err) : resolve(results)
+      );
+    });
+  }
 
-    static getAllCommande(id){
-        return new Promise((resolve,reject)=>{
-            const sql = `SELECT a.* FROM commande c JOIN article a ON c.Id_article = a.Id WHERE c.Id_user = ?;`
-            connection.query(sql, id, (err, results)=> err ? reject(err) : resolve(results));
-        })
-    }
+  static getAllCommande(id) {
+    return new Promise((resolve, reject) => {
+      const sql = `SELECT a.* FROM commande c JOIN article a ON c.Id_article = a.Id WHERE c.Id_user = ?;`;
+      connection.query(sql, id, (err, results) =>
+        err ? reject(err) : resolve(results)
+      );
+    });
+  }
 
-    static postFav(userId, articleId){
-        return new Promise((resolve, reject) => {
-            const sql = `INSERT INTO favoris (Id_user, Id_article) VALUES(?,?)`;
-            connection.query(sql,[userId, articleId],(err,results)=> err ? reject(err) : resolve(results[0]));
-        })
-    }
+  static postFav(userId, articleId) {
+    return new Promise((resolve, reject) => {
+      const sql = `INSERT INTO favoris (Id_user, Id_article) VALUES(?,?)`;
+      connection.query(sql, [userId, articleId], (err, results) =>
+        err ? reject(err) : resolve(results[0])
+      );
+    });
+  }
 
-    static postCommande(userId, articleId){
-        return new Promise((resolve, reject) => {
-            const sql = `INSERT INTO commande (Id_user,Id_article) VALUES(?,?)`;
-            connection.query(sql, [userId, articleId],(err,results)=> err ? reject(err) : resolve(results[0]));
-        })
-    }
+  static postCommande(userId, articleId) {
+    return new Promise((resolve, reject) => {
+      const sql = `INSERT INTO commande (Id_user,Id_article) VALUES(?,?)`;
+      connection.query(sql, [userId, articleId], (err, results) =>
+        err ? reject(err) : resolve(results[0])
+      );
+    });
+  }
 
-    static deleteFav(userID, articleId){
-        return new Promise((resolve, reject) => {
-            const sql = `DELETE FROM favoris WHERE Id_user=? AND Id_article=?`;
+  static deleteFav(userID, articleId) {
+    return new Promise((resolve, reject) => {
+      const sql = `DELETE FROM favoris WHERE Id_user=? AND Id_article=?`;
 
-            connection.query(sql, [userID,articleId], (err, results)=> err ? reject(err) : resolve(results[0]));
-        })
-    }
+      connection.query(sql, [userID, articleId], (err, results) =>
+        err ? reject(err) : resolve(results[0])
+      );
+    });
+  }
 
-    static getImages(id, test= false){
-        return new Promise((resolve, reject) => {
-            //Je selectionne l'url de la photo , je suis positionné dans la article, je fait une jointure entre l'Id de mon article et l'id article de ma photo,
-            //Quand l'id de l'article est égale a la valeur envoyé
-            let sql = `SELECT photo.URL FROM article LEFT JOIN photo ON article.Id = photo.Id_Article WHERE article.Id = ?`;
-            if (test){
-                sql += " LIMIT 2 OFFSET 0"
-            }
-            connection.query(sql, id, (err, results)=> err ? reject(err) : resolve(results));
-        });
-    }
+  static getImages(id, test = false) {
+    return new Promise((resolve, reject) => {
+      //Je selectionne l'url de la photo , je suis positionné dans la article, je fait une jointure entre l'Id de mon article et l'id article de ma photo,
+      //Quand l'id de l'article est égale a la valeur envoyé
+      let sql = `SELECT photo.URL FROM article LEFT JOIN photo ON article.Id = photo.Id_Article WHERE article.Id = ?`;
+      if (test) {
+        sql += " LIMIT 2 OFFSET 0";
+      }
+      connection.query(sql, id, (err, results) =>
+        err ? reject(err) : resolve(results)
+      );
+    });
+  }
 
-    static getTotal(sql, values) {
-        return new Promise((resolve, reject) => {
-            const countSql = `SELECT COUNT(*) AS total FROM (${sql}) AS subquery`;
-            connection.query(countSql, values, (err, results) => err ? reject(err) : resolve(results[0]));
-        });
-    }
+  static getTotal(sql, values) {
+    return new Promise((resolve, reject) => {
+      const countSql = `SELECT COUNT(*) AS total FROM (${sql}) AS subquery`;
+      connection.query(countSql, values, (err, results) =>
+        err ? reject(err) : resolve(results[0])
+      );
+    });
+  }
 
-    static getArticleSimilaire(id,limit) {
-        return new Promise((resolve, reject) => {
-            const sql = `
+  static getArticleSimilaire(id, limit) {
+    return new Promise((resolve, reject) => {
+      const sql = `
                             SELECT
                                 a.Id,
                                 marque.Label AS marqueLabel,
@@ -267,14 +310,16 @@ class ArticleModel{
                             WHERE b.Id = ?
                             ORDER BY similarity_score DESC
                             LIMIT ?`;
-            connection.query(sql, [id, limit], (err, results) => err ? reject(err) : resolve(results));
-        });
-    }
+      connection.query(sql, [id, limit], (err, results) =>
+        err ? reject(err) : resolve(results)
+      );
+    });
+  }
 
-    static getArticlesColor(path){
-        return new Promise((resolve, reject) => {
-            path += "%";
-            const sql = `
+  static getArticlesColor(path) {
+    return new Promise((resolve, reject) => {
+      path += "%";
+      const sql = `
                 WITH RankedPhotos AS (
                     SELECT
                         p.Id_Article,
@@ -293,21 +338,25 @@ class ArticleModel{
                 WHERE
                     rn = 1;
 
-            `
-            connection.query(sql,path,(err, results)=> err ? reject(err) : resolve(results));
-        })
-    }
+            `;
+      connection.query(sql, path, (err, results) =>
+        err ? reject(err) : resolve(results)
+      );
+    });
+  }
 
-    static getMarque(){
-        return new Promise((resolve, reject) => {
-            const sql = `SELECT Label FROM marque`
-            connection.query(sql, (err, results)=> err ? reject(err) : resolve(results));
-        });
-    }
+  static getMarque() {
+    return new Promise((resolve, reject) => {
+      const sql = `SELECT Label FROM marque`;
+      connection.query(sql, (err, results) =>
+        err ? reject(err) : resolve(results)
+      );
+    });
+  }
 
-    static getArticlesListId(list){
-        return new Promise((resolve, reject) => {
-            let sql = `
+  static getArticlesListId(list) {
+    return new Promise((resolve, reject) => {
+      let sql = `
                         SELECT        
                             a.Id,
                             a.Description,
@@ -336,13 +385,15 @@ class ArticleModel{
                             LEFT JOIN movement ON a.Id_Movement = movement.Id
                             LEFT JOIN bracelet ON a.Id_Bracelet = bracelet.Id
                             LEFT JOIN color_bracelet ON a.Id_Color_Bracelet = color_bracelet.Id 
-                        WHERE a.Id = ? `
-            for (let i = 1; i < list.length; i++) {
-                sql += " OR a.Id = ?";
-            }
-            connection.query(sql, list, (err, results)=> err ? reject(err) : resolve(results));
-        })
-    }
+                        WHERE a.Id = ? `;
+      for (let i = 1; i < list.length; i++) {
+        sql += " OR a.Id = ?";
+      }
+      connection.query(sql, list, (err, results) =>
+        err ? reject(err) : resolve(results)
+      );
+    });
+  }
 }
 
 module.exports = ArticleModel;

@@ -16,8 +16,70 @@
       <%- include('../components/search-bar'); %>
     </div>
     <%if (error === null){%>
-      
+
+
+    <form class="filtres" action="/filtres" method="post">
+      <div class="color-filter">
+        <button class="color-btn" type="button">
+          Couleurs
+        </button>
+        <div class="color-ctn">
+          <label><input type="checkbox" value="Argent" name="color[]"> Argent</label>
+            <label><input type="checkbox" value="Blanc" name="color[]"> Blanc</label>
+            <label><input type="checkbox" value="Bleu"name="color[]"> Bleu</label>
+            <label><input type="checkbox" value="Champagne"name="color[]"> Champagne</label>
+            <label><input type="checkbox" value="Diamant"name="color[]"> Diamant</label>
+            <label><input type="checkbox" value="Gris"name="color[]"> Gris</label> 
+            <label><input type="checkbox" value="Ivoire"name="color[]"> Ivoire</label>
+            <label><input type="checkbox" value="Marron"name="color[]"> Marron</label>
+            <label><input type="checkbox" value="Multi-color"name="color[]"> Multi-color</label>
+            <label><input type="checkbox" value="Noir"name="color[]"> Noir</label>
+            <label><input type="checkbox" value="Or jaune"name="color[]"> Or jaune</label>
+            <label><input type="checkbox" value="Rose"name="color[]"> Rose</label>
+            <label><input type="checkbox" value="Squelette"name="color[]"> Squelette</label>
+            <label><input type="checkbox" value="Transparent"name="color[]"> Transparent</label>
+        </div>
+      </div>
+
+      <div class="matiere-filter">
+        <button class="matiere-btn" type="button">
+          Matiere
+        </button>
+        <div class="matiere-ctn">
+          <label><input type="checkbox" value="Or blanc"name="matiere[]"> Or blanc</label>
+            <label><input type="checkbox" value="Or jaune"name="matiere[]"> Or jaune</label>
+            <label><input type="checkbox" value="Or rose"name="matiere[]"> Or rose</label>
+            <label><input type="checkbox" value="Platine"name="matiere[]"> Platine</label>
+            <label><input type="checkbox" value="Acier inoxydable"name="matiere[]"> Acier inoxydable</label>
+            <label><input type="checkbox" value="Titane"name="matiere[]"> Titane</label>
+            <label><input type="checkbox" value="Tantale" name="matiere[]"> Tantale</label>
+            <label><input type="checkbox" value="Aluminium"name="matiere[]"> Aluminium</label>
+            <label><input type="checkbox" value="Céramique"name="matiere[]"> Céramique</label>
+        </div>
+      </div>
+
+      <div class="marque-filter">
+        <button class="marque-btn" type="button">
+          Marque
+        </button>
+        <div class="marque-ctn">
+          <label><input type="checkbox" value="A. Lange & Sohne"name="marque[]"> A. Lange & Sohne</label>
+            <label><input type="checkbox" value="Audemars Piguet"name="marque[]"> Audemars Piguet</label>
+            <label><input type="checkbox" value="Breitling"name="marque[]"> Breitling</label>
+            <label><input type="checkbox" value="F.P. Journe"name="marque[]"> F.P. Journe</label>
+            <label><input type="checkbox" value="H. Moser & Cie."name="marque[]"> H. Moser & Cie.</label>
+            <label><input type="checkbox" value="Omega" name="marque[]"> Omega</label>
+            <label><input type="checkbox" value="Patek Philippe"name="marque[]"> Patek Philippe</label>
+            <label><input type="checkbox" value="Vacheron Constantin"name="marque[]"> Vacheron Constantin</label>
+        </div>
+      </div>
+
+      <button id="confirm" type="submit">Confirmer</button>
+    </form>
+
+
     <div class="item-ctn">
+      <%if(lst.items != null){%>
       <% lst.items.forEach(function (article) { %>
       <a class="watch" href="/detail?id=<%= article.Id%>">
         <div class="img-ctn">
@@ -31,7 +93,12 @@
         <%};%>
       </a>
       <%}); %>
+      <%}else if(lst.items === null){ %>
+        <p class="search-null">Aucun article ne correspond à votre recherche</p>
+      <%}; %>
     </div>
+
+
     <div class="pagination">
       <% if (lst.previous !== null) {%>
         <a href="/result?previous=<%= lst.previous %>" class="page">Previous</a>
@@ -88,5 +155,6 @@
 
   </body>
   <script src="/public/js/script2.js"></script>
+  <script src="/public/js/filtres.js"></script>
 </html>
 

@@ -46,7 +46,7 @@ exports.MentionsLegales = async (req, res) => {
 exports.Basket = async (req, res) => {
   res.render("../views/pages/basket", {
     connect: await getFav(req.cookies.Token),
-    error : errorHandler.getError(),
+    error: errorHandler.getError(),
   });
   errorHandler.resetError();
 };
@@ -62,8 +62,8 @@ exports.Result = async (req, res) => {
   try {
     watches = await fetchWatches(req.query);
   } catch (err) {
-    if (!err.response){
-      errorHandler.handleServerError()
+    if (!err.response) {
+      errorHandler.handleServerError();
       return res.redirect("/error500");
     }
   }
@@ -76,7 +76,10 @@ exports.Result = async (req, res) => {
       error: null,
     });
   } catch (err) {
-    errorHandler.setError(`Aucune montre trouvé pour la recherche ${req.query.search}`,404)
+    errorHandler.setError(
+      `Aucune montre trouvé pour la recherche ${req.query.search}`,
+      404
+    );
     res.render("../views/pages/result", {
       lst: null,
       search: true,
@@ -119,7 +122,7 @@ exports.WatchDetail = async (req, res) => {
     const [watchReq, colorReq, similarReq] = await Promise.all([
       axios.get(`${url}/article/${id}`),
       axios.get(`${url}/color/${id}`),
-      axios.get(`${url}/similar/${id}`)
+      axios.get(`${url}/similar/${id}`),
     ]);
 
     const like = await getFavId(req.cookies.Token, watchReq.data.article.Id);
@@ -176,9 +179,16 @@ exports.LoginTreatment = async (req, res) => {
     return res.redirect("/login");
   }
 
-  const { username, email } = isValidEmail(name) ? { email: name } : { username: name };
+  const { username, email } = isValidEmail(name)
+    ? { email: name }
+    : { username: name };
   try {
-    const response = await axios.post(`${url}/login`, {username, password, email, remember});
+    const response = await axios.post(`${url}/login`, {
+      username,
+      password,
+      email,
+      remember,
+    });
 
     if (response.status === 200) {
       res.cookie("Token", response.data.Token, {
@@ -206,7 +216,11 @@ exports.RegisterTreatment = async (req, res) => {
   const { username, password, email } = req.body;
 
   try {
-    const response = await axios.post(`${url}/register`, { username, password, email });
+    const response = await axios.post(`${url}/register`, {
+      username,
+      password,
+      email,
+    });
     if (response.data.status === 201) {
       return res.redirect("/Index");
     } else {
@@ -240,17 +254,17 @@ exports.forgotPasswordPost = async (req, res) => {
   if (!isValidEmail(email)) {
     return res.render("../views/pages/forgotPassword", { send: false });
   }
-  const connect= await getFav(req.cookies.Token)
+  const connect = await getFav(req.cookies.Token);
   try {
     const response = await axios.post(`${url}/forgotPassword`, { email });
     res.render("../views/pages/forgotPassword", {
       send: response.status === 200,
-      connect
+      connect,
     });
   } catch (err) {
     res.render("../views/pages/forgotPassword", {
       send: false,
-      connect
+      connect,
     });
   }
 };
@@ -262,7 +276,7 @@ exports.forgotPasswordPost = async (req, res) => {
  */
 exports.resetPasswordGet = async (req, res) => {
   res.render("../views/pages/resetPassword", {
-    token : req.query.token ,
+    token: req.query.token,
     connect: await getFav(req.cookies.Token),
   });
 };
@@ -277,12 +291,11 @@ exports.resetPasswordPost = async (req, res) => {
   const { password } = req.body;
 
   try {
-    await axios.post(`${url}/resetPassword`, { password },
-        {headers:
-              { Authorization: token,
-                "Content-Type": "application/json"
-              }
-        });
+    await axios.post(
+      `${url}/resetPassword`,
+      { password },
+      { headers: { Authorization: token, "Content-Type": "application/json" } }
+    );
     res.redirect("/Index");
   } catch (err) {
     errorHandler.handleRequestError(err);
@@ -299,8 +312,12 @@ exports.User = async (req, res) => {
   const token = req.cookies.Token;
   try {
     const [user, commande, fav] = await Promise.all([
-      axios.get(`${url}/user`, { headers: { Authorization: token, "Content-Type": "application/json" } }),
-      axios.get(`${url}/commande`, { headers: { Authorization: token, "Content-Type": "application/json" } }),
+      axios.get(`${url}/user`, {
+        headers: { Authorization: token, "Content-Type": "application/json" },
+      }),
+      axios.get(`${url}/commande`, {
+        headers: { Authorization: token, "Content-Type": "application/json" },
+      }),
       getFav(token),
     ]);
 
@@ -328,12 +345,9 @@ exports.AjoutFav = async (req, res) => {
 
   try {
     const isFav = await getFavId(token, id);
-    await (
-        isFav
-        ? axios.delete(`${url}/fav/${id}`, { headers })
-        : axios.get(`${url}/fav/${id}`, { headers })
-    )
-
+    await (isFav
+      ? axios.delete(`${url}/fav/${id}`, { headers })
+      : axios.get(`${url}/fav/${id}`, { headers }));
   } catch (err) {
     errorHandler.handleRequestError(err);
     res.redirect("/error500");
@@ -378,12 +392,16 @@ exports.Payemenent = async (req, res) => {
     price: parseInt(price),
   };
   try {
-    await axios.post("https://challenge-js.ynovaix.com/payment", { card, payment_intent },
-        { headers:
-              { Authorization: "2f107ff8-9f12-4d22-92ec-cc2f553b67d3",
-                "Content-Type": "application/json"
-              }
-        });
+    await axios.post(
+      "https://challenge-js.ynovaix.com/payment",
+      { card, payment_intent },
+      {
+        headers: {
+          Authorization: "2f107ff8-9f12-4d22-92ec-cc2f553b67d3",
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     res.render("../views/pages/kichta", { price });
   } catch (err) {
@@ -399,7 +417,10 @@ exports.Payemenent = async (req, res) => {
  */
 exports.Error = (req, res) => {
   const error = errorHandler.getError();
-  errorHandler.setError(error.message || "Nous n'avons pas trouvé la page que vous cherchez", error.status || 404)
+  errorHandler.setError(
+    error.message || "Nous n'avons pas trouvé la page que vous cherchez",
+    error.status || 404
+  );
   res.render("../views/pages/error", error);
   errorHandler.resetError();
 };
@@ -415,14 +436,14 @@ async function getFavId(token, id) {
     const response = await axios.get(`${url}/fav`, {
       headers: {
         Authorization: token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
-    return response.data.Favoris.some(fav => fav.Id == id);
+    return response.data.Favoris.some((fav) => fav.Id == id);
   } catch (e) {
     try {
       return e.response.data.status ? false : null;
-    }catch {
+    } catch {
       return null;
     }
   }
@@ -438,13 +459,13 @@ async function getFav(token) {
     return await axios.get(`${url}/fav`, {
       headers: {
         Authorization: token,
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     });
   } catch (e) {
     try {
       return e.response.data.status ? false : null;
-    }catch {
+    } catch {
       return null;
     }
   }
@@ -466,7 +487,8 @@ function isValidEmail(email) {
  * @returns {Promise<axios.AxiosResponse<any>|null>} The response from the server.
  */
 async function fetchWatches(query) {
-  const baseUrl = url + (query.search ? `/search?search=${query.search}` : "/articles");
+  const baseUrl =
+    url + (query.search ? `/search?search=${query.search}` : "/articles");
   const offsetParam = `&offset=${query.offset || 0}`;
   const searchParam = query.search ? `&search=${query.search}` : "";
   try {
@@ -477,9 +499,78 @@ async function fetchWatches(query) {
     } else {
       return axios.get(baseUrl);
     }
-  }catch (e) {
-    return null
+  } catch (e) {
+    return null;
   }
 }
 
+exports.Filtres = async (req, res) => {
+  console.log(req.body);
+  let watches;
+  try {
+    watches = await getWatches();
+  } catch (err) {
+    if (!err.response) {
+      errorHandler.handleServerError();
+      return res.redirect("/error500");
+    }
+  }
 
+  let color = req.body.color || [];
+  let marque = req.body.marque || [];
+  let matiere = req.body.matiere || [];
+
+  let result = filterArticles(watches.articles.items, color, marque, matiere);
+  try {
+    res.render("../views/pages/result", {
+      lst: {
+        items: result,
+        other: "wé",
+      },
+      search: false,
+      connect: await getFav(req.cookies.Token),
+      error: null,
+    });
+  } catch (err) {
+    errorHandler.setError(
+      `Aucune montre trouvé pour la recherche ${req.query.search}`,
+      404
+    );
+    res.render("../views/pages/result", {
+      lst: {
+        items: null,
+        other: "wé",
+      },
+      search: true,
+      error: true,
+      connect: await getFav(req.cookies.Token),
+      message: errorHandler.getError().message,
+    });
+  }
+  errorHandler.resetError();
+};
+
+function filterArticles(articles, couleurs, marques, matieres) {
+  const filteredArticles = [];
+  for (let i = 0; i < articles.length; i++) {
+    const article = articles[i];
+    const couleurMatch =
+      couleurs.length === 0 || couleurs.includes(article.color);
+    const marqueMatch =
+      marques.length === 0 || marques.includes(article.marqueLabel);
+
+    const matiereMatch =
+      matieres.length === 0 || matieres.includes(article.matiere);
+
+    if (couleurMatch && marqueMatch && matiereMatch) {
+      filteredArticles.push(article);
+    }
+  }
+
+  return filteredArticles;
+}
+
+async function getWatches() {
+  const data = await fetch(`http://localhost:4000/articles?limit=120&offset=0`);
+  return data.json();
+}

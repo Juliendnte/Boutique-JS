@@ -76,6 +76,7 @@ async function displayBasket() {
     basketListCtn.innerHTML = `<p class="empty">Votre panier est vide</p>`;
     basketListCtn.classList.add("center");
   }
+
   updateNb();
 }
 
@@ -97,6 +98,7 @@ function basketIncrease(e) {
       localStorage.setItem("panier", JSON.stringify(panier));
     }
   });
+
   detailCommande();
 }
 
@@ -120,7 +122,7 @@ function basketDecrease(e) {
       }
     }
   });
-  displayBasket();
+  location.reload();
 }
 
 function elemSuppr(e) {
@@ -242,5 +244,3 @@ function updateNb() {
   let panier = JSON.parse(localStorage.getItem("panier"));
   nb.innerHTML = panier.length;
 }
-
-updateNb();

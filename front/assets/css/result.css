@@ -9,7 +9,7 @@ html {
     height: 70px;
   }
 
-  .item-ctn {
+  .filtres {
     margin-top: 70px;
   }
 
@@ -52,7 +52,17 @@ html {
   }
 }
 
-@media screen and (min-width: 1100px) {
+@media screen and (min-width: 1024px) {
+  .watch {
+    width: 260px;
+    height: 330px;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .filtres {
+    margin-top: 70px;
+  }
   .watch {
     width: 260px;
     height: 330px;
@@ -149,11 +159,6 @@ html {
   margin-top: 30px;
 }
 
-.filtres {
-  width: 100vw;
-  height: 10vh;
-}
-
 .reduction {
   font-size: 15px;
   font-family: var(--light);
@@ -171,4 +176,78 @@ html {
 .fail-ctn p {
   font-size: 20px;
   font-family: var(--bold);
+}
+
+.filtres {
+  width: 100vw;
+  height: 10vh;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.filtres label,
+#confirm {
+  color: black;
+  font-family: var(--light);
+}
+
+.filtres label {
+  padding: 0.2em 1em;
+}
+
+.color-btn,
+.matiere-btn,
+.marque-btn {
+  padding: 1em;
+  border-radius: 10px;
+  background-color: var(--horo-blue);
+}
+
+.color-btn:active,
+.matiere-btn:active,
+.marque-btn:active {
+  background-color: #2e3788;
+}
+
+.filtres label:hover {
+  background-color: #bababa;
+}
+
+.color-ctn,
+.matiere-ctn,
+.marque-ctn {
+  display: none;
+  background-color: white;
+  flex-direction: column;
+  position: absolute;
+  z-index: 3;
+  border: solid 1px black;
+}
+
+#confirm {
+  color: var(--cream);
+  background-color: rgb(0, 204, 255);
+  padding: 1em;
+  border-radius: 10px;
+  border: none;
+}
+
+#confirm:active {
+  background-color: rgb(165, 237, 255);
+}
+
+.visible {
+  display: flex;
+}
+
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-null {
+  color: black;
 }
