@@ -34,8 +34,6 @@ async function filterSearch() {
     selectedMarque,
     selectedMatiere
   );
-
-  console.log(result);
 }
 
 function filterArticles(articles, couleurs, marques, matieres) {

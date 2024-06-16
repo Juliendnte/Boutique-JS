@@ -227,15 +227,17 @@ html {
 }
 
 #confirm {
-  color: var(--cream);
-  background-color: rgb(0, 204, 255);
+  font-family: var(--bold);
+  color: var(--horo-blue);
+  background-color: var(--cream);
   padding: 1em;
   border-radius: 10px;
-  border: none;
+  border: 1px black solid;
 }
 
 #confirm:active {
-  background-color: rgb(165, 237, 255);
+  color: var(--cream);
+  background-color: var(--horo-blue);
 }
 
 .visible {
