@@ -1,6 +1,4 @@
-const connection = require("../config/authBDD");
-const { resolve } = require("path");
-const { reject } = require("nodemailer/.ncurc");
+const connection = require("../config/authBDD")
 //Pour se connecter a la base de données
 
 class ArticleModel {
@@ -221,14 +219,26 @@ class ArticleModel {
     });
   }
 
-  static getAllCommande(id) {
-    return new Promise((resolve, reject) => {
-      const sql = `SELECT a.* FROM commande c JOIN article a ON c.Id_article = a.Id WHERE c.Id_user = ?;`;
-      connection.query(sql, id, (err, results) =>
-        err ? reject(err) : resolve(results)
-      );
-    });
-  }
+    static getAllCommande(id){
+        return new Promise((resolve,reject)=>{
+            const sql = `
+                        SELECT
+                             a.Id,
+                             marque.Label AS marqueLabel,
+                             a.Model,
+                             a.Availability,
+                             a.Price,
+                             a.Reduction,
+                             a.Stock,
+                             c.Nb ,
+                             c.Current_date
+                        FROM commande c 
+                            JOIN article a ON c.Id_article = a.Id
+                            LEFT JOIN marque ON a.Id_Marque = marque.Id
+                        WHERE c.Id_user = ?;`
+            connection.query(sql, id, (err, results)=> err ? reject(err) : resolve(results));
+        })
+    }
 
   static postFav(userId, articleId) {
     return new Promise((resolve, reject) => {
@@ -239,38 +249,40 @@ class ArticleModel {
     });
   }
 
-  static postCommande(userId, articleId) {
-    return new Promise((resolve, reject) => {
-      const sql = `INSERT INTO commande (Id_user,Id_article) VALUES(?,?)`;
-      connection.query(sql, [userId, articleId], (err, results) =>
-        err ? reject(err) : resolve(results[0])
-      );
-    });
-  }
+    static postCommande(userId, articleId, nb){
+        return new Promise((resolve, reject) => {
+            const sql = `INSERT INTO commande (Id_user,Id_article, Nb) VALUES(?,?, ?)`;
+            connection.query(sql, [userId, articleId, nb],(err,results)=> err ? reject(err) : resolve(results[0]));
+        })
+    }
 
-  static deleteFav(userID, articleId) {
-    return new Promise((resolve, reject) => {
-      const sql = `DELETE FROM favoris WHERE Id_user=? AND Id_article=?`;
+    static deleteFav(userID, articleId){
+        return new Promise((resolve, reject) => {
+            const sql = `DELETE FROM favoris WHERE Id_user=? AND Id_article=?`;
 
-      connection.query(sql, [userID, articleId], (err, results) =>
-        err ? reject(err) : resolve(results[0])
-      );
-    });
-  }
+            connection.query(sql, [userID,articleId], (err, results)=> err ? reject(err) : resolve(results[0]));
+        })
+    }
 
-  static getImages(id, test = false) {
-    return new Promise((resolve, reject) => {
-      //Je selectionne l'url de la photo , je suis positionné dans la article, je fait une jointure entre l'Id de mon article et l'id article de ma photo,
-      //Quand l'id de l'article est égale a la valeur envoyé
-      let sql = `SELECT photo.URL FROM article LEFT JOIN photo ON article.Id = photo.Id_Article WHERE article.Id = ?`;
-      if (test) {
-        sql += " LIMIT 2 OFFSET 0";
-      }
-      connection.query(sql, id, (err, results) =>
-        err ? reject(err) : resolve(results)
-      );
-    });
-  }
+    static deleteCommande(userID, articleId){
+        return new Promise((resolve, reject) => {
+            const sql = `DELETE FROM commande WHERE Id_user=? AND Id_article=?`;
+
+            connection.query(sql, [userID,articleId], (err, results)=> err ? reject(err) : resolve(results[0]));
+        })
+    }
+
+    static getImages(id, test= false){
+        return new Promise((resolve, reject) => {
+            //Je selectionne l'url de la photo , je suis positionné dans la article, je fait une jointure entre l'Id de mon article et l'id article de ma photo,
+            //Quand l'id de l'article est égale a la valeur envoyé
+            let sql = `SELECT photo.URL FROM article LEFT JOIN photo ON article.Id = photo.Id_Article WHERE article.Id = ?`;
+            if (test){
+                sql += " LIMIT 2 OFFSET 0"
+            }
+            connection.query(sql, id, (err, results)=> err ? reject(err) : resolve(results));
+        });
+    }
 
   static getTotal(sql, values) {
     return new Promise((resolve, reject) => {
@@ -396,4 +408,4 @@ class ArticleModel {
   }
 }
 
-module.exports = ArticleModel;
+module.exports = {ArticleModel ,connection};

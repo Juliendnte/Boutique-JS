@@ -15,7 +15,7 @@ routeur.get("/fav",middleware.validateToken,controllerArticle.getFav)
 routeur.get("/fav/:id",[middleware.validateToken,middleware.articleExists], controllerArticle.addFav)
 routeur.delete("/fav/:id",[middleware.validateToken,middleware.articleExists], controllerArticle.deleteFav)
 routeur.get("/commande", middleware.validateToken, controllerArticle.getCommande)
-routeur.get("/commande/:id",[middleware.validateToken,middleware.articleExists],controllerArticle.postCommande);
+routeur.post("/commande",middleware.validateToken,controllerArticle.postCommande);
 routeur.get("/search",controllerArticle.searchArticles)
 routeur.get("/similar/:id", middleware.articleExists, controllerArticle.getArticleSimilar)
 routeur.get("/color/:id",middleware.articleExists, controllerArticle.getArticleColor);
