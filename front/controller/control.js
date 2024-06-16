@@ -422,7 +422,7 @@ exports.Payemenent = (req, res) => {
 
       res.render("../views/pages/kichta", {
         connect: await getFav(req.cookies.Token),
-        id : commande.data.Commande[0].Id
+        Id : commande.data.Commande[commande.data.Commande.length - 1].Id_Commande
       });
     } catch (err) {
       errorHandler.handleRequestError(err);

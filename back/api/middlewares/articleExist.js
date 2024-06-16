@@ -12,7 +12,7 @@ const articleExists = async (req, res, next) => {
   }
   try {
     const articleById = await article.ArticleModel.getArticleById(id); //Récupere la donnée a l'id envoyée
-    console.log(articleById)
+
     if (!articleById) {
       //S'il est vide error 404
       return res.status(404).json({

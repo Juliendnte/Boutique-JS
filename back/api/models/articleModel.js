@@ -231,7 +231,8 @@ class ArticleModel {
                              a.Reduction,
                              a.Stock,
                              c.Nb ,
-                             c.Current_date
+                             c.Current_date,
+                             c.Id_Commande
                         FROM commande c 
                             JOIN article a ON c.Id_article = a.Id
                             LEFT JOIN marque ON a.Id_Marque = marque.Id
