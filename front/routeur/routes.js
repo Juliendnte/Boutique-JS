@@ -20,6 +20,7 @@ routeur.get("/resetPassword", controller.resetPasswordGet);
 routeur.post("/resetPassword/:token", controller.resetPasswordPost);
 routeur.get("/logOut", controller.Logout);
 routeur.get("/ajoutFav/:id", controller.AjoutFav);
+routeur.post("/filtres", controller.Filtres);
 
 routeur.post("/search", controller.SearchTreatment);
 routeur.get("/confirmed", controller.Confirm);

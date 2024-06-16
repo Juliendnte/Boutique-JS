@@ -1,0 +1,22 @@
+* {
+  background-color: var(--horo-blue);
+}
+
+h1,
+h2 {
+  font-family: var(--bold);
+  padding: 1em;
+}
+
+p {
+  font-family: var(--light);
+  padding-left: 2em;
+}
+
+ul {
+  font-family: var(--light);
+  padding-left: 3em;
+}
+section {
+  padding: 5em;
+}
