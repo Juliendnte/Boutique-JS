@@ -321,6 +321,18 @@ exports.User = async (req, res) => {
       getFav(token),
     ]);
 
+    commande.data.Commande.forEach((elem) => {
+      newdate = new Date(elem.Current_date);
+      let options = {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      };
+
+      let formattedDate = newdate.toLocaleString("fr-FR", options);
+      elem.Current_date = formattedDate;
+    });
+
     res.render("../views/pages/user", {
       fav: fav.data ? fav.data.Favoris : null,
       commande: commande.data ? commande.data.Commande : null,
@@ -383,25 +395,27 @@ exports.SearchTreatment = (req, res) => {
  */
 exports.Payemenent = (req, res) => {
   setTimeout(async () => {
-    const {cb,date, cvc, price} = req.body;
-    const {Token, panier} = req.cookies;
+    const { cb, date, cvc, price } = req.body;
+    const { Token, panier } = req.cookies;
     const card = {
       number: cb.replace(/\s/g, ""),
       expiration_date: date,
-      cvc
+      cvc,
     };
     const payment_intent = {
       price: parseInt(price),
     };
     try {
-      await axios.post("https://challenge-js.ynovaix.com/payment", {card, payment_intent},
-          {
-            headers:
-                {
-                  Authorization: "2f107ff8-9f12-4d22-92ec-cc2f553b67d3",
-                  "Content-Type": "application/json"
-                }
-          });
+      await axios.post(
+        "https://challenge-js.ynovaix.com/payment",
+        { card, payment_intent },
+        {
+          headers: {
+            Authorization: "2f107ff8-9f12-4d22-92ec-cc2f553b67d3",
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       await axios.post(url + "/commande", {panier},{ headers: { Authorization: Token, "Content-Type": "application/json" } })
       const commande = await axios.get(`${url}/commande`, { headers: { Authorization: Token, "Content-Type": "application/json" } });
@@ -414,7 +428,7 @@ exports.Payemenent = (req, res) => {
       errorHandler.handleRequestError(err);
       res.redirect("/basket");
     }
-  },1000)
+  }, 1000);
 };
 
 /**
@@ -561,6 +575,139 @@ async function fetchWatches(query) {
   }
 }
 
+exports.Filtres = async (req, res) => {
+  let watches;
+  try {
+    watches = await getWatches();
+  } catch (err) {
+    if (!err.response) {
+      errorHandler.handleServerError();
+      return res.redirect("/error500");
+    }
+  }
+
+  let color = req.body.color || [];
+  let marque = req.body.marque || [];
+  let matiere = req.body.matiere || [];
+  let prix = req.body.prix || [];
+  let result = filterArticles(watches.articles.items, color, marque, matiere);
+  if (prix != null) {
+    result = trierParPrix(result, prix);
+  }
+  try {
+    if (result.length === 0){
+      throw new this.Error
+    }
+    res.render("../views/pages/result", {
+      lst: {
+        items: result
+      },
+      search: false,
+      connect: await getFav(req.cookies.Token),
+      error: null,
+    });
+  } catch (err) {
+    errorHandler.setError(
+      `Aucune montre trouvé pour votre recherche`,
+      404
+    );
+    res.render("../views/pages/result", {
+      lst: {
+        items: null
+      },
+      search: true,
+      error: true,
+      connect: await getFav(req.cookies.Token),
+      message: errorHandler.getError().message,
+    });
+  }
+  errorHandler.resetError();
+};
+
+exports.Reduction = async (req, res) => {
+  let watches;
+  try {
+    watches = await getWatches();
+  } catch (err) {
+    if (!err.response) {
+      errorHandler.handleServerError();
+      return res.redirect("/error500");
+    }
+  }
+
+  let prix = "reduction";
+  result = trierParPrix(watches.articles.items, prix);
+
+  try {
+    res.render("../views/pages/result", {
+      lst: {
+        items: result,
+        other: "wé",
+      },
+      search: false,
+      connect: await getFav(req.cookies.Token),
+      error: null,
+    });
+  } catch (err) {
+    errorHandler.setError(
+      `Aucune montre trouvé pour la recherche ${req.query.search}`,
+      404
+    );
+    res.render("../views/pages/result", {
+      lst: {
+        items: null,
+        other: "wé",
+      },
+      search: true,
+      error: true,
+      connect: await getFav(req.cookies.Token),
+      message: errorHandler.getError().message,
+    });
+  }
+  errorHandler.resetError();
+};
+
+exports.PetitsBudgets = async (req, res) => {
+  let watches;
+  try {
+    watches = await getWatches();
+  } catch (err) {
+    if (!err.response) {
+      errorHandler.handleServerError();
+      return res.redirect("/error500");
+    }
+  }
+
+  let prix = "croissant";
+  result = trierParPrix(watches.articles.items, prix);
+  result = result.slice(0, 18);
+  try {
+    res.render("../views/pages/result", {
+      lst: {
+        items: result
+      },
+      search: false,
+      connect: await getFav(req.cookies.Token),
+      error: null,
+    });
+  } catch (err) {
+    errorHandler.setError(
+      `Aucune montre trouvé pour la recherche ${req.query.search}`,
+      404
+    );
+    res.render("../views/pages/result", {
+      lst: {
+        items: null
+      },
+      search: true,
+      error: true,
+      connect: await getFav(req.cookies.Token),
+      message: errorHandler.getError().message,
+    });
+  }
+  errorHandler.resetError();
+};
+
 function filterArticles(articles, couleurs, marques, matieres) {
   const filteredArticles = [];
   articles.forEach((article)=>{
@@ -579,4 +726,19 @@ function filterArticles(articles, couleurs, marques, matieres) {
 async function getWatches() {
   const data = await fetch(`http://localhost:4000/articles?limit=120&offset=0`);
   return data.json();
+}
+
+function trierParPrix(montres, critere) {
+  const comparerCroissant = (a, b) => a.Price - b.Price;
+  const comparerDecroissant = (a, b) => b.Price - a.Price;
+
+  if (critere === "croissant") {
+    return montres.sort(comparerCroissant);
+  } else if (critere === "decroissant") {
+    return montres.sort(comparerDecroissant);
+  } else if (critere === "reduction") {
+    return montres.filter((montre) => montre.Reduction > 0);
+  } else {
+    return montres;
+  }
 }

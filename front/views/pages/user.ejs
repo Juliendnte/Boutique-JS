@@ -42,7 +42,19 @@
       <div class="historique-commande">
         <p class="to-pad">Historique des commandes</p>
         <div class="commande-ctn">
+          <% if (commande === null) {%>
           <p>Vous n'avez passer aucune commande</p>
+          <%} else {%> <% commande.forEach(function (article) { %>
+          <div class="elem-fav">
+            <img src="<%=article.Images[0]%>" class="img-item" />
+            <div class="text-ctn">
+              <p><%= article.Model %></p>
+              <p><%= article.marqueLabel %></p>
+              <p>Date : <%=article.Current_date%></p>
+            </div>
+            <p>X<%= article.Nb%></p>
+          </div>
+          <%})%> <%}%>
         </div>
       </div>
     </section>

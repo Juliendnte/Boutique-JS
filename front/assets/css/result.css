@@ -199,7 +199,8 @@ html {
 
 .color-btn,
 .matiere-btn,
-.marque-btn {
+.marque-btn,
+.price-btn {
   padding: 1em;
   border-radius: 10px;
   background-color: var(--horo-blue);
@@ -207,7 +208,8 @@ html {
 
 .color-btn:active,
 .matiere-btn:active,
-.marque-btn:active {
+.marque-btn:active,
+.price-btn:active {
   background-color: #2e3788;
 }
 
@@ -217,7 +219,8 @@ html {
 
 .color-ctn,
 .matiere-ctn,
-.marque-ctn {
+.marque-ctn,
+.price-ctn {
   display: none;
   background-color: white;
   flex-direction: column;
