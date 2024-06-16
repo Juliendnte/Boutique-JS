@@ -172,12 +172,12 @@ function removeActiveClass() {
 }
 
 function clickAdress(e) {
-  const [paragraphs, data,rue,ville, postcode] = [
-      e.querySelectorAll("p"),
-    Array.from(paragraphs).map((p) => p.textContent),
+  const [ data,rue,ville, postcode] = [
+    Array.from(e.querySelectorAll("p")).map((p) => p.textContent),
     document.querySelector("input[name=street]"),
-    document.querySelector("input[name=street]"),
+    document.querySelector("input[name=ville]"),
     document.querySelector("input[name=postcode]")];
+
   rue.value = data[0];
   ville.value = data[1];
   postcode.value = data[2];
