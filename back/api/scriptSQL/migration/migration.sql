@@ -156,7 +156,8 @@ CREATE TABLE IF NOT EXISTS `color_bracelet` (
 
 DROP TABLE IF EXISTS `commande`;
 CREATE TABLE IF NOT EXISTS `commande` (
-       `Id_Commande`int ,
+       `Id_Commande`int auto_increment ,
+       `Nb` int NOT NULL DEFAULT 1,
        `Id_user` int NOT NULL,
        `Id_article` int NOT NULL,
        `Current_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,

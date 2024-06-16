@@ -306,7 +306,7 @@ exports.User = async (req, res) => {
 
     res.render("../views/pages/user", {
       fav: fav.data ? fav.data.Favoris : null,
-      commande,
+      commande: commande.data ? commande.data.Commande : null,
       connect: fav,
       user: user.data,
     });
@@ -367,29 +367,35 @@ exports.SearchTreatment = (req, res) => {
  * @param {Object} req - The request object.
  * @param {Object} res - The response object.
  */
-exports.Payemenent = async (req, res) => {
-  const { cb, date, cvc, price } = req.body;
-  const card = {
-    number: cb.replace(/\s/g, ""),
-    expiration_date: date,
-    cvc,
-  };
-  const payment_intent = {
-    price: parseInt(price),
-  };
-  try {
-    await axios.post("https://challenge-js.ynovaix.com/payment", { card, payment_intent },
-        { headers:
-              { Authorization: "2f107ff8-9f12-4d22-92ec-cc2f553b67d3",
-                "Content-Type": "application/json"
-              }
-        });
+exports.Payemenent = (req, res) => {
+  setTimeout(async () => {
+    const {cb,date, cvc, price} = req.body;
+    const {Token, panier} = req.cookies;
+    const card = {
+      number: cb.replace(/\s/g, ""),
+      expiration_date: date,
+      cvc
+    };
+    const payment_intent = {
+      price: parseInt(price),
+    };
+    try {
+      await axios.post("https://challenge-js.ynovaix.com/payment", {card, payment_intent},
+          {
+            headers:
+                {
+                  Authorization: "2f107ff8-9f12-4d22-92ec-cc2f553b67d3",
+                  "Content-Type": "application/json"
+                }
+          });
 
-    res.render("../views/pages/kichta", { price });
-  } catch (err) {
-    errorHandler.handleRequestError(err);
-    res.redirect("/basket");
-  }
+      await axios.post(url + "/commande", {panier},{ headers: { Authorization: Token, "Content-Type": "application/json" } })
+      res.redirect("/confirmed");
+    } catch (err) {
+      errorHandler.handleRequestError(err);
+      res.redirect("/basket");
+    }
+  },1000)
 };
 
 /**

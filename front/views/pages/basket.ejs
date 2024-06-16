@@ -18,27 +18,17 @@
         <div class="articles" id="basket-ctn">
           <p>Articles</p>
         </div>
-        <form action="/payement" method="post" class="payement">
+        <form id="myForm" action="/payement" method="post" class="payement">
           <%if (connect !== null) {%>
           <p style="color: red; font-size: 30px"><%= error.message%></p>
           <p class="to-pad info-client">Informations client</p>
           <div class="nom-prenom to-pad">
             <div class="inputBox">
-              <input
-                name="premon"
-                placeholder="ex: Vincent"
-                type="text"
-                required
-              />
+              <input name="premon" placeholder="ex: Vincent" type="text" required/>
               <span>Nom</span>
             </div>
             <div class="inputBox">
-              <input
-                name="nom"
-                placeholder="ex: Franky"
-                type="text"
-                required=""
-              />
+              <input name="nom" placeholder="ex: Franky" type="text" required=""/>
               <span>Prenom</span>
             </div>
           </div>
@@ -46,63 +36,31 @@
 
           <div class="to-pad">
             <div class="inputBox street">
-              <input
-                name="street"
-                placeholder="ex: 11 bd du metro"
-                class="rue"
-                type="text"
-                required=""
-                onblur="removeActiveClass()"
-                oninput="AddresseStreet()"
-                onfocus="AddresseStreet()"
-              />
+              <input name="street" placeholder="ex: 11 bd du metro" class="rue" type="text" required="" onblur="removeActiveClass()" oninput="AddresseStreet()" onfocus="AddresseStreet()"/>
               <span>Rue</span>
               <div class="gros-truc"></div>
             </div>
           </div>
           <div class="ville-postal to-pad">
             <div class="inputBox">
-              <input
-                name="ville"
-                placeholder="ex: Ouapy"
-                type="text"
-                required=""
-              />
+              <input name="ville" placeholder="ex: Ouapy" type="text" required=""/>
               <span>Ville</span>
             </div>
             <div class="inputBox">
-              <input
-                name="postcode"
-                placeholder="ex: 13005"
-                type="text"
-                required=""
-              />
+              <input name="postcode" placeholder="ex: 13005" type="text" required=""/>
               <span>Code postal</span>
             </div>
           </div>
           <span class="separate to-pad"></span>
           <div class="to-pad">
             <div class="inputBox">
-              <input
-                name="cb"
-                placeholder="ex: 1418 3945 1109 0593"
-                class="carte-infos"
-                type="text"
-                required
-                oninput="insertSpace()"
-                maxlength="19"
-              />
+              <input name="cb" placeholder="ex: 1418 3945 1109 0593" class="carte-infos" type="text" required oninput="insertSpace()" maxlength="19"/>
               <span>Carte</span>
             </div>
           </div>
           <div class="exp-cvc to-pad">
             <div class="inputBox">
-              <input
-                name="date"
-                placeholder="ex: 11/09"
-                type="text"
-                required=""
-              />
+              <input name="date" placeholder="ex: 11/09" type="text" required=""/>
               <span>Date d'expiration</span>
             </div>
             <div class="inputBox">
@@ -115,9 +73,9 @@
           <div class="detail-commande-ctn"></div>
           <p class="price to-pad" id="total">Vous n'avez aucun article</p>
           <input hidden="hidden" name="price" />
-          <a class="acheter" href="/confirmed">
-            <div class="buy-btn">Payer</div>
-          </a>
+          <div class="acheter" >
+            <button type="submit" class="buy-btn">Payer</button>
+          </div>
           <%} else{%>
           <p class="to-pad info-client">Informations client</p>
           <div class="nom-prenom to-pad">
@@ -234,6 +192,7 @@
     </section>
     <%- include('../components/footer'); %>
   </body>
+  <script src="/public/js/payement.js"></script>
   <script src="/public/js/script2.js"></script>
   <script src="/public/js/basket.js"></script>
 </html>

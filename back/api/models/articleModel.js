@@ -1,6 +1,4 @@
 const connection = require("../config/authBDD")
-const {resolve} = require("path");
-const {reject} = require("nodemailer/.ncurc");
 //Pour se connecter a la base de données
 
 class ArticleModel{
@@ -192,7 +190,21 @@ class ArticleModel{
 
     static getAllCommande(id){
         return new Promise((resolve,reject)=>{
-            const sql = `SELECT a.* FROM commande c JOIN article a ON c.Id_article = a.Id WHERE c.Id_user = ?;`
+            const sql = `
+                        SELECT
+                             a.Id,
+                             marque.Label AS marqueLabel,
+                             a.Model,
+                             a.Availability,
+                             a.Price,
+                             a.Reduction,
+                             a.Stock,
+                             c.Nb ,
+                             c.Current_date
+                        FROM commande c 
+                            JOIN article a ON c.Id_article = a.Id
+                            LEFT JOIN marque ON a.Id_Marque = marque.Id
+                        WHERE c.Id_user = ?;`
             connection.query(sql, id, (err, results)=> err ? reject(err) : resolve(results));
         })
     }
@@ -204,16 +216,24 @@ class ArticleModel{
         })
     }
 
-    static postCommande(userId, articleId){
+    static postCommande(userId, articleId, nb){
         return new Promise((resolve, reject) => {
-            const sql = `INSERT INTO commande (Id_user,Id_article) VALUES(?,?)`;
-            connection.query(sql, [userId, articleId],(err,results)=> err ? reject(err) : resolve(results[0]));
+            const sql = `INSERT INTO commande (Id_user,Id_article, Nb) VALUES(?,?, ?)`;
+            connection.query(sql, [userId, articleId, nb],(err,results)=> err ? reject(err) : resolve(results[0]));
         })
     }
 
     static deleteFav(userID, articleId){
         return new Promise((resolve, reject) => {
             const sql = `DELETE FROM favoris WHERE Id_user=? AND Id_article=?`;
+
+            connection.query(sql, [userID,articleId], (err, results)=> err ? reject(err) : resolve(results[0]));
+        })
+    }
+
+    static deleteCommande(userID, articleId){
+        return new Promise((resolve, reject) => {
+            const sql = `DELETE FROM commande WHERE Id_user=? AND Id_article=?`;
 
             connection.query(sql, [userID,articleId], (err, results)=> err ? reject(err) : resolve(results[0]));
         })
@@ -345,4 +365,4 @@ class ArticleModel{
     }
 }
 
-module.exports = ArticleModel;
+module.exports = {ArticleModel ,connection};

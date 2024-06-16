@@ -5,7 +5,6 @@ const span2 = document.querySelector("#second-span");
 const span3 = document.querySelector("#third-span");
 const burgerListCtn = document.querySelector(".burger-list-ctn");
 const burgerList = document.querySelectorAll(".burger-list-ctn p");
-const listP = document.querySelectorAll(".filtre p");
 const vidCtn = document.querySelector(".vid-ctn");
 const horlogerie = document.querySelector(".horlogerie");
 const burgerCategories = document.querySelectorAll(".burger-categories");

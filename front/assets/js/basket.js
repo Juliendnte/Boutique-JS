@@ -1,5 +1,4 @@
 let basketListCtn = document.querySelector("#basket-ctn");
-console.log("basketListCtn : " + basketListCtn);
 let gros_truc = document.querySelector(".gros-truc");
 let total;
 
@@ -9,35 +8,20 @@ async function getWatches(lst) {
   return data.json();
 }
 
-async function affectEvent() {
-  const listPlus = document.querySelectorAll(".plus");
-  const listMoins = document.querySelectorAll(".moins");
-  listPlus.forEach((button) => {
-    button.addEventListener("click", basketIncrease);
-  });
-
-  listMoins.forEach((button) => {
-    button.addEventListener("click", basketDecrease);
-  });
-
-  const listSuppr = document.querySelectorAll(".delete-item-img");
-
-  listSuppr.forEach((button) => {
-    button.addEventListener("click", trashElemSuppr);
-  });
+function affectEvent() {
+  document.querySelectorAll(".plus").forEach(button => button.addEventListener("click", basketIncrease));
+  document.querySelectorAll(".moins").forEach(button => button.addEventListener("click", basketDecrease));
+  document.querySelectorAll(".delete-item-img").forEach(button => button.addEventListener("click", trashElemSuppr));
 }
 
-async function displayBasket() {
+function displayBasket() {
   let liste = JSON.parse(localStorage.getItem("panier")) || []; // je récupère mon panier
-  let listReq = []; // pour passer tout les elements en query dans la fonction
-  liste.forEach((watch) => {
-    listReq.push(watch.id);
-  });
+  const listReq = liste.map(item => item.id);  // pour passer tout les elements en query dans la fonction
   basketListCtn.classList.remove("center");
   basketListCtn.innerHTML = ""; // nettoyage du ctn dans le HTML pour pas avoir de doublons
-  console.log(listReq.length);
-  if (listReq.length != 0) {
-    getWatches(listReq).then(async (watches) => {
+
+  if (listReq.length !== 0) {
+    getWatches(listReq).then((watches) => {
       total = watches.listArticles;
 
       if (watches.listArticles != null) {
@@ -69,7 +53,7 @@ async function displayBasket() {
           basketListCtn.appendChild(ctn); // on l'ajoute...
         }
       }
-      await affectEvent(); //on remet les events sur les bouttons
+      affectEvent(); //on remet les events sur les bouttons
       detailCommande(); // on refresh pour actualiser en fct du localStorage
     });
   } else {
@@ -81,11 +65,14 @@ async function displayBasket() {
 
 displayBasket();
 
-function basketIncrease(e) {
+async function basketIncrease(e) {
   const listStock = document.querySelectorAll(".quantity");
-  toInc = e.target.classList[0];
-  listStock.forEach((elem) => {
-    if (elem.id === toInc) {
+  let toInc = e.target.classList[0];
+  let i = 0;
+  for (const elem of listStock) {
+    const watche = await getWatches([toInc])
+    if (elem.id === toInc && watche.listArticles[i].Stock >= parseInt(elem.innerText)){
+      i++
       let newStock = parseInt(elem.innerText) + 1;
       elem.innerText = newStock;
       let panier = JSON.parse(localStorage.getItem("panier"));
@@ -96,13 +83,13 @@ function basketIncrease(e) {
       });
       localStorage.setItem("panier", JSON.stringify(panier));
     }
-  });
+  }
   detailCommande();
 }
 
 function basketDecrease(e) {
   const listStock = document.querySelectorAll(".quantity");
-  toDec = e.target.classList[0];
+  let toDec = e.target.classList[0];
   listStock.forEach((elem) => {
     if (elem.id === toDec) {
       let newStock = parseInt(elem.innerText) - 1;
@@ -158,9 +145,7 @@ async function AddresseStreet() {
 }
 
 async function getAdresse(street) {
-  const data = await fetch(
-    `https://api-adresse.data.gouv.fr/search/?q=${street}`
-  );
+  const data = await fetch(`https://api-adresse.data.gouv.fr/search/?q=${street}`);
   return data.json();
 }
 
@@ -182,17 +167,16 @@ function updateAddresses(response) {
 }
 
 function removeActiveClass() {
-  setTimeout(() => {
-    gros_truc.classList.remove("active");
-  }, 500);
+  setTimeout(() => gros_truc.classList.remove("active"), 500);
 }
 
 function clickAdress(e) {
-  const paragraphs = e.querySelectorAll("p");
-  const data = Array.from(paragraphs).map((p) => p.textContent);
-  const rue = document.querySelector("input[name=street]");
-  const ville = document.querySelector("input[name=ville]");
-  const postcode = document.querySelector("input[name=postcode]");
+  const [paragraphs, data,rue,ville, postcode] = [
+      e.querySelectorAll("p"),
+    Array.from(paragraphs).map((p) => p.textContent),
+    document.querySelector("input[name=street]"),
+    document.querySelector("input[name=street]"),
+    document.querySelector("input[name=postcode]")];
   rue.value = data[0];
   ville.value = data[1];
   postcode.value = data[2];
@@ -204,7 +188,7 @@ function detailCommande() {
   const totalCommande = document.querySelector("#total");
   const input = document.querySelector("input[name=price]");
 
-  var totalValue = 0;
+  let totalValue = 0;
   if (total != null) {
     for (const elem of total) {
       let Nb = 0;
