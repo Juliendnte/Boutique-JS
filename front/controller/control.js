@@ -15,6 +15,12 @@ exports.Index = async (req, res) => {
   });
 };
 
+exports.Histoire = async (req, res) => {
+  res.render("../views/pages/history", {
+    connect: await getFav(req.cookies.Token),
+  });
+};
+
 /**
  * Render the confirmation page.
  * @param {Object} req - The request object.

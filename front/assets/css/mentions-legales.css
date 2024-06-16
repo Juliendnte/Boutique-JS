@@ -2,18 +2,22 @@
   background-color: var(--horo-blue);
 }
 
-h1,
-h2 {
+html{
+  overflow-x: hidden;
+}
+
+section h1,
+section h2 {
   font-family: var(--bold);
   padding: 1em;
 }
 
-p {
+section p {
   font-family: var(--light);
   padding-left: 2em;
 }
 
-ul {
+section ul {
   font-family: var(--light);
   padding-left: 3em;
 }

@@ -9,6 +9,7 @@ routeur.get("/basket", controller.Basket);
 routeur.get("/user", controller.User);
 routeur.get("/marque", controller.Marque);
 routeur.get("/mentionslegales", controller.MentionsLegales);
+routeur.get("/histoire", controller.Histoire);
 
 routeur.get("/login", controller.Login);
 routeur.get("/create-account", controller.CreateAccount);
