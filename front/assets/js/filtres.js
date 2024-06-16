@@ -70,7 +70,14 @@ const marquebtn = document.querySelector(".marque-btn");
 const marquectn = document.querySelector(".marque-ctn");
 marquebtn.addEventListener("click", toggleMarque);
 
+const pricebtn = document.querySelector(".price-btn");
+const pricectn = document.querySelector(".price-ctn");
+pricebtn.addEventListener("click", togglePrice);
+
 function toggleColor() {
+  if (pricectn.classList[1] === "visible") {
+    togglePrice();
+  }
   if (matctn.classList[1] === "visible") {
     toggleMatiere();
   }
@@ -81,6 +88,9 @@ function toggleColor() {
 }
 
 function toggleMatiere() {
+  if (pricectn.classList[1] === "visible") {
+    togglePrice();
+  }
   if (colorctn.classList[1] === "visible") {
     toggleColor();
   }
@@ -91,6 +101,9 @@ function toggleMatiere() {
 }
 
 function toggleMarque() {
+  if (pricectn.classList[1] === "visible") {
+    togglePrice();
+  }
   if (matctn.classList[1] === "visible") {
     toggleMatiere();
   }
@@ -98,6 +111,19 @@ function toggleMarque() {
     toggleColor();
   }
   marquectn.classList.toggle("visible");
+}
+
+function togglePrice() {
+  if (marquectn.classList[1] === "visible") {
+    toggleMarque();
+  }
+  if (matctn.classList[1] === "visible") {
+    toggleMatiere();
+  }
+  if (colorctn.classList[1] === "visible") {
+    toggleColor();
+  }
+  pricectn.classList.toggle("visible");
 }
 
 async function getWatches() {

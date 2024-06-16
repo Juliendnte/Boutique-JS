@@ -74,6 +74,19 @@
         </div>
       </div>
 
+      <div class="price-filter">
+        <button class="price-btn" type="button">
+          Prix
+        </button>
+        <div class="price-ctn">
+          <label><input type="radio" value="aucun"name="prix"> Aucun</label>
+          <label><input type="radio" value="croissant"name="prix"> Prix Croissant</label>
+            <label><input type="radio" value="decroissant"name="prix"> Prix Décroissant</label>
+            <label><input type="radio" value="reduction"name="prix"> Réduction</label>
+        </div>
+      </div>
+
+
       <button id="confirm" type="submit">Confirmer</button>
     </form>
 
@@ -93,9 +106,7 @@
         <%};%>
       </a>
       <%}); %>
-      <%}else if(lst.items === null){ %>
-        <p class="search-null">Aucun article ne correspond à votre recherche</p>
-      <%}; %>
+      <%};%>
     </div>
 
 

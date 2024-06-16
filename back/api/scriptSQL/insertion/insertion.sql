@@ -80,7 +80,7 @@ INSERT INTO `article` (
     `Id_Color`, `Waterproof`, `Id_Movement`, `Complications`, `Id_Bracelet`,
     `Id_Color_Bracelet`, `Availability`, `Reduction`, `Stock`, `Description`
 ) VALUES
-    (1, "1815 Chronograph", "402.026", 53650, 2, "39mm", 1, 1, "30m", 1, "Chronographe, Heures et minutes, Secondes", 1, 1, DEFAULT, NULL, 3,
+    (1, "1815 Chronograph", "402.026", 53650, 2, "39mm", 1, 1, "30m", 1, "Chronographe, Heures et minutes, Secondes", 1, 1, DEFAULT, 5, 3,
     "Montre à remontage manuel A. Lange & Sohne 1815 Chronograph (402026) d'occasion, dotée d'un boîtier en or blanc 18 carats de 39,5 mm entourant un cadran argenté sur un tout nouveau bracelet en alligator noir avec une boucle ardillon en or blanc 18 carats. Les fonctions incluent les heures, les minutes, la petite seconde et le chronographe. Cette montre est soigneusement sélectionnée et méticuleusement expertisée par nos maîtres horlogers Horo Haven, garantissant ainsi son authenticité et sa qualité irréprochable. Livrée avec ses papiers d'origine, chaque pièce incarne l'exclusivité et l'élégance intemporelle que seul Horo Haven peut vous offrir."),
 
     (1, "Tourbillon Pour Le Merite Limited Edition", "701.001", 242850, 2, "38mm", 2,1, "30m", 1, "Heures et minutes , Indicateur de réserve de marche , Secondes , Tourbillon", 1, 2,DEFAULT,NULL, 2,
@@ -94,7 +94,7 @@ INSERT INTO `article` (
     "Montre à remontage manuel A. Lange & Sohne Lange 1 (101027) d'occasion, dotée d'un boîtier en or blanc 18 carats de 38,5 mm entourant un cadran bleu sur un tout nouveau bracelet en alligator marron avec une boucle ardillon en or blanc 18 carats. Les fonctions incluent les heures, les minutes, les secondes, la date et l'indicateur de réserve de marche. Cette montre est soigneusement sélectionnée et méticuleusement expertisée par nos maîtres horlogers Horo Haven, garantissant ainsi son authenticité et sa qualité irréprochable. Livrée avec ses papiers d'origine, chaque pièce incarne l'exclusivité et l'élégance intemporelle que seul Horo Haven peut vous offrir. " ),
 
 
-   (1, "Lange 1", "101.022", 26550, 2, "38mm", 2,1, "30m", 1, "Date , Heures et minutes , Indicateur de réserve de marche , Secondes", 1, 1,DEFAULT,NULL, 2,
+   (1, "Lange 1", "101.022", 26550, 2, "38mm", 2,1, "30m", 1, "Date , Heures et minutes , Indicateur de réserve de marche , Secondes", 1, 1,DEFAULT,10, 2,
     "Montre à remontage manuel A.Lange & Sohne Lange 1 (101022) d'occasion, dotée d'un boîtier de 38 mm en or jaune 18 carats entourant un cadran argenté sur un bracelet en alligator noir avec une boucle ardillon en or jaune 18 carats. Les fonctions comprennent les heures, les minutes, la petite seconde, la date et l'indicateur de réserve de marche. Cette montre est soigneusement sélectionnée et méticuleusement expertisée par nos maîtres horlogers Horo Haven, garantissant ainsi son authenticité et sa qualité irréprochable. Livrée avec ses papiers d'origine, chaque pièce incarne l'exclusivité et l'élégance intemporelle que seul Horo Haven peut vous offrir. " ),
 
 
@@ -106,7 +106,7 @@ INSERT INTO `article` (
     "Montre automatique à remontage automatique A. Lange & Sohne Langematik (308021) d'occasion, dotée d'un boîtier en or jaune 18 carats de 37 mm entourant un cadran argenté sur un bracelet en alligator noir avec une boucle ardillon en or jaune 18 carats. Les fonctions incluent les heures, les minutes, la petite seconde et la date. Cette montre est soigneusement sélectionnée et méticuleusement expertisée par nos maîtres horlogers Horo Haven, garantissant ainsi son authenticité et sa qualité irréprochable. Livrée avec ses papiers d'origine, chaque pièce incarne l'exclusivité et l'élégance intemporelle que seul Horo Haven peut vous offrir. " ),
 
 
-   (1, "Grosse Langematick Gangreserve Limited for Wempe", "304.047", 32600, 2, "40mm", 3,1, "30m", 2, "Date , Heures et minutes , Secondes", 1, 2,DEFAULT,NULL, 4,
+   (1, "Grosse Langematick Gangreserve Limited for Wempe", "304.047", 32600, 2, "40mm", 3,1, "30m", 2, "Date , Heures et minutes , Secondes", 1, 2,DEFAULT,5, 4,
     "Montre automatique à remontage automatique A. Lange & Sohne Grosse Langematick Gangreserve Limited pour Wempe (304047) d'occasion, dotée d'un boîtier en or rose 18 carats de 40,5 mm entourant un cadran argenté sur un tout nouveau bracelet en alligator marron avec une boucle ardillon en or rose 18 carats. Les fonctions comprennent les heures, les minutes, la petite seconde et l'indicateur de réserve de marche. Cette montre est soigneusement sélectionnée et méticuleusement expertisée par nos maîtres horlogers Horo Haven, garantissant ainsi son authenticité et sa qualité irréprochable. Livrée avec ses papiers d'origine, chaque pièce incarne l'exclusivité et l'élégance intemporelle que seul Horo Haven peut vous offrir. " ),
 
 
@@ -122,7 +122,7 @@ INSERT INTO `article` (
     "Montre à remontage manuel A. Lange & Sohne Richard Lange Tourbillon Pour Le Merite (760032) d'occasion, dotée d'un boîtier en or rose 18 carats de 41,9 mm entourant un cadran argenté sur un tout nouveau bracelet en alligator marron avec une boucle ardillon en or rose 18 carats. Les fonctions incluent les heures, les minutes, les secondes et le tourbillon. Cette montre est soigneusement sélectionnée et méticuleusement expertisée par nos maîtres horlogers Horo Haven, garantissant ainsi son authenticité et sa qualité irréprochable. Livrée avec ses papiers d'origine, chaque pièce incarne l'exclusivité et l'élégance intemporelle que seul Horo Haven peut vous offrir. " ),
 
 
-    (1, "Richard Lange Tourbillon ""Pour le Merite"" ", "760.025", 130750, 2, "41mm", 4,1, "50m", 1, "Heures et minutes , Secondes , Tourbillon", 1, 1,DEFAULT,NULL, 3,
+    (1, "Richard Lange Tourbillon ""Pour le Merite"" ", "760.025", 130750, 2, "41mm", 4,1, "50m", 1, "Heures et minutes , Secondes , Tourbillon", 1, 1,DEFAULT,5, 3,
     "Montre à remontage manuel A. Lange & Sohne Richard Lange Tourbillon ""Pour le Mérite"" (760025) d'occasion, dotée d'un boîtier en platine de 41,9 mm entourant un cadran argenté sur un bracelet en alligator noir avec une boucle déployante en platine. Les fonctions incluent les heures, les minutes, les secondes et le tourbillon. Cette montre est soigneusement sélectionnée et méticuleusement expertisée par nos maîtres horlogers Horo Haven, garantissant ainsi son authenticité et sa qualité irréprochable. Livrée avec ses papiers d'origine, chaque pièce incarne l'exclusivité et l'élégance intemporelle que seul Horo Haven peut vous offrir. " ),
 
 
@@ -142,7 +142,7 @@ INSERT INTO `article` (
     "Montre à remontage manuel A. Lange & Sohne Zeitwerk Date (148038) d'occasion, dotée d'un boîtier en or blanc 18 carats de 44,2 mm entourant un cadran gris sur un bracelet en alligator noir avec une boucle ardillon en or blanc 18 carats. Les fonctions comprennent les heures, les minutes, la petite seconde, la date et l'indicateur de réserve de marche. Cette montre est soigneusement sélectionnée et méticuleusement expertisée par nos maîtres horlogers Horo Haven, garantissant ainsi son authenticité et sa qualité irréprochable. Livrée avec ses papiers d'origine, chaque pièce incarne l'exclusivité et l'élégance intemporelle que seul Horo Haven peut vous offrir. " ),
 
 
-    (1, "Zeitwerk Minute Repeater", "147.025", 260650, 2, "44mm", 4,1, "30m", 1, "Date , Heures et minutes , Indicateur de réserve de marche , Secondes", 1, 1,DEFAULT,NULL, 5,
+    (1, "Zeitwerk Minute Repeater", "147.025", 260650, 2, "44mm", 4,1, "30m", 1, "Date , Heures et minutes , Indicateur de réserve de marche , Secondes", 1, 1,DEFAULT,5, 5,
     "Montre à remontage manuel A. Lange & Sohne Zeitwerk Minute Repeater (147025) d'occasion, dotée d'un boîtier en platine de 44,2 mm entourant un cadran argenté sur un bracelet en alligator noir avec une boucle ardillon en platine. Les fonctions incluent les heures sautantes, les minutes, les secondes et l'indicateur de réserve de marche. Cette montre est soigneusement sélectionnée et méticuleusement expertisée par nos maîtres horlogers Horo Haven, garantissant ainsi son authenticité et sa qualité irréprochable. Livrée avec ses papiers d'origine, chaque pièce incarne l'exclusivité et l'élégance intemporelle que seul Horo Haven peut vous offrir. " ),
 
     (2, "Code 11.59", "15210QT.OO.A064KB.01", 29900, 1, "41mm", 5,3, "30m", 2, "Date , Heures et minutes ,  Secondes", 2, 2,DEFAULT,NULL, 1,
@@ -153,7 +153,7 @@ INSERT INTO `article` (
     "Montre automatique à remontage automatique Audemars Piguet Code 11.59 à calendrier perpétuel (26394BCOOD027KB01) d'occasion, dotée d'un boîtier en or blanc 18 carats de 41 mm entourant un cadran aventurine bleu sur un bracelet en cuir gris à dos en caoutchouc avec une boucle ardillon en or blanc 18 carats. Les fonctions incluent les heures, les minutes, la semaine, la date, le jour, le mois, la phase de lune et le calendrier perpétuel. Cette montre est soigneusement sélectionnée et méticuleusement expertisée par nos maîtres horlogers Horo Haven, garantissant ainsi son authenticité et sa qualité irréprochable. Livrée avec ses papiers d'origine, chaque pièce incarne l'exclusivité et l'élégance intemporelle que seul Horo Haven peut vous  offrir. " ),
 
 
-    (2, "Code 11.59", "15210OR.OO.A028CR.01", 28050, 1, "41mm", 3,2, "30m", 2, "Heures et minutes , Secondes", 1, 3,DEFAULT,NULL, 2,
+    (2, "Code 11.59", "15210OR.OO.A028CR.01", 28050, 1, "41mm", 3,2, "30m", 2, "Heures et minutes , Secondes", 1, 3,DEFAULT,10, 2,
     "Montre automatique à remontage automatique Audemars Piguet Code 11.59 (15210OROOA028CR01) d'occasion, dotée d'un boîtier en or rose 18 carats de 41 mm entourant un cadran bleu laqué fumé sur un bracelet en alligator bleu avec une boucle ardillon en or rose 18 carats. Les fonctions incluent les heures, les minutes, les secondes et la date. Cette montre est soigneusement sélectionnée et méticuleusement expertisée par nos maîtres horlogers Horo Haven, garantissant ainsi son authenticité et sa qualité irréprochable. Livrée avec ses papiers d'origine, chaque pièce incarne l'exclusivité et l'élégance intemporelle que seul Horo Haven peut vous  offrir. " ),
 
 
@@ -177,7 +177,7 @@ INSERT INTO `article` (
     "Montre automatique à remontage automatique Audemars Piguet Royal Oak Extra-Thin (15202BCZZ1241BC02) d'occasion, dotée d'un boîtier en or blanc 18 carats de 39 mm avec lunette et attaches en diamant entourant un cadran en diamant bleu sur un bracelet en diamant en or blanc 18 carats. Les fonctions incluent les heures et les minutes. Cette montre est soigneusement sélectionnée et méticuleusement expertisée par nos maîtres horlogers Horo Haven, garantissant ainsi son authenticité et sa qualité irréprochable. Livrée avec ses papiers d'origine, chaque pièce incarne l'exclusivité et l'élégance intemporelle que seul Horo Haven peut vous  offrir. " ),
 
 
-    (2, "Royal Oak", "15413OR.YY.1220OR.01", 266450, 1, "41mm", 3,7, "30m", 2, "Heures et Minutes , Secondes , Date", 7, 7,DEFAULT,NULL, 2,
+    (2, "Royal Oak", "15413OR.YY.1220OR.01", 266450, 1, "41mm", 3,7, "30m", 2, "Heures et Minutes , Secondes , Date", 7, 7,DEFAULT,15, 2,
     "Montre automatique à remontage automatique Audemars Piguet Royal Oak (15413ORYY1220OR01) d'occasion, dotée d'un boîtier en or rose 18 carats de 41 mm avec une lunette baguette en saphir arc-en-ciel entourant un cadran en diamant sur un bracelet en or rose 18 carats avec boucle déployante. Les fonctions incluent les heures, les minutes, les secondes et la date. Cette montre est soigneusement sélectionnée et méticuleusement expertisée par nos maîtres horlogers Horo Haven, garantissant ainsi son authenticité et sa qualité irréprochable. Livrée avec ses papiers d'origine, chaque pièce incarne l'exclusivité et l'élégance intemporelle que seul Horo Haven peut vous  offrir. " ),
 
 
@@ -189,7 +189,7 @@ INSERT INTO `article` (
     "Montre automatique à remontage automatique Audemars Piguet Royal Oak Offshore Diver Limited Edition (15720CNOOA002CA01) d'occasion, dotée d'un boîtier en or blanc 18 carats de 42 mm avec une lunette en céramique noire entourant un cadran Mega Tapiserrie noir sur un bracelet en caoutchouc noir avec une boucle ardillon en or blanc 18 carats . Les fonctions incluent les heures, les minutes, les secondes, la date et la valve de libération d'hélium. Cette montre est soigneusement sélectionnée et méticuleusement expertisée par nos maîtres horlogers Horo Haven, garantissant ainsi son authenticité et sa qualité irréprochable. Livrée avec ses papiers d'origine, chaque pièce incarne l'exclusivité et l'élégance intemporelle que seul Horo Haven peut vous  offrir. " ),
 
 
-    (2, "Royal Oak Offshore Chronograph", "26238OR.OO.2000OR.01", 96000, 1, "42mm", 3,2, "100m", 2, "Chronographe , Date , Heures et minutes , Secondes , Tachymètre", 7, 7,DEFAULT,NULL, 2,
+    (2, "Royal Oak Offshore Chronograph", "26238OR.OO.2000OR.01", 96000, 1, "42mm", 3,2, "100m", 2, "Chronographe , Date , Heures et minutes , Secondes , Tachymètre", 7, 7,DEFAULT,10, 2,
     "Montre automatique à remontage automatique Audemars Piguet Royal Oak Offshore Chronograph (26238OROO2000OR01) d'occasion, dotée d'un boîtier en or rose 18 carats de 42 mm entourant un cadran bleu petite tapisserie sur un bracelet en or rose 18 carats avec boucle déployante. Les fonctions incluent les heures, les minutes, la petite seconde, la date, le chronographe et le tachymètre. Cette montre est soigneusement sélectionnée et méticuleusement expertisée par nos maîtres horlogers Horo Haven, garantissant ainsi son authenticité et sa qualité irréprochable. Livrée avec ses papiers d'origine, chaque pièce incarne l'exclusivité et l'élégance intemporelle que seul Horo Haven peut vous offrir. " ),
 
     (3, "Bentley", "A2536513/B954", 5050, 1, "48mm", 5,3, "100m", 2, "Chronographe , Date , Heures et Minutes , Secondes", 1, 1,DEFAULT,NULL, 5,
@@ -212,7 +212,7 @@ INSERT INTO `article` (
     "Montre automatique à remontage automatique Breitling Chrono-Matic 24 Limited Edition (A2236013/B817) d'occasion, dotée d'un boîtier en acier inoxydable de 44 mm entourant un cadran noir sur un bracelet Pilot en acier inoxydable avec boucle déployante. Les fonctions incluent les heures, les minutes, la petite seconde, la date, le chronographe et le tachymètre. Cette montre est soigneusement sélectionnée et méticuleusement expertisée par nos maîtres horlogers Horo Haven, garantissant ainsi son authenticité et sa qualité irréprochable. Livrée avec ses papiers d'origine, chaque pièce incarne l'exclusivité et l'élégance intemporelle que seul Horo Haven peut vous  offrir. " ),
 
 
-    (3, "Chronomatic", "H2236012/B818", 10250, 1, "44mm", 3,3, "30m",2, "Chronographe , Date , Gmt/Heure mondiale , Heures et minutes , Secondes", 1, 2,DEFAULT,NULL, 1,
+    (3, "Chronomatic", "H2236012/B818", 10250, 1, "44mm", 3,3, "30m",2, "Chronographe , Date , Gmt/Heure mondiale , Heures et minutes , Secondes", 1, 2,DEFAULT,5, 1,
     "Montre automatique à remontage automatique Breitling Chronomatic (H2236012B818) d'occasion, dotée d'un boîtier en or rose 18 carats de 44 mm entourant un cadran noir sur un tout nouveau bracelet en alligator marron avec une boucle déployante en or rose 18 carats. Les fonctions incluent les heures, les minutes, la petite seconde, la date, le chronographe, l'heure GMT/mondiale. Cette montre est soigneusement sélectionnée et méticuleusement expertisée par nos maîtres horlogers Horo Haven, garantissant ainsi son authenticité et sa qualité irréprochable. Livrée avec ses papiers d'origine, chaque pièce incarne l'exclusivité et l'élégance intemporelle que seul Horo Haven peut vous  offrir. " ),
 
 
@@ -259,11 +259,11 @@ INSERT INTO `article` (
     "Montre automatique à remontage automatique FP Journe Octa Quantieme Perpetuel d'occasion, dotée d'un boîtier en platine de 42 mm entourant un cadran bleu sur un bracelet en alligator bleu avec une boucle ardillon en platine. Les fonctions incluent les heures, les minutes, les secondes, la date, le jour, le mois, le calendrier perpétuel et l'indicateur de réserve de marche. Cette montre est soigneusement sélectionnée et méticuleusement expertisée par nos maîtres horlogers Horo Haven, garantissant ainsi son authenticité et sa qualité irréprochable. Livrée avec ses papiers d'origine, chaque pièce incarne l'exclusivité et l'élégance intemporelle que seul Horo Haven peut vous offrir. " ),
 
 
-    (4, "Chronometre Bleu", "CSBLEU TA 39 A BL", 79050, 1, "39mm", 7, 2, "30m", 1, "Heures et minutes, Secondes", 1, 9, DEFAULT, NULL, 4,
+    (4, "Chronometre Bleu", "CSBLEU TA 39 A BL", 79050, 1, "39mm", 7, 2, "30m", 1, "Heures et minutes, Secondes", 1, 9, DEFAULT, 5, 4,
     "Montre à remontage manuel FP Journe Chronomètre Bleu d'occasion, dotée d'un boîtier en tantale de 39 mm entourant un cadran bleu chromé sur un tout nouveau bracelet en alligator beige avec une boucle ardillon en tantale. Les fonctions incluent les heures, les minutes et la petite seconde. Cette montre est soigneusement sélectionnée et méticuleusement expertisée par nos maîtres horlogers Horo Haven, garantissant ainsi son authenticité et sa qualité irréprochable. Livrée avec ses papiers d'origine, chaque pièce incarne l'exclusivité et l'élégance intemporelle que seul Horo Haven peut vous offrir. " ),
 
 
-    (4, "Linesport Centigraphe Sport", "L-CTS AL 42 D GR", 121450, 1, "42mm", 8, 4, "30m", 1, "Chronographe, Heures et Minutes, Secondes", 2, 1, DEFAULT, NULL, 5,
+    (4, "Linesport Centigraphe Sport", "L-CTS AL 42 D GR", 121450, 1, "42mm", 8, 4, "30m", 1, "Chronographe, Heures et Minutes, Secondes", 2, 1, DEFAULT, 5, 5,
     "Montre à remontage manuel FP Journe Linesport Centigraphe Sport d'occasion, dotée d'un boîtier en aluminium de 42 mm entourant un cadran gris sur un tout nouveau bracelet en caoutchouc noir avec une boucle déployante en aluminium. Les fonctions incluent les heures, les minutes, la petite seconde et le chronographe. Cette montre est soigneusement sélectionnée et méticuleusement expertisée par nos maîtres horlogers Horo Haven, garantissant ainsi son authenticité et sa qualité irréprochable. Livrée avec ses papiers d'origine, chaque pièce incarne l'exclusivité et l'élégance intemporelle que seul Horo Haven peut vous offrir. " ),
 
 
@@ -315,7 +315,7 @@ INSERT INTO `article` (
     (5, "Streamliner Tourbillon", "6804-1201", 69650, 1, "40mm", 5, 4, "120m", 2, "Heures et minutes, Tourbillon", 5, 6, DEFAULT, NULL, 2,
     "Montre automatique à remontage automatique H. Moser & Cie. Streamliner Tourbillon (68041201) d'occasion, dotée d'un boîtier en acier inoxydable de 40 mm avec une lunette baguette en saphir arc-en-ciel entourant un cadran gris sur un bracelet en acier inoxydable avec boucle déployante. Les fonctions incluent les heures, les minutes et le tourbillon. Cette montre est soigneusement sélectionnée et méticuleusement expertisée par nos maîtres horlogers Horo Haven, garantissant ainsi son authenticité et sa qualité irréprochable. Livrée avec ses papiers d'origine, chaque pièce incarne l'exclusivité et l'élégance intemporelle que seul Horo Haven peut vous offrir. " ),
 
-    (5, "Streamliner Tourbillon", "6804-0401", 102150, 1, "40mm", 3, 3, "120m", 2, "Heures et minutes, Secondes, Tourbillon", 7, 7, DEFAULT, NULL, 3,
+    (5, "Streamliner Tourbillon", "6804-0401", 102150, 1, "40mm", 3, 3, "120m", 2, "Heures et minutes, Secondes, Tourbillon", 7, 7, DEFAULT, 5, 3,
     "Montre automatique à remontage automatique H. Moser & Cie Streamliner Tourbillon (68040401) d'occasion, dotée d'un boîtier en or rose 18 carats de 40 mm entourant un cadran noir sur un bracelet en or rose 18 carats avec boucle déployante. Les fonctions incluent les heures, les minutes, les secondes et le tourbillon. Cette montre est soigneusement sélectionnée et méticuleusement expertisée par nos maîtres horlogers Horo Haven, garantissant ainsi son authenticité et sa qualité irréprochable. Livrée avec ses papiers d'origine, chaque pièce incarne l'exclusivité et l'élégance intemporelle que seul Horo Haven peut vous offrir."),
 
 
@@ -334,7 +334,7 @@ INSERT INTO `article` (
     "Montre automatique à remontage automatique Omega De Ville Prestige (42410372003001) d'occasion, dotée d'un boîtier en acier inoxydable de 36,8 mm entourant un cadran bleu sur un bracelet en acier inoxydable avec boucle déployante. Les fonctions incluent les heures, les minutes, les secondes et la date. Cette montre est soigneusement sélectionnée et méticuleusement expertisée par nos maîtres horlogers Horo Haven, garantissant ainsi son authenticité et sa qualité irréprochable. Livrée avec ses papiers d'origine, chaque pièce incarne l'exclusivité et l'élégance intemporelle que seul Horo Haven peut vous offrir. " ),
 
 
-   (6, "De Ville Tresor", "432.58.40.21.05.003", 8800, 1, "40mm", 3, 6, "30m", 1, "Date, Heures et Minutes, Secondes", 1, 2, DEFAULT, NULL, 5,
+   (6, "De Ville Tresor", "432.58.40.21.05.003", 8800, 1, "40mm", 3, 6, "30m", 1, "Date, Heures et Minutes, Secondes", 1, 2, DEFAULT, 5, 5,
     "Montre à remontage manuel Omega De Ville Tresor (43258402105003) d'occasion, dotée d'un boîtier en or rose 18 carats de 40 mm avec une lunette en diamant entourant un cadran en nacre blanche sur un tout nouveau bracelet en alligator marron avec une boucle ardillon en or rose 18 carats. Les fonctions incluent les heures, les minutes, les secondes et la date. Cette montre est soigneusement sélectionnée et méticuleusement expertisée par nos maîtres horlogers Horo Haven, garantissant ainsi son authenticité et sa qualité irréprochable. Livrée avec ses papiers d'origine, chaque pièce incarne l'exclusivité et l'élégance intemporelle que seul Horo Haven peut vous offrir. " ),
 
 
@@ -377,7 +377,7 @@ INSERT INTO `article` (
     "Montre à remontage manuel Patek Philippe Calatrava (5196G001) d'occasion, dotée d'un boîtier en or blanc 18 carats de 37 mm entourant un cadran gris argenté sur un tout nouveau bracelet en alligator noir avec une boucle ardillon en or blanc 18 carats. Les fonctions incluent les heures, les minutes et la petite seconde. Cette montre est soigneusement sélectionnée et méticuleusement expertisée par nos maîtres horlogers Horo Haven, garantissant ainsi son authenticité et sa qualité irréprochable. Livrée avec ses papiers d'origine, chaque pièce incarne l'exclusivité et l'élégance intemporelle que seul Horo Haven peut vous offrir. " ),
 
 
-    (7, "Calatrava", "3802/205", 14400, 1, "33mm", 2, 6, "30m", 2, "Heures et Minutes, Secondes, Date", 11, 11, DEFAULT, NULL, 6,
+    (7, "Calatrava", "3802/205", 14400, 1, "33mm", 2, 6, "30m", 2, "Heures et Minutes, Secondes, Date", 11, 11, DEFAULT, 10, 6,
     "Montre automatique à remontage automatique Patek Philippe Calatrava (3802205) d'occasion, dotée d'un boîtier en or jaune 18 carats de 33 mm avec une lunette cloutée entourant un cadran blanc sur un bracelet en or jaune 18 carats avec boucle déployante. Les fonctions incluent les heures, les minutes, les secondes et la date. Cette montre est soigneusement sélectionnée et méticuleusement expertisée par nos maîtres horlogers Horo Haven, garantissant ainsi son authenticité et sa qualité irréprochable. Livrée avec ses papiers d'origine, chaque pièce incarne l'exclusivité et l'élégance intemporelle que seul Horo Haven peut vous offrir. " ),
 
 
@@ -405,7 +405,7 @@ INSERT INTO `article` (
     "Montre à remontage manuel Patek Philippe Gondolo (5100J001) d'occasion, dotée d'un boîtier en or jaune 18 carats de 34 mm x 46 mm entourant un cadran argenté sur un bracelet en alligator noir avec une boucle ardillon en or jaune 18 carats. Les fonctions comprennent les heures, les minutes, la petite seconde et l'indicateur de réserve de marche. Cette montre est soigneusement sélectionnée et méticuleusement expertisée par nos maîtres horlogers Horo Haven, garantissant ainsi son authenticité et sa qualité irréprochable. Livrée avec ses papiers d'origine, chaque pièce incarne l'exclusivité et l'élégance intemporelle que seul Horo Haven peut vous offrir. " ),
 
 
-    (7, "Gondolo", "5098P-001", 21600, 1, "32x42mm", 4, 1, "30m", 1, "Heures et minutes", 1, 1, DEFAULT, NULL, 2,
+    (7, "Gondolo", "5098P-001", 21600, 1, "32x42mm", 4, 1, "30m", 1, "Heures et minutes", 1, 1, DEFAULT, 15, 2,
     "Montre à remontage manuel Patek Philippe Gondolo (5098P001) d'occasion, dotée d'un boîtier en platine de 32 mm x 42 mm entourant un cadran argenté sur un tout nouveau bracelet en alligator noir avec une boucle ardillon en platine. Les fonctions incluent les heures et les minutes. Cette montre est soigneusement sélectionnée et méticuleusement expertisée par nos maîtres horlogers Horo Haven, garantissant ainsi son authenticité et sa qualité irréprochable. Livrée avec ses papiers d'origine, chaque pièce incarne l'exclusivité et l'élégance intemporelle que seul Horo Haven peut vous offrir. " ),
 
 
@@ -471,7 +471,7 @@ INSERT INTO `article` (
 
 
 
-    (8, "Metiers D'Art 'Nightingale'", "33222/000R-9517", 30850, 1, "40mm", 3, 3, "30m", 1, "Heures et Minutes , Secondes", 1, 1, DEFAULT, NULL, 1,
+    (8, "Metiers D'Art 'Nightingale'", "33222/000R-9517", 30850, 1, "40mm", 3, 3, "30m", 1, "Heures et Minutes , Secondes", 1, 1, DEFAULT, 5, 1,
     "Montre à remontage manuel Vacheron Constantin Metiers D'Art 'Nightingale' (33222000R9517) d'occasion, dotée d'un boîtier en or rose 18 carats de 40 mm entourant un cadran squelette en émail noir sur un tout nouveau bracelet en alligator noir avec une boucle ardillon en or rose 18 carats. Les fonctions incluent les heures et les minutes. Cette montre est soigneusement sélectionnée et méticuleusement expertisée par nos maîtres horlogers Horo Haven, garantissant ainsi son authenticité et sa qualité irréprochable. Livrée avec ses papiers d'origine, chaque pièce incarne l'exclusivité et l'élégance intemporelle que seul Horo Haven peut vous offrir. " ),
 
 
@@ -514,7 +514,7 @@ INSERT INTO `article` (
     (8, "Traditionnelle Complete Calendar Openface", "4020T/000G-B655", 42200, 1, "41mm", 1, 14, "30m", 2, "Date , Jour , Heures et minutes , Mois , Phase de lune", 1, 5,DEFAULT, NULL, 1,
     "Montre automatique à remontage automatique Vacheron Constantin Traditionnelle à calendrier complet Openface (4020T000GB655) d'occasion, dotée d'un boîtier en or blanc 18 carats de 41 mm entourant un cadran squelette gris sur un bracelet en alligator gris avec une boucle ardillon en or blanc 18 carats. Les fonctions incluent les heures, les minutes, la date, le jour, le mois et les phases de lune. Cette montre est soigneusement sélectionnée et méticuleusement expertisée par nos maîtres horlogers Horo Haven, garantissant ainsi son authenticité et sa qualité irréprochable. Livrée avec ses papiers d'origine, chaque pièce incarne l'exclusivité et l'élégance intemporelle que seul Horo Haven peut vous offrir. " ),
 
-    (8, "Traditionnelle Complete Calendar Openface", "4020T/000R-B654", 44400, 1, "41mm", 3, 14, "30m", 2, "Date , Jour , Heures et minutes , Mois , Phase de lune", 1, 2,DEFAULT, NULL, 1,
+    (8, "Traditionnelle Complete Calendar Openface", "4020T/000R-B654", 44400, 1, "41mm", 3, 14, "30m", 2, "Date , Jour , Heures et minutes , Mois , Phase de lune", 1, 2,DEFAULT, 10, 1,
     "Montre automatique à remontage automatique Vacheron Constantin Traditionnelle à calendrier complet Openface (4020T000RB654) d'occasion, dotée d'un boîtier en or rose 18 carats de 41 mm entourant un cadran squelette gris sur un bracelet en alligator marron avec une boucle ardillon en or rose 18 carats. Les fonctions incluent les heures, les minutes, les secondes, la date, le jour, le mois et la phase de lune. Cette montre est soigneusement sélectionnée et méticuleusement expertisée par nos maîtres horlogers Horo Haven, garantissant ainsi son authenticité et sa qualité irréprochable. Livrée avec ses papiers d'origine, chaque pièce incarne l'exclusivité et l'élégance intemporelle que seul Horo Haven peut vous offrir.");
 
 
