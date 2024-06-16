@@ -24,7 +24,6 @@ routeur.get("/ajoutFav/:id", controller.AjoutFav);
 routeur.post("/filtres", controller.Filtres);
 
 routeur.post("/search", controller.SearchTreatment);
-routeur.get("/confirmed", controller.Confirm);
 routeur.post("/payement", controller.Payemenent);
 routeur.get("/:blabla", controller.Error);
 

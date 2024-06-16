@@ -27,17 +27,6 @@ exports.Histoire = async (req, res) => {
 };
 
 /**
- * Render the confirmation page.
- * @param {Object} req - The request object.
- * @param {Object} res - The response object.
- */
-exports.Confirm = async (req, res) => {
-  res.render("../views/pages/kichta", {
-    connect: await getFav(req.cookies.Token),
-  });
-};
-
-/**
  * Render the legal mentions page.
  * @param {Object} req - The request object.
  * @param {Object} res - The response object.
@@ -415,7 +404,12 @@ exports.Payemenent = (req, res) => {
           });
 
       await axios.post(url + "/commande", {panier},{ headers: { Authorization: Token, "Content-Type": "application/json" } })
-      res.redirect("/confirmed");
+      const commande = await axios.get(`${url}/commande`, { headers: { Authorization: Token, "Content-Type": "application/json" } });
+
+      res.render("../views/pages/kichta", {
+        connect: await getFav(req.cookies.Token),
+        id : commande.data.Commande[0].Id
+      });
     } catch (err) {
       errorHandler.handleRequestError(err);
       res.redirect("/basket");
@@ -435,6 +429,56 @@ exports.Error = (req, res) => {
     error.status || 404
   );
   res.render("../views/pages/error", error);
+  errorHandler.resetError();
+};
+
+/**
+ * Render the result page with filtre
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ */
+exports.Filtres = async (req, res) => {
+  let watches;
+  try {
+    watches = await getWatches();
+  } catch (err) {
+    if (!err.response) {
+      errorHandler.handleServerError();
+      return res.redirect("/error500");
+    }
+  }
+
+  let color = req.body.color || [];
+  let marque = req.body.marque || [];
+  let matiere = req.body.matiere || [];
+
+  let result = filterArticles(watches.articles.items, color, marque, matiere);
+  try {
+    res.render("../views/pages/result", {
+      lst: {
+        items: result,
+        other: "wé",
+      },
+      search: false,
+      connect: await getFav(req.cookies.Token),
+      error: null,
+    });
+  } catch (err) {
+    errorHandler.setError(
+      `Aucune montre trouvé pour la recherche ${req.query.search}`,
+      404
+    );
+    res.render("../views/pages/result", {
+      lst: {
+        items: null,
+        other: "wé",
+      },
+      search: true,
+      error: true,
+      connect: await getFav(req.cookies.Token),
+      message: errorHandler.getError().message,
+    });
+  }
   errorHandler.resetError();
 };
 
@@ -517,68 +561,17 @@ async function fetchWatches(query) {
   }
 }
 
-exports.Filtres = async (req, res) => {
-  console.log(req.body);
-  let watches;
-  try {
-    watches = await getWatches();
-  } catch (err) {
-    if (!err.response) {
-      errorHandler.handleServerError();
-      return res.redirect("/error500");
-    }
-  }
-
-  let color = req.body.color || [];
-  let marque = req.body.marque || [];
-  let matiere = req.body.matiere || [];
-
-  let result = filterArticles(watches.articles.items, color, marque, matiere);
-  try {
-    res.render("../views/pages/result", {
-      lst: {
-        items: result,
-        other: "wé",
-      },
-      search: false,
-      connect: await getFav(req.cookies.Token),
-      error: null,
-    });
-  } catch (err) {
-    errorHandler.setError(
-      `Aucune montre trouvé pour la recherche ${req.query.search}`,
-      404
-    );
-    res.render("../views/pages/result", {
-      lst: {
-        items: null,
-        other: "wé",
-      },
-      search: true,
-      error: true,
-      connect: await getFav(req.cookies.Token),
-      message: errorHandler.getError().message,
-    });
-  }
-  errorHandler.resetError();
-};
-
 function filterArticles(articles, couleurs, marques, matieres) {
   const filteredArticles = [];
-  for (let i = 0; i < articles.length; i++) {
-    const article = articles[i];
-    const couleurMatch =
-      couleurs.length === 0 || couleurs.includes(article.color);
-    const marqueMatch =
-      marques.length === 0 || marques.includes(article.marqueLabel);
-
-    const matiereMatch =
-      matieres.length === 0 || matieres.includes(article.matiere);
+  articles.forEach((article)=>{
+    const couleurMatch = couleurs.length === 0 || couleurs.includes(article.color);
+    const marqueMatch = marques.length === 0 || marques.includes(article.marqueLabel);
+    const matiereMatch = matieres.length === 0 || matieres.includes(article.matiere);
 
     if (couleurMatch && marqueMatch && matiereMatch) {
       filteredArticles.push(article);
     }
-  }
+  })
 
   return filteredArticles;
 }
